@@ -5,7 +5,7 @@ var SITE_NAME = "MolValkor Forge";
   document.querySelectorAll("[data-site-name]").forEach(function (el) {
     el.textContent = SITE_NAME;
   });
-  document.title = SITE_NAME + " · " + document.title;
+  if (document.title.indexOf(SITE_NAME) === -1) document.title = SITE_NAME + " · " + document.title;
   var y = document.querySelector("[data-year]");
   if (y) y.textContent = "2026";
 })();
