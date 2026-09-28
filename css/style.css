@@ -1,0 +1,131 @@
+:root {
+  --bg: #0b0a09;
+  --bg-2: #12100e;
+  --card: #171412;
+  --card-2: #1d1916;
+  --line: #2c2520;
+  --line-2: #3d332b;
+  --text: #ede6dc;
+  --muted: #a39686;
+  --dim: #7a6e62;
+  --ember: #e8833a;
+  --ember-2: #f3a55c;
+  --bronze: #c08a4e;
+  --glow: rgba(232, 131, 58, 0.18);
+  --radius: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(1100px 520px at 50% -180px, rgba(232, 131, 58, 0.13), transparent 70%),
+    var(--bg);
+  color: var(--text);
+  font: 16px/1.55 var(--font);
+  min-height: 100vh;
+}
+a { color: var(--ember-2); }
+img { display: block; max-width: 100%; }
+.wrap { width: min(1160px, 100% - 40px); margin: 0 auto; }
+
+/* Header */
+.site-head { padding: 64px 0 28px; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.mark {
+  width: 44px; height: 44px; flex: none; border-radius: 11px;
+  background: linear-gradient(145deg, #3a2515, #1a120c);
+  border: 1px solid var(--line-2);
+  display: grid; place-items: center;
+  box-shadow: 0 0 24px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.mark svg { width: 24px; height: 24px; }
+h1 {
+  margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.1;
+  letter-spacing: -0.02em; font-weight: 750;
+}
+.tagline { margin: 14px 0 0; font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 40ch; }
+.head-nav { margin-top: 22px; display: flex; gap: 8px; flex-wrap: wrap; }
+.head-nav a {
+  font-size: 14px; color: var(--muted); text-decoration: none;
+  padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+}
+.head-nav a:hover { color: var(--text); border-color: var(--line-2); }
+
+/* Sections */
+section { padding: 26px 0 30px; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+h2 {
+  margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bronze);
+  display: flex; align-items: center; gap: 10px;
+}
+h2::before { content: ""; width: 18px; height: 2px; background: linear-gradient(90deg, var(--ember), var(--bronze)); border-radius: 2px; }
+.note { margin: 0; font-size: 13px; color: var(--dim); }
+
+/* Game cards */
+.grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.card {
+  background: linear-gradient(180deg, var(--card-2), var(--card));
+  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { border-color: var(--line-2); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(232, 131, 58, 0.08); }
+.thumb { position: relative; aspect-ratio: 16 / 10; background: #000; border-bottom: 1px solid var(--line); overflow: hidden; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.thumb .ver {
+  position: absolute; top: 10px; right: 10px; font: 600 11px/1 var(--mono);
+  background: rgba(11, 10, 9, 0.82); color: var(--ember-2); border: 1px solid var(--line-2);
+  padding: 5px 7px; border-radius: 6px;
+}
+.body { padding: 18px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+h3 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
+.desc { margin: 0; color: var(--muted); font-size: 15px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 0; padding: 0; list-style: none; }
+.tags li {
+  font-size: 12px; color: #d8c3a8; background: rgba(192, 138, 78, 0.1);
+  border: 1px solid rgba(192, 138, 78, 0.25); padding: 2px 9px; border-radius: 999px;
+}
+.actions { margin-top: auto; padding-top: 8px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  font-weight: 650; font-size: 15px; color: #1a0f06;
+  background: linear-gradient(180deg, var(--ember-2), var(--ember));
+  padding: 10px 20px; border-radius: 10px; min-height: 44px;
+  box-shadow: 0 6px 18px rgba(232, 131, 58, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.btn:hover { filter: brightness(1.07); }
+.btn:focus-visible, .dl:focus-visible, .site:focus-visible, .head-nav a:focus-visible { outline: 2px solid var(--ember-2); outline-offset: 3px; }
+.dl { font-size: 13px; color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--line-2); padding: 4px 0; }
+.dl:hover { color: var(--text); border-color: var(--muted); }
+.dl .size { color: var(--dim); }
+
+/* Site cards */
+.sites { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+.site {
+  display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.site:hover { border-color: var(--line-2); transform: translateY(-2px); }
+.site .thumb { aspect-ratio: 16 / 9; }
+.site .body { padding: 14px 16px 16px; gap: 6px; }
+.site h3 { font-size: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.site h3 span { color: var(--ember-2); font-size: 14px; }
+.site .desc { font-size: 14px; }
+.site .url { font: 12px var(--mono); color: var(--dim); overflow-wrap: anywhere; }
+
+/* Footer */
+.site-foot { border-top: 1px solid var(--line); margin-top: 30px; padding: 26px 0 40px; color: var(--dim); font-size: 14px; }
+.site-foot .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 560px) {
+  .wrap { width: calc(100% - 28px); }
+  .site-head { padding: 40px 0 18px; }
+  .grid { grid-template-columns: 1fr; gap: 18px; }
+  .sites { grid-template-columns: 1fr; }
+  .mark { width: 38px; height: 38px; }
+}
+@media (prefers-reduced-motion: reduce) { .card, .site { transition: none; } .card:hover, .site:hover { transform: none; } }
