@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-CbXtAM7H.js";import{l as t}from"./index-CQmoLklN.js";var n=e(t(),1);function r({children:e,fallback:t}){let[r,i]=(0,n.useState)(!1);return(0,n.useEffect)(()=>i(!0),[]),r?e:t}export{r as t};
