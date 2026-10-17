@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full ASVAB Practice Test | ASVAB Focus</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .section-header { background: #1e293b; padding: 0.75rem 1rem; border-radius: var(--radius); margin-bottom: 1rem; }
+    .timer { font-size: 1.1rem; font-weight: bold; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="full-test.html" class="active">Full Test</a>
+          <a href="ai-tutor.html">AI Tutor</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Full CAT-ASVAB Style Practice Test</h1>
+      <p>135 scored questions across 10 subtests matching official structure. Each section is timed. Estimated standard scores and AFQT percentile are calculated at the end using an approximation algorithm (not official DoD scoring).</p>
+      <div class="disclaimer">This is an independent practice tool. Scores are estimates for study purposes only and will not match an official ASVAB result exactly. Not affiliated with the Department of Defense.</div>
+
+      <div id="start-screen" class="card">
+        <p>Sections and official-style limits (scored items only):</p>
+        <ul>
+          <li>GS: 15 questions / 12 min</li>
+          <li>AR: 15 questions / 55 min</li>
+          <li>WK: 15 questions / 9 min</li>
+          <li>PC: 10 questions / 27 min</li>
+          <li>MK: 15 questions / 31 min</li>
+          <li>EI: 15 questions / 10 min</li>
+          <li>AI: 10 questions / 7 min</li>
+          <li>SI: 10 questions / 6 min</li>
+          <li>MC: 15 questions / 22 min</li>
+          <li>AO: 15 questions / 18 min</li>
+        </ul>
+        <button id="start-btn" class="btn">Begin Full Test</button>
+      </div>
+
+      <div id="test-area" style="display:none;">
+        <div class="section-header">
+          <strong id="section-name"></strong> — Question <span id="q-num"></span> of <span id="q-total"></span>
+          <div class="timer" id="timer">Time remaining: --:--</div>
+        </div>
+        <div id="question-area"></div>
+        <button id="next-btn" class="btn" style="margin-top:1rem;">Submit & Next</button>
+      </div>
+
+      <div id="results" style="display:none;" class="card">
+        <h2>Estimated Results</h2>
+        <div id="score-summary"></div>
+        <p><strong>Estimated AFQT Percentile:</strong> <span id="afqt"></span></p>
+        <p id="afqt-note"></p>
+        <a href="dashboard.html" class="btn">View Progress</a>
+        <button onclick="location.reload()" class="btn" style="margin-left:1rem;">Retake</button>
+      </div>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official. Estimated scores only.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    // Question banks (abbreviated for each subject; expanded from existing material + new items)
+    const banks = {
+      GS: [
+        {q: "Which organelle produces energy in the form of ATP?", options: ["Nucleus", "Mitochondria", "Ribosome", "Chloroplast"], answer: 1, explanation: "Mitochondria produce ATP."},
+        {q: "What is the chemical formula for water?", options: ["CO2", "H2O", "NaCl", "O2"], answer: 1, explanation: "H2O."},
+        {q: "Photosynthesis primarily occurs in which organelle?", options: ["Mitochondria", "Chloroplast", "Nucleus", "Vacuole"], answer: 1, explanation: "Chloroplasts contain chlorophyll."},
+        {q: "The process by which plants make food using sunlight is called:", options: ["Respiration", "Photosynthesis", "Fermentation", "Digestion"], answer: 1, explanation: "Photosynthesis."},
+        {q: "Which of the following is a state of matter?", options: ["Energy", "Solid", "Force", "Velocity"], answer: 1, explanation: "Solid is a state of matter."},
+        {q: "The Earth revolves around the:", options: ["Moon", "Sun", "Mars", "Polaris"], answer: 1, explanation: "The Sun."},
+        {q: "DNA is found primarily in the:", options: ["Cytoplasm", "Nucleus", "Cell membrane", "Mitochondria only"], answer: 1, explanation: "Nucleus."},
+        {q: "Which gas do plants absorb for photosynthesis?", options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], answer: 2, explanation: "Carbon dioxide."},
+        {q: "The boiling point of water at sea level is:", options: ["0°C", "32°C", "100°C", "212°C"], answer: 2, explanation: "100°C."},
+        {q: "Which blood cells fight infection?", options: ["Red", "White", "Platelets", "Plasma"], answer: 1, explanation: "White blood cells."},
+        {q: "Gravity is an example of a:", options: ["Chemical reaction", "Force", "Element", "Compound"], answer: 1, explanation: "Force."},
+        {q: "The solar system’s center is the:", options: ["Earth", "Sun", "Moon", "Jupiter"], answer: 1, explanation: "Sun."},
+        {q: "Which is a renewable energy source?", options: ["Coal", "Oil", "Solar", "Natural gas"], answer: 2, explanation: "Solar."},
+        {q: "Osmosis is the movement of:", options: ["Solids", "Water across a membrane", "Heat", "Light"], answer: 1, explanation: "Water."},
+        {q: "The primary function of red blood cells is to carry:", options: ["Oxygen", "Carbon dioxide only", "Nutrients only", "Waste"], answer: 0, explanation: "Oxygen."}
+      ],
+      AR: [ /* reuse and expand from existing AR bank */ 
+        {q: "A vehicle travels 240 miles on 8 gallons. Average mpg?", options: ["25", "30", "35", "40"], answer: 1, explanation: "240/8=30."},
+        {q: "25% of 80 is:", options: ["15", "20", "25", "30"], answer: 1, explanation: "0.25*80=20."},
+        {q: "Three workers finish a job in 6 hours. How long for two workers at the same rate?", options: ["4", "8", "9", "12"], answer: 2, explanation: "Inverse: 18/2=9 hours."},
+        {q: "Average of 78, 85, 90, and x is 82. What is x?", options: ["75", "76", "78", "80"], answer: 0, explanation: "328 - 253 = 75."},
+        {q: "A $120 item is discounted 15%. Sale price?", options: ["96", "102", "105", "108"], answer: 1, explanation: "120-18=102."},
+        {q: "Ratio of men to women is 3:2. 45 men. How many women?", options: ["20", "25", "30", "35"], answer: 2, explanation: "1 part=15, 2 parts=30."},
+        {q: "0.45 per mile for 840 miles. Earnings?", options: ["318", "378", "392", "420"], answer: 1, explanation: "0.45*840=378."},
+        {q: "4 people, 12 days. How many days for 6 people?", options: ["6", "8", "9", "10"], answer: 1, explanation: "48/6=8."},
+        {q: "15% of 240?", options: ["30", "36", "40", "45"], answer: 1, explanation: "36."},
+        {q: "Map scale 1 inch = 20 miles. 3.5 inches?", options: ["60", "70", "80", "90"], answer: 1, explanation: "70."},
+        {q: "120 soldiers, 25% on leave. Present?", options: ["80", "90", "95", "100"], answer: 1, explanation: "90."},
+        {q: "Two pipes: 4 hrs and 6 hrs. Together?", options: ["2", "2.4", "3", "5"], answer: 1, explanation: "2.4 hours."},
+        {q: "$200 reduced 30%. New price?", options: ["130", "140", "150", "160"], answer: 1, explanation: "140."},
+        {q: "Walks 2.5 miles in 45 minutes. Mph?", options: ["2.5", "3", "3.33", "3.5"], answer: 2, explanation: "≈3.33."},
+        {q: "Tax 6% on $85. Total?", options: ["89.10", "90.10", "91.10", "92"], answer: 1, explanation: "90.10."}
+      ],
+      WK: [
+        {q: "ABOLISH most nearly means:", options: ["create", "end", "support", "modify"], answer: 1, explanation: "End."},
+        {q: "METICULOUS most nearly means:", options: ["careless", "careful", "quick", "angry"], answer: 1, explanation: "Careful."},
+        {q: "ARDUOUS most nearly means:", options: ["easy", "difficult", "pleasant", "short"], answer: 1, explanation: "Difficult."},
+        {q: "CONCISE most nearly means:", options: ["long", "brief", "confusing", "loud"], answer: 1, explanation: "Brief."},
+        {q: "AMBIGUOUS most nearly means:", options: ["clear", "uncertain", "certain", "simple"], answer: 1, explanation: "Uncertain."},
+        {q: "PRUDENT most nearly means:", options: ["risky", "wise", "foolish", "expensive"], answer: 1, explanation: "Wise."},
+        {q: "BENEVOLENT most nearly means:", options: ["cruel", "kind", "selfish", "strict"], answer: 1, explanation: "Kind."},
+        {q: "VAGUE most nearly means:", options: ["clear", "unclear", "detailed", "accurate"], answer: 1, explanation: "Unclear."},
+        {q: "RELUCTANT most nearly means:", options: ["eager", "unwilling", "happy", "certain"], answer: 1, explanation: "Unwilling."},
+        {q: "RESOLVE most nearly means:", options: ["doubt", "determination", "fear", "anger"], answer: 1, explanation: "Determination."},
+        {q: "OBSOLETE most nearly means:", options: ["modern", "outdated", "useful", "new"], answer: 1, explanation: "Outdated."},
+        {q: "EXPLICIT most nearly means:", options: ["unclear", "clear", "brief", "complex"], answer: 1, explanation: "Clear."},
+        {q: "DILIGENT most nearly means:", options: ["lazy", "hardworking", "careless", "slow"], answer: 1, explanation: "Hardworking."},
+        {q: "PRECARIOUS most nearly means:", options: ["safe", "uncertain", "stable", "easy"], answer: 1, explanation: "Uncertain."},
+        {q: "ADEQUATE most nearly means:", options: ["insufficient", "sufficient", "excessive", "poor"], answer: 1, explanation: "Sufficient."}
+      ],
+      PC: [
+        {q: "A short passage states that consistent training reduces injury rates among recruits. What is the main idea?", options: ["Injuries are inevitable", "Regular training has measurable benefits including fewer injuries", "Only officers should train", "Training is optional"], answer: 1, explanation: "Main idea is the benefit of consistent training."},
+        {q: "The text notes that the clerk notified the supervisor immediately after discovering a discrepancy in the inventory. What did the clerk do?", options: ["Ignored the problem", "Notified the supervisor", "Corrected it alone", "Returned the items"], answer: 1, explanation: "Direct detail."},
+        {q: "According to the paragraph, the unit completed the mission ahead of schedule because of careful planning. What can be inferred?", options: ["Planning was irrelevant", "Preparation contributed to the early completion", "The mission failed", "No planning occurred"], answer: 1, explanation: "Supported inference."},
+        {q: "The passage explains that higher elevations have lower air pressure, which affects breathing. What is a key point?", options: ["Air pressure is constant", "Elevation can change air pressure and breathing", "Breathing is unaffected", "Only temperature matters"], answer: 1, explanation: "Key relationship."},
+        {q: "A paragraph describes how a soldier used a map and compass to navigate after GPS failed. Main idea?", options: ["GPS is perfect", "Traditional navigation skills remain useful", "Maps are obsolete", "Compasses do not work"], answer: 1, explanation: "Main idea."},
+        {q: "The text says the new procedure reduced errors by 40 percent. What is stated?", options: ["Errors increased", "Errors decreased by 40%", "No change occurred", "The procedure was abandoned"], answer: 1, explanation: "Direct detail."},
+        {q: "From the passage, one can conclude that early reporting of equipment issues prevents larger problems. This is an:", options: ["Unrelated fact", "Supported inference", "Contradiction", "Outside knowledge"], answer: 1, explanation: "Inference."},
+        {q: "The paragraph focuses on the importance of clear communication during operations. Topic?", options: ["Equipment maintenance", "Communication", "Weather", "Nutrition"], answer: 1, explanation: "Topic."},
+        {q: "According to the text, the team reviewed the checklist before departure. What happened?", options: ["They skipped the checklist", "They reviewed the checklist", "They left early without review", "The checklist was lost"], answer: 1, explanation: "Detail."},
+        {q: "A passage notes that hydration is critical in hot environments. Main idea?", options: ["Water is optional", "Proper hydration supports performance and safety in heat", "Only cold weather matters", "Hydration has no effect"], answer: 1, explanation: "Main idea."}
+      ],
+      MK: [
+        {q: "Solve: 3x + 5 = 20", options: ["3", "4", "5", "6"], answer: 2, explanation: "x=5."},
+        {q: "Area of rectangle 8 by 5:", options: ["13", "26", "40", "45"], answer: 2, explanation: "40."},
+        {q: "2³ × 2² =", options: ["2⁵", "2⁶", "4⁵", "8"], answer: 0, explanation: "2^5."},
+        {q: "3/4 as a decimal:", options: ["0.34", "0.75", "0.8", "1.33"], answer: 1, explanation: "0.75."},
+        {q: "Perimeter of square is 36. Side length?", options: ["6", "9", "12", "18"], answer: 1, explanation: "9."},
+        {q: "Factor x² − 9", options: ["(x−3)(x+3)", "(x−9)(x+1)", "(x−3)²", "(x+3)²"], answer: 0, explanation: "Difference of squares."},
+        {q: "Circle area, r=6 (π≈3.14)", options: ["18.84", "37.68", "113.04", "226"], answer: 2, explanation: "≈113."},
+        {q: "2x − 7 = 11", options: ["7", "8", "9", "10"], answer: 2, explanation: "x=9."},
+        {q: "5² + 3²", options: ["25", "34", "40", "64"], answer: 1, explanation: "34."},
+        {q: "Volume of 4×3×2 box", options: ["12", "18", "24", "36"], answer: 2, explanation: "24."},
+        {q: "LCM of 4 and 6", options: ["8", "12", "18", "24"], answer: 1, explanation: "12."},
+        {q: "(x² − 4)/(x − 2) for x≠2", options: ["x−2", "x+2", "x²+2", "2x"], answer: 1, explanation: "x+2."},
+        {q: "2/5 + 1/5", options: ["1/5", "2/5", "3/5", "1"], answer: 2, explanation: "3/5."},
+        {q: "Right triangle legs 3 and 4. Hypotenuse?", options: ["5", "6", "7", "12"], answer: 0, explanation: "5."},
+        {q: "15% as decimal", options: ["0.015", "0.15", "1.5", "15"], answer: 1, explanation: "0.15."}
+      ],
+      EI: [
+        {q: "Ohm’s Law is V =", options: ["I × R", "I / R", "R / I", "P × R"], answer: 0, explanation: "V=IR."},
+        {q: "In a series circuit, current is:", options: ["Different in each part", "The same throughout", "Zero", "Only at the battery"], answer: 1, explanation: "Same."},
+        {q: "A component that stores charge is a:", options: ["Resistor", "Capacitor", "Switch", "Fuse"], answer: 1, explanation: "Capacitor."},
+        {q: "Power equals:", options: ["V × I", "V / I", "I / R", "R × I"], answer: 0, explanation: "P=VI."},
+        {q: "In parallel, voltage across branches is:", options: ["Different", "The same", "Zero", "Half"], answer: 1, explanation: "Same."},
+        {q: "Resistance is measured in:", options: ["Volts", "Amps", "Ohms", "Watts"], answer: 2, explanation: "Ohms."},
+        {q: "A closed switch allows:", options: ["No current", "Current to flow", "Only voltage", "Heat only"], answer: 1, explanation: "Current."},
+        {q: "Ground in a circuit is usually:", options: ["Positive", "Negative or zero reference", "Always hot", "Unused"], answer: 1, explanation: "Reference."},
+        {q: "If voltage doubles and resistance stays the same, current:", options: ["Halves", "Doubles", "Stays same", "Quadruples"], answer: 1, explanation: "Doubles (Ohm’s Law)."},
+        {q: "A fuse protects by:", options: ["Increasing voltage", "Opening the circuit on overload", "Storing energy", "Reducing resistance"], answer: 1, explanation: "Opens."},
+        {q: "Semiconductors are used in:", options: ["Only batteries", "Diodes and transistors", "Only wires", "Fuses only"], answer: 1, explanation: "Diodes/transistors."},
+        {q: "Current is measured in:", options: ["Volts", "Amps", "Ohms", "Watts"], answer: 1, explanation: "Amps."},
+        {q: "A battery provides:", options: ["Resistance only", "Voltage / EMF", "Only current", "Ground"], answer: 1, explanation: "Voltage."},
+        {q: "In series, total resistance is:", options: ["Less than each", "Sum of each", "Product", "Zero"], answer: 1, explanation: "Sum."},
+        {q: "An open circuit has:", options: ["Continuous path", "No continuous path for current", "Maximum current", "Zero resistance"], answer: 1, explanation: "No path."}
+      ],
+      AI: [
+        {q: "The four-stroke cycle order is:", options: ["Intake, compression, power, exhaust", "Power, intake, exhaust, compression", "Compression, intake, power, exhaust", "Exhaust, power, intake, compression"], answer: 0, explanation: "Intake-compression-power-exhaust."},
+        {q: "The alternator primarily:", options: ["Starts the engine", "Charges the battery while running", "Cools the engine", "Filters oil"], answer: 1, explanation: "Charges battery."},
+        {q: "Brake fluid is used in:", options: ["Cooling system", "Hydraulic brake system", "Fuel system", "Transmission"], answer: 1, explanation: "Hydraulic brakes."},
+        {q: "The battery provides power to:", options: ["Only the radio", "Start the engine and accessories", "Only the lights", "Nothing"], answer: 1, explanation: "Starting and accessories."},
+        {q: "A thermostat regulates:", options: ["Fuel flow", "Coolant temperature", "Oil pressure", "Spark"], answer: 1, explanation: "Coolant temp."},
+        {q: "The starter motor is powered by the:", options: ["Alternator", "Battery", "Fuel pump", "Radiator"], answer: 1, explanation: "Battery."},
+        {q: "Oil primarily lubricates and:", options: ["Cools", "Heats", "Ignites", "Filters air"], answer: 0, explanation: "Lubricates and helps cool."},
+        {q: "Disc brakes use:", options: ["Drums only", "Pads and rotors", "Only fluid", "Cables only"], answer: 1, explanation: "Pads and rotors."},
+        {q: "The fuel pump delivers fuel from the:", options: ["Radiator", "Tank to the engine", "Battery", "Exhaust"], answer: 1, explanation: "Tank to engine."},
+        {q: "A catalytic converter is part of the:", options: ["Cooling system", "Exhaust system", "Ignition", "Suspension"], answer: 1, explanation: "Exhaust."}
+      ],
+      SI: [
+        {q: "A micrometer is used for:", options: ["Hammering", "Precise measurement", "Cutting", "Welding"], answer: 1, explanation: "Precise measurement."},
+        {q: "A wrench is primarily used to:", options: ["Measure", "Turn nuts and bolts", "Cut metal", "Sand"], answer: 1, explanation: "Turn fasteners."},
+        {q: "Safety glasses protect:", options: ["Feet", "Eyes", "Hands only", "Ears"], answer: 1, explanation: "Eyes."},
+        {q: "A caliper can measure:", options: ["Only length", "Inside and outside dimensions", "Only weight", "Temperature"], answer: 1, explanation: "Dimensions."},
+        {q: "A screwdriver is used with:", options: ["Nuts", "Screws", "Bolts only", "Nails"], answer: 1, explanation: "Screws."},
+        {q: "Pliers are useful for:", options: ["Precise measurement", "Gripping and bending", "Drilling", "Grinding"], answer: 1, explanation: "Gripping."},
+        {q: "A level checks:", options: ["Weight", "Horizontal or vertical alignment", "Temperature", "Voltage"], answer: 1, explanation: "Alignment."},
+        {q: "Files are used to:", options: ["Measure", "Smooth or shape metal/wood", "Tighten", "Paint"], answer: 1, explanation: "Smooth/shape."},
+        {q: "A hacksaw cuts:", options: ["Only wood", "Metal", "Only plastic", "Glass only"], answer: 1, explanation: "Metal."},
+        {q: "Torque is important when:", options: ["Painting", "Tightening fasteners to specification", "Measuring length", "Welding only"], answer: 1, explanation: "Proper tightening."}
+      ],
+      MC: [
+        {q: "A longer lever arm generally:", options: ["Increases force needed", "Reduces force needed", "Has no effect", "Stops motion"], answer: 1, explanation: "Mechanical advantage."},
+        {q: "Meshed gears turn in:", options: ["The same direction", "Opposite directions", "Random directions", "Only one turns"], answer: 1, explanation: "Opposite."},
+        {q: "A fixed pulley primarily:", options: ["Reduces force", "Changes direction of force", "Increases speed only", "Stops motion"], answer: 1, explanation: "Changes direction."},
+        {q: "A movable pulley can:", options: ["Only change direction", "Reduce the force required", "Increase force needed", "Do nothing"], answer: 1, explanation: "Reduces force."},
+        {q: "A larger gear meshed with a smaller gear turns:", options: ["Faster", "Slower with more torque", "Same speed", "Not at all"], answer: 1, explanation: "Slower, more torque."},
+        {q: "Friction opposes:", options: ["Motion", "Gravity only", "Heat", "Light"], answer: 0, explanation: "Motion."},
+        {q: "Center of gravity affects:", options: ["Only color", "Stability", "Electrical resistance", "Temperature"], answer: 1, explanation: "Stability."},
+        {q: "An inclined plane reduces:", options: ["Distance", "Force needed to raise an object", "Weight", "Friction always"], answer: 1, explanation: "Force."},
+        {q: "Hydraulic systems transmit force via:", options: ["Air only", "Fluid", "Gears only", "Levers only"], answer: 1, explanation: "Fluid."},
+        {q: "A wedge is a type of:", options: ["Pulley", "Inclined plane", "Gear", "Lever"], answer: 1, explanation: "Inclined plane."},
+        {q: "Torque increases with:", options: ["Shorter arm", "Longer force arm or more force", "Less force", "No arm"], answer: 1, explanation: "Longer arm or more force."},
+        {q: "In a block and tackle, multiple pulleys can:", options: ["Increase force needed", "Provide greater mechanical advantage", "Stop motion", "Only change direction"], answer: 1, explanation: "Greater advantage."},
+        {q: "A screw is essentially a:", options: ["Lever", "Inclined plane wrapped around a cylinder", "Pulley", "Gear"], answer: 1, explanation: "Inclined plane."},
+        {q: "Balanced forces result in:", options: ["Acceleration", "No change in motion", "Always stopping", "Increasing speed"], answer: 1, explanation: "No change (Newton’s first)."},
+        {q: "A wheel and axle multiplies:", options: ["Only speed", "Force or speed depending on use", "Nothing", "Only heat"], answer: 1, explanation: "Force or speed."}
+      ],
+      AO: [
+        {q: "Which shape best completes a simple puzzle of interlocking parts? (conceptual)", options: ["A mismatched angle", "The complementary piece", "A larger unrelated shape", "A circle only"], answer: 1, explanation: "Complementary fit."},
+        {q: "When assembling objects, matching edges and angles is key. A correct piece will:", options: ["Overlap incorrectly", "Align edges and fill the space", "Be a different color only", "Be larger than the space"], answer: 1, explanation: "Align and fill."},
+        {q: "Spatial rotation: a figure rotated 90 degrees will:", options: ["Look identical in orientation", "Have sides in a new orientation", "Disappear", "Change color"], answer: 1, explanation: "New orientation."},
+        {q: "In assembly tasks, symmetry often helps identify the correct piece. A symmetric match is usually:", options: ["Random", "The correct fit", "Always wrong", "Unrelated"], answer: 1, explanation: "Often correct."},
+        {q: "A piece that leaves gaps is typically:", options: ["Correct", "Incorrect", "Always better", "The largest"], answer: 1, explanation: "Incorrect."},
+        {q: "Mental rotation practice improves performance on assembling objects. This skill is:", options: ["Verbal", "Spatial", "Only mathematical", "Irrelevant"], answer: 1, explanation: "Spatial."},
+        {q: "When two parts interlock, the protruding section fits into:", options: ["Nothing", "A matching recess", "Any space", "A larger hole only"], answer: 1, explanation: "Matching recess."},
+        {q: "Mirror images are sometimes used in spatial tests. A mirror of a shape is:", options: ["Identical in orientation", "Reflected", "Always larger", "Unrelated"], answer: 1, explanation: "Reflected."},
+        {q: "The correct assembly usually requires the fewest leftover pieces and no overlaps. This indicates:", options: ["Poor fit", "Proper assembly", "Incomplete", "Random"], answer: 1, explanation: "Proper."},
+        {q: "Practice with paper cutouts can help develop:", options: ["Only vocabulary", "Spatial visualization", "Only arithmetic", "Nothing"], answer: 1, explanation: "Spatial skill."},
+        {q: "In a sequence of shapes, the next logical piece continues the pattern of:", options: ["Random change", "Rotation or addition", "Color only", "Size decrease only"], answer: 1, explanation: "Pattern continuation."},
+        {q: "Overlapping incorrectly usually means the piece is:", options: ["Correct", "Wrong orientation or shape", "Too small always", "Perfect"], answer: 1, explanation: "Wrong."},
+        {q: "Assembling Objects rewards careful observation of:", options: ["Only color", "Edges, angles, and fit", "Only size", "Text"], answer: 1, explanation: "Edges and fit."},
+        {q: "A 180-degree rotation flips a shape. The result is:", options: ["Unchanged", "Inverted", "Smaller", "Larger"], answer: 1, explanation: "Inverted orientation."},
+        {q: "The best strategy is to eliminate pieces that clearly do not fit before choosing. This is:", options: ["Useless", "Efficient process of elimination", "Only for math", "Prohibited"], answer: 1, explanation: "Elimination."}
+      ]
+    };
+
+    const structure = [
+      {code: "GS", name: "General Science", count: 15, minutes: 12},
+      {code: "AR", name: "Arithmetic Reasoning", count: 15, minutes: 55},
+      {code: "WK", name: "Word Knowledge", count: 15, minutes: 9},
+      {code: "PC", name: "Paragraph Comprehension", count: 10, minutes: 27},
+      {code: "MK", name: "Mathematics Knowledge", count: 15, minutes: 31},
+      {code: "EI", name: "Electronics Information", count: 15, minutes: 10},
+      {code: "AI", name: "Auto Information", count: 10, minutes: 7},
+      {code: "SI", name: "Shop Information", count: 10, minutes: 6},
+      {code: "MC", name: "Mechanical Comprehension", count: 15, minutes: 22},
+      {code: "AO", name: "Assembling Objects", count: 15, minutes: 18}
+    ];
+
+    let sectionIndex = 0;
+    let questionIndex = 0;
+    let currentQuestions = [];
+    let sectionQuestions = {}; // store actual questions used per section
+    let answers = {};
+    let timerInterval = null;
+    let timeLeft = 0;
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startSection() {
+      const sec = structure[sectionIndex];
+      const bank = banks[sec.code] || [];
+      currentQuestions = shuffle(bank).slice(0, Math.min(sec.count, bank.length));
+      sectionQuestions[sec.code] = currentQuestions;
+      questionIndex = 0;
+      timeLeft = sec.minutes * 60;
+      document.getElementById('section-name').textContent = sec.name;
+      document.getElementById('q-total').textContent = currentQuestions.length;
+      updateTimer();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) nextSection();
+      }, 1000);
+      renderQuestion();
+    }
+
+    function updateTimer() {
+      const m = Math.floor(timeLeft / 60);
+      const s = timeLeft % 60;
+      document.getElementById('timer').textContent = `Time remaining: ${m}:${s.toString().padStart(2,'0')}`;
+    }
+
+    function renderQuestion() {
+      const sec = structure[sectionIndex];
+      const q = currentQuestions[questionIndex];
+      document.getElementById('q-num').textContent = questionIndex + 1;
+      document.getElementById('question-area').innerHTML = `
+        <p><strong>${q.q}</strong></p>
+        <div class="options">
+          ${q.options.map((opt, i) => `<label><input type="radio" name="opt" value="${i}"> ${opt}</label>`).join('')}
+        </div>
+      `;
+    }
+
+    function nextQuestion() {
+      const sel = document.querySelector('input[name="opt"]:checked');
+      const sec = structure[sectionIndex];
+      if (sel) {
+        answers[`${sec.code}-${questionIndex}`] = parseInt(sel.value);
+      }
+      questionIndex++;
+      if (questionIndex >= currentQuestions.length) {
+        nextSection();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function nextSection() {
+      clearInterval(timerInterval);
+      sectionIndex++;
+      if (sectionIndex >= structure.length) {
+        finishTest();
+      } else {
+        startSection();
+      }
+    }
+
+    function finishTest() {
+      clearInterval(timerInterval);
+      document.getElementById('test-area').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+
+      const results = {};
+      structure.forEach(sec => {
+        const qs = sectionQuestions[sec.code] || [];
+        let correct = 0;
+        qs.forEach((q, i) => {
+          const key = `${sec.code}-${i}`;
+          if (answers[key] === q.answer) correct++;
+        });
+        results[sec.code] = { correct, total: qs.length };
+      });
+
+      function toStd(pct) {
+        return Math.round(30 + pct * 50);
+      }
+
+      const arPct = (results.AR?.correct || 0) / (results.AR?.total || 1);
+      const mkPct = (results.MK?.correct || 0) / (results.MK?.total || 1);
+      const wkPct = (results.WK?.correct || 0) / (results.WK?.total || 1);
+      const pcPct = (results.PC?.correct || 0) / (results.PC?.total || 1);
+
+      const arStd = toStd(arPct);
+      const mkStd = toStd(mkPct);
+      const wkStd = toStd(wkPct);
+      const pcStd = toStd(pcPct);
+
+      const ve = Math.round(0.65 * wkStd + 0.40 * pcStd - 3);
+      const afqtRaw = arStd + mkStd + 2 * ve;
+      let afqt = Math.min(99, Math.max(1, Math.round((afqtRaw - 140) / 1.3)));
+
+      let html = '<ul>';
+      structure.forEach(sec => {
+        const r = results[sec.code] || {correct:0, total:0};
+        const pct = r.total ? Math.round((r.correct / r.total) * 100) : 0;
+        html += `<li>${sec.name}: ${r.correct}/${r.total} (${pct}%) — Est. Standard Score ~${toStd(r.correct/r.total || 0)}</li>`;
+      });
+      html += '</ul>';
+      document.getElementById('score-summary').innerHTML = html;
+      document.getElementById('afqt').textContent = afqt;
+      document.getElementById('afqt-note').textContent = `Estimated using exact answers from this session, AR + MK + 2×VE approximation. Actual official scoring uses item-response equating and published tables. Use for practice tracking only.`;
+
+      // Approximate line scores (Army-style examples)
+      const gt = Math.round((arStd + ve) / 2 + 50); // rough GT
+      const mm = Math.round((results.MC ? toStd(results.MC.correct / results.MC.total) : 50) + 10);
+      const el = Math.round((results.EI ? toStd(results.EI.correct / results.EI.total) : 50) + 5);
+      document.getElementById('line-scores').innerHTML = `
+        <h3>Estimated Line Scores (approximate)</h3>
+        <ul>
+          <li>GT (General Technical) ~${gt}</li>
+          <li>MM (Mechanical Maintenance) ~${mm}</li>
+          <li>EL (Electronics) ~${el}</li>
+        </ul>
+        <p style="font-size:0.9rem;">These are rough estimates for study purposes. Official line scores determine job qualification and vary by branch. Discuss with a recruiter.</p>
+      `;
+
+      const pts = parseInt(localStorage.getItem('asvabPoints') || '0') + 50;
+      localStorage.setItem('asvabPoints', pts);
+
+      // Save to progress
+      const progress = JSON.parse(localStorage.getItem('asvabProgress') || '{}');
+      progress.FullTest = { afqt, date: new Date().toISOString() };
+      localStorage.setItem('asvabProgress', JSON.stringify(progress));
+    }
+
+    document.getElementById('start-btn').onclick = () => {
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('test-area').style.display = 'block';
+      startSection();
+    };
+
+    document.getElementById('next-btn').onclick = nextQuestion;
+  </script>
+</body>
+</html>

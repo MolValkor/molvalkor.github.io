@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ASVAB Focus Prep — Independent military-themed study tool focused on AFQT subjects. Lessons, practice quizzes, full test, AI tutor, and progress tracking to help you qualify.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html" class="active">Home</a>
+          <a href="onboarding.html">Get Started</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="full-test.html">Full Test</a>
+          <a href="ai-tutor.html">AI Tutor</a>
+          <a href="branches.html">Branches</a>
+          <a href="diagnostic.html">Diagnostic</a>
+          <a href="dashboard.html">Progress</a>
+          <a href="resources.html">Resources</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>ASVAB Focus Prep</h1>
+      <p>Built for people who need to pass. Focus on the four AFQT subjects and reach a qualifying score of 31. Simple lessons and practice so you can get there even if school was not your strength.</p>
+      <a href="lessons.html" class="btn">Start Lessons</a>
+      <a href="practice.html" class="btn btn-secondary" style="margin-left: 0.75rem;">Practice Now</a>
+    </div>
+  </section>
+
+  <main>
+    <div class="container">
+      <div class="disclaimer">
+        <strong>Disclaimer:</strong> Independent study tool. Not affiliated with the Department of Defense or official ASVAB program. Original content only. Practice performance does not guarantee official results. Consult a recruiter for current requirements.
+      </div>
+
+      <h2>Primary Mission: AFQT Subjects</h2>
+      <p>These four subtests form the Armed Forces Qualification Test score (percentile 1–99). Most branches require at least 31 with a high school diploma. Verbal Expression (Word Knowledge + Paragraph Comprehension) is double-weighted.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <span class="badge afqt">AFQT</span>
+          <h3>Arithmetic Reasoning</h3>
+          <p>Translate word problems into arithmetic operations. Rates, percentages, averages, ratios. No calculator.</p>
+          <a href="lessons.html#ar" class="btn">Lesson</a>
+          <a href="arithmetic.html" class="btn btn-secondary" style="margin-left:0.5rem;">Practice</a>
+        </div>
+        <div class="card">
+          <span class="badge afqt">AFQT</span>
+          <h3>Mathematics Knowledge</h3>
+          <p>Algebra, geometry, exponents, fractions, and number concepts at high-school level.</p>
+          <a href="lessons.html#mk" class="btn">Lesson</a>
+          <a href="math-knowledge.html" class="btn btn-secondary" style="margin-left:0.5rem;">Practice</a>
+        </div>
+        <div class="card">
+          <span class="badge afqt">AFQT</span>
+          <h3>Word Knowledge</h3>
+          <p>Synonyms and word meanings, often in short sentence context. Builds Verbal Expression.</p>
+          <a href="lessons.html#wk" class="btn">Lesson</a>
+          <a href="word-knowledge.html" class="btn btn-secondary" style="margin-left:0.5rem;">Practice</a>
+        </div>
+        <div class="card">
+          <span class="badge afqt">AFQT</span>
+          <h3>Paragraph Comprehension</h3>
+          <p>Extract main ideas, details, and inferences from short passages.</p>
+          <a href="lessons.html#pc" class="btn">Lesson</a>
+          <a href="paragraph.html" class="btn btn-secondary" style="margin-left:0.5rem;">Practice</a>
+        </div>
+      </div>
+
+      <h2>Secondary Subjects (Line Scores)</h2>
+      <p>These feed composite scores used for specific occupations. Strong performance expands job options after qualification.</p>
+      <div class="grid grid-3">
+        <div class="card"><span class="badge secondary">Line</span><h3>General Science</h3><a href="lessons.html#gs">Lesson</a></div>
+        <div class="card"><span class="badge secondary">Line</span><h3>Electronics Information</h3><a href="lessons.html#ei">Lesson</a></div>
+        <div class="card"><span class="badge secondary">Line</span><h3>Mechanical Comprehension</h3><a href="lessons.html#mc">Lesson</a></div>
+        <div class="card"><span class="badge secondary">Line</span><h3>Auto & Shop</h3><a href="lessons.html#as">Lesson</a></div>
+      </div>
+
+      <h2>Study Path for Rapid Qualification</h2>
+      <ol>
+        <li>Complete the four primary lessons (target: 60–90 minutes total).</li>
+        <li>Run the corresponding practice quizzes and review every explanation.</li>
+        <li>Use the AI Tutor for any remaining weak points.</li>
+        <li>Optional: secondary lessons for desired career fields.</li>
+      </ol>
+      <p>The materials are written for clarity so that users with basic high-school exposure can progress quickly.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>ASVAB Focus Prep — Independent study tool. Not affiliated with the Department of Defense.</p>
+      <p><a href="privacy.html">Privacy & Terms</a> · <a href="onboarding.html">Get Started</a> · <a href="login.html">Login</a> · <a href="https://www.officialasvab.com/" target="_blank" rel="noopener">Official ASVAB</a></p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p>
+    </div>
+  </footer>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
+    }
+  </script>
+</body>
+</html>

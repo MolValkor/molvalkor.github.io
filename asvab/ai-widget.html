@@ -1,0 +1,79 @@
+<!-- AI Chat Widget - Include on learning pages -->
+<div id="ai-widget">
+  <button id="ai-toggle" class="ai-fab">Ask AI</button>
+  <div id="ai-panel" style="display:none;">
+    <div class="ai-header">
+      <strong>ASVAB AI Tutor</strong>
+      <button id="ai-close">×</button>
+    </div>
+    <div id="ai-chat"></div>
+    <div class="ai-input">
+      <input type="text" id="ai-input" placeholder="Ask about this topic...">
+      <button id="ai-send">Send</button>
+    </div>
+  </div>
+</div>
+<style>
+#ai-widget { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; }
+.ai-fab { background: var(--accent); color: #0f172a; border: none; padding: 0.8rem 1.2rem; border-radius: 999px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+#ai-panel { position: absolute; bottom: 4rem; right: 0; width: 340px; max-height: 480px; background: #1e293b; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); display: flex; flex-direction: column; }
+.ai-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+#ai-close { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; }
+#ai-chat { flex: 1; overflow-y: auto; padding: 0.75rem; max-height: 320px; font-size: 0.9rem; }
+.ai-msg { margin: 0.5rem 0; padding: 0.6rem 0.8rem; border-radius: 8px; }
+.ai-user { background: #1e3a5f; margin-left: 1.5rem; }
+.ai-tutor { background: #0f172a; border-left: 3px solid var(--accent); }
+.ai-input { display: flex; padding: 0.5rem; border-top: 1px solid var(--border); }
+#ai-input { flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: #0f172a; color: #fff; }
+#ai-send { background: var(--accent); color: #0f172a; border: none; padding: 0.5rem 0.8rem; margin-left: 0.4rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+</style>
+<script>
+(function() {
+  const knowledge = {
+    "ohm": "Ohm’s Law: Voltage = Current × Resistance (V = I × R). Power = V × I. Series = one path. Parallel = same voltage across branches.",
+    "percent": "Percent: turn into decimal then multiply. 25% of 80 = 0.25 × 80 = 20. Percent change = (difference ÷ original) × 100.",
+    "arithmetic": "Arithmetic Reasoning: read the word problem, find what is asked, write the numbers, choose the operation, solve, and check units. No calculator.",
+    "average": "Average = total ÷ count. To find a missing number, multiply average by count, then subtract known numbers.",
+    "afqt": "AFQT comes from AR + MK + 2×VE (WK + PC). Most branches want 31+ with a diploma.",
+    "lever": "Longer lever arm means less force is needed. This is mechanical advantage.",
+    "main idea": "Main idea = what the whole passage is mostly about. Usually in the first or last sentence.",
+    "meticulous": "Meticulous means very careful and precise."
+  };
+
+  const toggle = document.getElementById('ai-toggle');
+  const panel = document.getElementById('ai-panel');
+  const close = document.getElementById('ai-close');
+  const chat = document.getElementById('ai-chat');
+  const input = document.getElementById('ai-input');
+  const send = document.getElementById('ai-send');
+
+  function add(msg, type) {
+    const d = document.createElement('div');
+    d.className = 'ai-msg ai-' + type;
+    d.innerHTML = msg;
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function reply(q) {
+    const lower = q.toLowerCase();
+    for (const [k, v] of Object.entries(knowledge)) {
+      if (lower.includes(k)) return v + '<br><a href="lessons.html" style="color:var(--accent);">See full lesson</a>';
+    }
+    return "I can help with ASVAB topics. Try asking about percentages, Ohm’s law, averages, the AFQT, or levers.";
+  }
+
+  toggle.onclick = () => { panel.style.display = panel.style.display === 'none' ? 'flex' : 'none'; };
+  close.onclick = () => { panel.style.display = 'none'; };
+  send.onclick = () => {
+    const t = input.value.trim();
+    if (!t) return;
+    add(t, 'user');
+    input.value = '';
+    setTimeout(() => add(reply(t), 'tutor'), 200);
+  };
+  input.onkeypress = (e) => { if (e.key === 'Enter') send.onclick(); };
+
+  add("Ask me anything about the topic you’re studying.", "tutor");
+})();
+</script>

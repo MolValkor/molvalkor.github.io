@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathematics Knowledge Practice | ASVAB Focus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="ai-tutor.html">AI Tutor</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="resources.html">Resources</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Mathematics Knowledge (MK)</h1>
+      <p>Primary AFQT subject. Questions drawn randomly from a larger bank each session.</p>
+      <div class="disclaimer">Original practice questions. Not official ASVAB items.</div>
+
+      <div id="quiz" class="quiz-container"></div>
+      <div id="results" style="display:none;" class="card">
+        <h2>Results</h2>
+        <p id="score-text"></p>
+        <a href="practice.html" class="btn">Back to Practice</a>
+        <button onclick="location.reload()" class="btn" style="margin-left:1rem;">New Random Set</button>
+      </div>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    const fullBank = [
+      {q: "Solve for x: 3x + 5 = 20", options: ["3", "4", "5", "6"], answer: 2, explanation: "3x = 15, x = 5."},
+      {q: "What is the area of a rectangle with length 8 and width 5?", options: ["13", "26", "40", "45"], answer: 2, explanation: "Area = 8 × 5 = 40."},
+      {q: "Simplify: 2³ × 2²", options: ["2⁵", "2⁶", "4⁵", "8"], answer: 0, explanation: "Add exponents: 3 + 2 = 5, so 2⁵."},
+      {q: "What is 3/4 as a decimal?", options: ["0.34", "0.75", "0.8", "1.33"], answer: 1, explanation: "3 ÷ 4 = 0.75."},
+      {q: "The perimeter of a square is 36. What is the length of one side?", options: ["6", "9", "12", "18"], answer: 1, explanation: "36 ÷ 4 = 9."},
+      {q: "Factor: x² − 9", options: ["(x−3)(x+3)", "(x−9)(x+1)", "(x−3)²", "(x+3)²"], answer: 0, explanation: "Difference of squares."},
+      {q: "What is the area of a circle with radius 6? (Use π ≈ 3.14)", options: ["18.84", "37.68", "113.04", "226.08"], answer: 2, explanation: "πr² ≈ 3.14 × 36 = 113.04."},
+      {q: "Solve: 2x − 7 = 11", options: ["7", "8", "9", "10"], answer: 2, explanation: "2x = 18, x = 9."},
+      {q: "What is 5² + 3²?", options: ["25", "34", "40", "64"], answer: 1, explanation: "25 + 9 = 34."},
+      {q: "The volume of a rectangular box is length × width × height. What is the volume of a 4 × 3 × 2 box?", options: ["12", "18", "24", "36"], answer: 2, explanation: "4 × 3 × 2 = 24."},
+      {q: "What is the least common multiple of 4 and 6?", options: ["8", "12", "18", "24"], answer: 1, explanation: "LCM is 12."},
+      {q: "Simplify: (x² − 4) / (x − 2) for x ≠ 2", options: ["x − 2", "x + 2", "x² + 2", "2x"], answer: 1, explanation: "Difference of squares factors to (x−2)(x+2) / (x−2) = x + 2."},
+      {q: "What is 2/5 + 1/5?", options: ["1/5", "2/5", "3/5", "1"], answer: 2, explanation: "3/5."},
+      {q: "A right triangle has legs of 3 and 4. What is the hypotenuse?", options: ["5", "6", "7", "12"], answer: 0, explanation: "3-4-5 triangle. √(9+16)=√25=5."},
+      {q: "What is 15% expressed as a decimal?", options: ["0.015", "0.15", "1.5", "15"], answer: 1, explanation: "15% = 0.15."},
+      {q: "Solve for y: y/4 = 5", options: ["16", "20", "24", "25"], answer: 1, explanation: "y = 20."}
+    ];
+
+    function shuffle(array) {
+      const a = [...array];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    const questions = shuffle(fullBank).slice(0, 10);
+    let current = 0, score = 0, answered = false;
+
+    function renderQuestion() {
+      const container = document.getElementById('quiz');
+      if (current >= questions.length) { showResults(); return; }
+      const q = questions[current];
+      container.innerHTML = `
+        <div class="progress-bar"><div class="progress-fill" style="width:${(current/questions.length)*100}%"></div></div>
+        <div class="question"><h3>Question ${current+1} of ${questions.length}</h3><p>${q.q}</p></div>
+        <div class="options">
+          ${q.options.map((opt, i) => `<label><input type="radio" name="opt" value="${i}"> ${opt}</label>`).join('')}
+        </div>
+        <button id="submit-btn" class="btn" style="margin-top:1rem;">Submit Answer</button>
+        <div id="feedback"></div>
+      `;
+      document.getElementById('submit-btn').onclick = submitAnswer;
+      answered = false;
+    }
+
+    function submitAnswer() {
+      if (answered) return;
+      const selected = document.querySelector('input[name="opt"]:checked');
+      if (!selected) return alert('Please select an answer.');
+      answered = true;
+      const idx = parseInt(selected.value);
+      const q = questions[current];
+      const feedback = document.getElementById('feedback');
+      if (idx === q.answer) {
+        score++;
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `<strong>Correct.</strong> ${q.explanation}`;
+      } else {
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = `<strong>Incorrect.</strong> Correct: ${q.options[q.answer]}. ${q.explanation}`;
+      }
+      document.getElementById('submit-btn').textContent = 'Next Question';
+      document.getElementById('submit-btn').onclick = () => { current++; renderQuestion(); };
+    }
+
+    function showResults() {
+      document.getElementById('quiz').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+      const pct = Math.round((score / questions.length) * 100);
+      document.getElementById('score-text').textContent = `You scored ${score} out of ${questions.length} (${pct}%). Reload for a new random set.`;
+      const progress = JSON.parse(localStorage.getItem('asvabProgress') || '{}');
+      progress.MK = { score, total: questions.length, pct, date: new Date().toISOString() };
+      localStorage.setItem('asvabProgress', JSON.stringify(progress));
+    }
+
+    renderQuestion();
+  </script>
+<script src="ai-widget.html"></script></body>
+</html>

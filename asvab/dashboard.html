@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Dashboard | ASVAB Focus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="ai-tutor.html">AI Tutor</a>
+          <a href="reference.html">Reference</a>
+          <a href="flashcards.html">Flashcards</a>
+          <a href="dashboard.html" class="active">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Your Progress</h1>
+      <div class="card" id="recommendations">
+        <h3>Suggested Next Steps</h3>
+        <p id="rec-text">Complete a diagnostic or practice quiz to get personalized suggestions.</p>
+        <div id="rec-links"></div>
+      </div>
+        <h3>Study Streak</h3>
+        <p id="streak-text">Current streak: 0 days</p>
+      </div>
+      <div class="card" id="readiness-card">
+        <h3>AFQT Readiness</h3>
+        <p id="readiness-text">Complete a diagnostic or full test to see readiness.</p>
+      </div>
+        <h2 id="rank-title">Rank: E-1</h2>
+        <p id="points-text">Points: 0</p>
+        <div class="progress-bar"><div id="rank-fill" class="progress-fill" style="width:0%"></div></div>
+        <p id="next-rank">Next rank at 50 points</p>
+      </div>
+
+      <h2>Subject Mastery</h2>
+      <div id="progress-list" class="grid grid-2"></div>
+
+      <h2>Adaptive Review Queue</h2>
+      <div id="review-queue" class="card"><p>No missed questions yet. Complete quizzes to build your review queue.</p></div>
+
+      <p style="margin-top:2rem;"><button id="clear-btn" class="btn" style="background:var(--error);">Clear All Progress</button></p>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    const ranks = [
+      {name: "E-1", points: 0},
+      {name: "E-2", points: 50},
+      {name: "E-3", points: 120},
+      {name: "E-4", points: 220},
+      {name: "E-5", points: 350},
+      {name: "E-6", points: 500},
+      {name: "E-7", points: 700},
+      {name: "E-8", points: 950},
+      {name: "E-9", points: 1250}
+    ];
+
+    const subjects = {
+      AR: "Arithmetic Reasoning",
+      MK: "Mathematics Knowledge",
+      WK: "Word Knowledge",
+      PC: "Paragraph Comprehension",
+      GS: "General Science",
+      EI: "Electronics Information",
+      MC: "Mechanical Comprehension",
+      AS: "Auto & Shop"
+    };
+
+    function getPoints() {
+      return parseInt(localStorage.getItem('asvabPoints') || '0');
+    }
+
+    function getRank(points) {
+      let current = ranks[0];
+      let next = ranks[1];
+      for (let i = 0; i < ranks.length; i++) {
+        if (points >= ranks[i].points) {
+          current = ranks[i];
+          next = ranks[i+1] || null;
+        }
+      }
+      return {current, next};
+    }
+
+    function updateRecommendations() {
+      const progress = JSON.parse(localStorage.getItem('asvabProgress') || '{}');
+      let text = 'Complete a diagnostic or practice quiz to get personalized suggestions.';
+      let links = '';
+      if (!progress.AR || (progress.AR && progress.AR.pct < 70)) {
+        text = 'Focus on Arithmetic Reasoning to raise your AFQT fastest.';
+        links = '<a href="lessons.html#ar" class="btn">AR Lesson</a> <a href="arithmetic.html" class="btn btn-secondary">AR Practice</a>';
+      } else if (!progress.WK || (progress.WK && progress.WK.pct < 70)) {
+        text = 'Word Knowledge has high impact on your AFQT. Review vocabulary.';
+        links = '<a href="lessons.html#wk" class="btn">WK Lesson</a> <a href="word-knowledge.html" class="btn btn-secondary">WK Practice</a>';
+      } else if (progress.FullTest && progress.FullTest.afqt < 31) {
+        text = 'Your estimated AFQT is below 31. Prioritize the four AFQT subjects.';
+        links = '<a href="lessons.html" class="btn">All Lessons</a> <a href="diagnostic.html" class="btn btn-secondary">Retake Diagnostic</a>';
+      } else {
+        text = 'Good progress. Keep practicing and take the full test when ready.';
+        links = '<a href="full-test.html" class="btn">Full Test</a> <a href="branches.html" class="btn btn-secondary">Explore Branches</a>';
+      }
+      document.getElementById('rec-text').textContent = text;
+      document.getElementById('rec-links').innerHTML = links;
+    }
+      const today = new Date().toDateString();
+      let streakData = JSON.parse(localStorage.getItem('asvabStreak') || '{"count":0,"last":""}');
+      if (streakData.last !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (streakData.last === yesterday.toDateString()) {
+          streakData.count++;
+        } else if (streakData.last !== today) {
+          streakData.count = 1;
+        }
+        streakData.last = today;
+        localStorage.setItem('asvabStreak', JSON.stringify(streakData));
+      }
+      document.getElementById('streak-text').textContent = `Current streak: ${streakData.count} day${streakData.count !== 1 ? 's' : ''}`;
+    }
+
+    function updateReadiness() {
+      const progress = JSON.parse(localStorage.getItem('asvabProgress') || '{}');
+      let text = 'Complete a diagnostic or full test to see readiness.';
+      if (progress.FullTest && progress.FullTest.afqt) {
+        const afqt = progress.FullTest.afqt;
+        if (afqt >= 70) text = 'Ready for competitive scores (70+)';
+        else if (afqt >= 50) text = 'Ready for stronger options (50+)';
+        else if (afqt >= 31) text = 'Approaching basic qualification (31+)';
+        else text = 'Needs more work on AFQT subjects';
+      } else if (progress.AR || progress.WK) {
+        text = 'Keep practicing primary AFQT subjects.';
+      }
+      document.getElementById('readiness-text').textContent = text;
+    }
+      const points = getPoints();
+      const {current, next} = getRank(points);
+      document.getElementById('rank-title').textContent = `Rank: ${current.name}`;
+      document.getElementById('points-text').textContent = `Points: ${points}`;
+      if (next) {
+        const progress = ((points - current.points) / (next.points - current.points)) * 100;
+        document.getElementById('rank-fill').style.width = Math.min(100, progress) + '%';
+        document.getElementById('next-rank').textContent = `Next rank (${next.name}) at ${next.points} points`;
+      } else {
+        document.getElementById('rank-fill').style.width = '100%';
+        document.getElementById('next-rank').textContent = 'Maximum rank achieved';
+      }
+
+      const progress = JSON.parse(localStorage.getItem('asvabProgress') || '{}');
+      const container = document.getElementById('progress-list');
+      container.innerHTML = '';
+      let hasAny = false;
+      for (const [key, name] of Object.entries(subjects)) {
+        if (progress[key]) {
+          hasAny = true;
+          const p = progress[key];
+          const mastery = p.pct >= 80 ? 'Strong' : p.pct >= 60 ? 'Developing' : 'Needs Review';
+          container.innerHTML += `
+            <div class="card">
+              <h3>${name}</h3>
+              <p><strong>${p.score} / ${p.total}</strong> (${p.pct}%) — ${mastery}</p>
+              <p style="font-size:0.85rem; color:var(--muted);">Last: ${new Date(p.date).toLocaleDateString()}</p>
+            </div>
+          `;
+        }
+      }
+      if (!hasAny) {
+        container.innerHTML = '<div class="card"><p>No quizzes completed yet. Start with the primary AFQT subjects.</p></div>';
+      }
+
+      const queue = JSON.parse(localStorage.getItem('asvabReviewQueue') || '[]');
+      const qContainer = document.getElementById('review-queue');
+      if (queue.length === 0) {
+        qContainer.innerHTML = '<p>No missed questions yet. Complete quizzes to build your adaptive review queue.</p>';
+      } else {
+        qContainer.innerHTML = `<p>${queue.length} item(s) in review queue. Practice these first for better retention.</p><ul>${queue.slice(0,5).map(q => `<li>${q.q.substring(0,80)}...</li>`).join('')}</ul>`;
+      }
+    }
+
+    document.getElementById('clear-btn').onclick = () => {
+      if (confirm('Clear all saved progress, points, and review queue?')) {
+        localStorage.removeItem('asvabProgress');
+        localStorage.removeItem('asvabPoints');
+        localStorage.removeItem('asvabReviewQueue');
+        loadProgress();
+      }
+    };
+
+    loadProgress();
+    updateStreak();
+    updateReadiness();
+  </script>
+</body>
+</html>

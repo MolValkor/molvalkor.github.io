@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lessons | ASVAB Focus Prep</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .lesson { margin-bottom: 4rem; max-width: 800px; }
+    .lesson h2 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
+    .level { margin: 2rem 0; }
+    .level h3 { color: #e2e8f0; }
+    .teach { background: #1e293b; padding: 1.25rem; border-radius: var(--radius); margin: 1rem 0; line-height: 1.7; }
+    .example { background: #0f172a; padding: 1.25rem; border-radius: var(--radius); margin: 1rem 0; border-left: 4px solid var(--accent); }
+    .check { background: #152033; padding: 1.25rem; border-radius: var(--radius); margin: 1.25rem 0; border: 1px solid var(--border); }
+    .check button { margin-top: 0.5rem; }
+    .feedback { margin-top: 0.75rem; font-weight: 600; }
+    .correct { color: var(--success); }
+    .incorrect { color: var(--error); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="lessons.html" class="active">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="ai-tutor.html">AI Tutor</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Lessons</h1>
+      <p>These lessons walk you through each idea with clear explanations, worked examples, and questions you can answer to check that you understand. Start with Level 1 of Arithmetic Reasoning if you just need to pass.</p>
+
+      <div class="lesson" id="ar">
+        <h2>Arithmetic Reasoning (AR)</h2>
+
+        <div class="level">
+          <h3>Level 1 — What Is a Percent?</h3>
+          <div class="teach">
+            A percent means “out of 100.”<br>
+            25% means 25 out of 100, which is the same as 0.25.<br>
+            50% means 50 out of 100, which is the same as 0.50 or one half.<br><br>
+            To find a percent of a number, turn the percent into a decimal and multiply.
+          </div>
+          <div class="example">
+            <strong>Worked example:</strong><br>
+            What is 25% of 80?<br>
+            Step 1: 25% = 0.25<br>
+            Step 2: 0.25 × 80 = 20<br>
+            Answer: 20
+          </div>
+          <div class="check">
+            <strong>Check your understanding:</strong><br>
+            What is 10% of 50?<br>
+            <button onclick="check('ar1', 5, this)">5</button>
+            <button onclick="check('ar1', 10, this)">10</button>
+            <button onclick="check('ar1', 15, this)">15</button>
+            <div class="feedback" id="ar1"></div>
+          </div>
+        </div>
+
+        <div class="level">
+          <h3>Level 2 — Percent Change and Averages</h3>
+          <div class="teach">
+            Percent change tells you how much something went up or down.<br>
+            Formula: (difference ÷ original) × 100.<br><br>
+            An average is the total divided by how many numbers there are.
+          </div>
+          <div class="example">
+            <strong>Average example:</strong><br>
+            Scores: 78, 85, 90, and one more. The average is 82.<br>
+            Total needed = 82 × 4 = 328<br>
+            Known total = 78 + 85 + 90 = 253<br>
+            Missing score = 328 − 253 = 75
+          </div>
+          <div class="check">
+            <strong>Check:</strong> The average of 10, 20, and 30 is?<br>
+            <button onclick="check('ar2', 20, this)">20</button>
+            <button onclick="check('ar2', 15, this)">15</button>
+            <button onclick="check('ar2', 25, this)">25</button>
+            <div class="feedback" id="ar2"></div>
+          </div>
+        </div>
+
+        <div class="level">
+          <h3>Level 3 — Work Problems</h3>
+          <div class="teach">
+            If more people work on a job, it finishes faster.<br>
+            Find the total person-hours, then divide by the new number of people.
+          </div>
+          <div class="example">
+            3 people finish a job in 6 hours.<br>
+            Total work = 3 × 6 = 18 person-hours.<br>
+            If only 2 people work, time = 18 ÷ 2 = 9 hours.
+          </div>
+        </div>
+        <a href="arithmetic.html" class="btn">Practice AR Questions</a>
+      </div>
+
+      <div class="lesson" id="mk">
+        <h2>Mathematics Knowledge (MK)</h2>
+
+        <div class="level">
+          <h3>Level 1 — What Is an Exponent?</h3>
+          <div class="teach">
+            An exponent tells you how many times to multiply a number by itself.<br>
+            2³ means 2 × 2 × 2 = 8.<br>
+            The small number (3) is the exponent. The big number (2) is the base.
+          </div>
+          <div class="example">
+            <strong>Example:</strong> 3² = 3 × 3 = 9<br>
+            5² = 5 × 5 = 25<br>
+            2⁴ = 2 × 2 × 2 × 2 = 16
+          </div>
+          <div class="check">
+            <strong>Check:</strong> What is 4²?<br>
+            <button onclick="check('mk1', 16, this)">16</button>
+            <button onclick="check('mk1', 8, this)">8</button>
+            <button onclick="check('mk1', 12, this)">12</button>
+            <div class="feedback" id="mk1"></div>
+          </div>
+        </div>
+
+        <div class="level">
+          <h3>Level 2 — Solving Simple Equations</h3>
+          <div class="teach">
+            To solve for x, do the opposite operation on both sides until x is alone.
+          </div>
+          <div class="example">
+            3x + 5 = 20<br>
+            Subtract 5 from both sides: 3x = 15<br>
+            Divide both sides by 3: x = 5<br>
+            Check: 3(5) + 5 = 20. Correct.
+          </div>
+          <div class="check">
+            <strong>Check:</strong> Solve 2x = 10. What is x?<br>
+            <button onclick="check('mk2', 5, this)">5</button>
+            <button onclick="check('mk2', 8, this)">8</button>
+            <button onclick="check('mk2', 12, this)">12</button>
+            <div class="feedback" id="mk2"></div>
+          </div>
+        </div>
+
+        <div class="level">
+          <h3>Level 3 — Pythagorean Theorem</h3>
+          <div class="teach">
+            In a right triangle, a² + b² = c².<br>
+            c is the longest side (the hypotenuse).
+          </div>
+          <div class="example">
+            A triangle with sides 3 and 4.<br>
+            3² + 4² = 9 + 16 = 25<br>
+            c = √25 = 5
+          </div>
+        </div>
+        <a href="math-knowledge.html" class="btn">Practice MK Questions</a>
+      </div>
+
+      <div class="lesson" id="wk">
+        <h2>Word Knowledge (WK)</h2>
+        <div class="level">
+          <h3>Level 1 — What Is a Synonym?</h3>
+          <div class="teach">
+            A synonym is a word that means the same or almost the same as another word.<br>
+            On the test you pick the word that means the same as the given word.
+          </div>
+          <div class="example">
+            Abolish means to end or cancel.<br>
+            Meticulous means very careful.<br>
+            Arduous means hard or difficult.
+          </div>
+          <div class="check">
+            <strong>Check:</strong> Which word means the same as “concise”?<br>
+            <button onclick="check('wk1', 'brief', this)">brief</button>
+            <button onclick="check('wk1', 'long', this)">long</button>
+            <button onclick="check('wk1', 'loud', this)">loud</button>
+            <div class="feedback" id="wk1"></div>
+          </div>
+        </div>
+        <a href="word-knowledge.html" class="btn">Practice WK</a>
+      </div>
+
+      <div class="lesson" id="pc">
+        <h2>Paragraph Comprehension (PC)</h2>
+        <div class="level">
+          <h3>Level 1 — Main Idea</h3>
+          <div class="teach">
+            The main idea is what the whole paragraph is mostly about.<br>
+            It is often stated in the first or last sentence.<br>
+            The other sentences give details that support the main idea.
+          </div>
+          <div class="example">
+            If a paragraph talks about how regular training reduces injuries, the main idea is that consistent training has benefits, including fewer injuries.
+          </div>
+          <div class="check">
+            <strong>Check:</strong> The main idea is usually found where?<br>
+            <button onclick="check('pc1', 'first or last', this)">First or last sentence</button>
+            <button onclick="check('pc1', 'middle', this)">Only in the middle</button>
+            <div class="feedback" id="pc1"></div>
+          </div>
+        </div>
+        <a href="paragraph.html" class="btn">Practice PC</a>
+      </div>
+
+      <div class="lesson">
+        <h2>Next Steps</h2>
+        <p>After you finish a level and get the check questions right, go practice more questions. Use the AI Tutor anytime something is still unclear.</p>
+        <a href="ai-tutor.html" class="btn">Ask the AI Tutor</a>
+        <a href="practice.html" class="btn btn-secondary" style="margin-left:0.5rem;">Practice</a>
+      </div>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    function check(id, correct, btn) {
+      const fb = document.getElementById(id);
+      const chosen = btn.textContent.trim();
+      const isCorrect = (typeof correct === 'number') ? (parseFloat(chosen) === correct) : (chosen.toLowerCase().includes(String(correct).toLowerCase()));
+      if (isCorrect) {
+        fb.className = 'feedback correct';
+        fb.textContent = 'Correct. Good job.';
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = 'Not quite. Try again or review the example above.';
+      }
+    }
+  </script>
+</body>
+</html>

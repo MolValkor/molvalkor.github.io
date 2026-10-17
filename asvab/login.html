@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Sign Up | ASVAB Focus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="login.html" class="active">Login</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Track Your Progress</h1>
+      <p>Create a free account to save your scores, ranks, and review queue. We’ll use your email (and optional phone) to send study reminders and progress updates. Data stays on this device for now; cloud sync can be added later.</p>
+      <div class="disclaimer">Prototype account system. Email and phone are stored locally in your browser. No messages are sent yet. A production version will use a secure backend for real accounts and notifications.</div>
+
+      <div class="card" id="auth-form">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required style="width:100%; padding:0.75rem; margin:0.5rem 0 1rem; border-radius:var(--radius); border:1px solid var(--border); background:#1e293b; color:#f1f5f9;">
+        <label>Phone (optional)</label>
+        <input type="tel" id="phone" placeholder="555-123-4567" style="width:100%; padding:0.75rem; margin:0.5rem 0 1rem; border-radius:var(--radius); border:1px solid var(--border); background:#1e293b; color:#f1f5f9;">
+        <label><input type="checkbox" id="reminders"> Send me study reminders</label>
+        <button id="save-btn" class="btn" style="margin-top:1rem;">Save & Continue</button>
+        <p id="status" style="margin-top:1rem;"></p>
+      </div>
+
+      <div id="logged-in" style="display:none;" class="card">
+        <h2>Account Active</h2>
+        <p id="account-info"></p>
+        <button id="logout-btn" class="btn" style="background:var(--error);">Log Out (clear local account)</button>
+      </div>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    function loadAccount() {
+      const account = JSON.parse(localStorage.getItem('asvabAccount') || 'null');
+      if (account && account.email) {
+        document.getElementById('auth-form').style.display = 'none';
+        document.getElementById('logged-in').style.display = 'block';
+        document.getElementById('account-info').innerHTML = `Email: ${account.email}<br>Phone: ${account.phone || 'Not provided'}<br>Reminders: ${account.reminders ? 'Yes' : 'No'}<br>Joined: ${new Date(account.date).toLocaleDateString()}`;
+      }
+    }
+
+    document.getElementById('save-btn').onclick = () => {
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const reminders = document.getElementById('reminders').checked;
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email.');
+        return;
+      }
+      const account = { email, phone, reminders, date: new Date().toISOString() };
+      localStorage.setItem('asvabAccount', JSON.stringify(account));
+      // Link progress to this account
+      localStorage.setItem('asvabAccountLinked', 'true');
+      document.getElementById('status').textContent = 'Account saved. Your progress will be associated with this email.';
+      loadAccount();
+    };
+
+    document.getElementById('logout-btn').onclick = () => {
+      if (confirm('Clear local account? Progress data will remain in this browser but will no longer be linked.')) {
+        localStorage.removeItem('asvabAccount');
+        localStorage.removeItem('asvabAccountLinked');
+        location.reload();
+      }
+    };
+
+    loadAccount();
+  </script>
+</body>
+</html>

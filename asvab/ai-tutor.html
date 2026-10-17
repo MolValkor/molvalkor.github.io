@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tutor | ASVAB Focus Prep</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    #chat { height: 560px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; background: #0f172a; margin-bottom: 1rem; }
+    .msg { margin: 0.75rem 0; padding: 0.9rem 1rem; border-radius: var(--radius); max-width: 92%; line-height: 1.6; }
+    .user { background: #1e3a5f; margin-left: auto; }
+    .tutor { background: #1e293b; border-left: 3px solid var(--accent); }
+    .tutor a { color: var(--accent); font-weight: 600; }
+    .tutor strong { color: #f8fafc; }
+    #input-area { display: flex; gap: 0.5rem; }
+    #user-input { flex: 1; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius); background: #1e293b; color: #f1f5f9; }
+    .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .topic-btn { padding: 0.45rem 0.85rem; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 0.85rem; color: #e2e8f0; }
+    .topic-btn:hover, .topic-btn.active { background: var(--accent); color: #0f172a; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="ai-tutor.html" class="active">AI Tutor</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>ASVAB AI Tutor</h1>
+      <p>Ask any question. The tutor walks you through the idea in simple steps with examples and links to lessons.</p>
+      <div class="disclaimer">Focused on ASVAB subjects. Answers use short steps so they are easy to follow.</div>
+
+      <div class="topics">
+        <button class="topic-btn" data-q="what is arithmetic reasoning">AR</button>
+        <button class="topic-btn" data-q="how do percentages work">Percent</button>
+        <button class="topic-btn" data-q="what is ohm's law">Ohm</button>
+        <button class="topic-btn" data-q="what is the afqt">AFQT</button>
+        <button class="topic-btn" data-q="how do levers work">Levers</button>
+        <button class="topic-btn" data-q="what does meticulous mean">Vocab</button>
+        <button class="topic-btn" data-q="main idea">Reading</button>
+        <button class="topic-btn" data-q="pythagorean">Geometry</button>
+      </div>
+
+      <div id="chat">
+        <div class="msg tutor">Ask anything about the ASVAB. I will explain it step by step. Try the buttons or type your own question.</div>
+      </div>
+
+      <div id="input-area">
+        <input type="text" id="user-input" placeholder="Ask any ASVAB question..." />
+        <button id="send-btn" class="btn">Send</button>
+      </div>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    const knowledge = {
+      "ohm": `<strong>Ohm’s Law — Simple Steps</strong><br>
+1. Voltage (V) is the push that moves electricity.<br>
+2. Current (I) is how much electricity flows.<br>
+3. Resistance (R) slows the flow.<br>
+4. Rule: <strong>V = I × R</strong>.<br>
+5. Power = Voltage × Current.<br><br>
+Example: 12 volts and 4 ohms → current = 12 ÷ 4 = 3 amps.<br>
+Series = one path (resistances add). Parallel = same voltage across each path.<br>
+<a href="lessons.html#ei">Electronics lesson</a>`,
+
+      "percent": `<strong>Percentages — Step by Step</strong><br>
+1. Percent means “out of 100.” 25% = 0.25.<br>
+2. To find a percent of a number: change to decimal, then multiply.<br>
+   25% of $80 → 0.25 × 80 = $20.<br>
+3. Discount: subtract the discount from the original price. $80 − $20 = $60.<br>
+4. Percent change = (difference ÷ original) × 100.<br><br>
+Always turn the percent into a decimal first.<br>
+<a href="lessons.html#ar">Arithmetic Reasoning lesson</a>`,
+
+      "arithmetic": `<strong>Arithmetic Reasoning — How to Solve Word Problems</strong><br>
+1. Read the whole problem slowly.<br>
+2. Find out exactly what the question wants.<br>
+3. Write down every number and what it means.<br>
+4. Choose add, subtract, multiply, or divide.<br>
+5. Solve and check that the answer makes sense.<br><br>
+Common types: rates, percentages, averages, ratios, work problems. No calculator.<br>
+<a href="lessons.html#ar">Full AR lesson</a>`,
+
+      "average": `<strong>Averages</strong><br>
+Average = total ÷ how many numbers.<br>
+To find a missing score: multiply the average by the count to get the total needed, then subtract the scores you already have.<br>
+Example: 78, 85, 90, and one more average to 82. Total needed = 328. Known = 253. Missing = 75.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "ratio": `<strong>Ratios</strong><br>
+A ratio compares two amounts. Set up a proportion and cross-multiply.<br>
+Example: men to women is 3:2 and there are 45 men. One part = 15, so women = 30.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "work": `<strong>Work Problems</strong><br>
+More people finish faster. Find total person-hours, then divide by the new number of people.<br>
+Example: 3 people take 6 hours → 18 person-hours. Two people take 9 hours.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "afqt": `<strong>AFQT Score</strong><br>
+1. The AFQT decides if you can join the military.<br>
+2. It uses only four tests: Arithmetic Reasoning, Math Knowledge, Word Knowledge, and Paragraph Comprehension.<br>
+3. Word Knowledge + Paragraph Comprehension make Verbal Expression, which counts double.<br>
+4. Most branches want at least 31 with a high school diploma.<br>
+Focus on those four subjects first.<br>
+<a href="onboarding.html">Get a study path</a>`,
+
+      "lever": `<strong>Levers</strong><br>
+1. A lever is a bar that pivots on a fulcrum.<br>
+2. The longer the side you push on, the less force you need.<br>
+3. This is called mechanical advantage.<br>
+A long crowbar makes lifting easier than a short one.<br>
+<a href="lessons.html#mc">Mechanical lesson</a>`,
+
+      "pulley": `<strong>Pulleys</strong><br>
+Fixed pulley changes the direction you pull.<br>
+Movable pulley makes the load feel lighter.<br>
+More pulleys together make the job even easier.<br>
+<a href="lessons.html#mc">MC lesson</a>`,
+
+      "gear": `<strong>Gears</strong><br>
+Gears that touch turn in opposite directions.<br>
+A bigger gear turns slower but gives more torque (turning force).<br>
+<a href="lessons.html#mc">Mechanical lesson</a>`,
+
+      "meticulous": `<strong>Meticulous</strong><br>
+Means very careful and exact about small details.<br>
+A meticulous person checks their work carefully so nothing is wrong.<br>
+<a href="lessons.html#wk">Word Knowledge lesson</a>`,
+
+      "abolish": `<strong>Abolish</strong><br>
+Means to officially end or cancel something.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "arduous": `<strong>Arduous</strong><br>
+Means very hard or difficult.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "concise": `<strong>Concise</strong><br>
+Means short and clear, using few words.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "main idea": `<strong>Main Idea</strong><br>
+1. Read the short paragraph once.<br>
+2. Ask “What is this mostly about?”<br>
+3. The main idea is usually in the first or last sentence.<br>
+4. The other sentences give details that support it.<br>
+Answer only from the paragraph.<br>
+<a href="lessons.html#pc">Paragraph Comprehension lesson</a>`,
+
+      "inference": `<strong>Inference</strong><br>
+An inference is a logical conclusion you can draw from the paragraph. It is not stated directly but is supported by the text. Do not use outside knowledge.<br>
+<a href="lessons.html#pc">PC lesson</a>`,
+
+      "mitochondria": `<strong>Mitochondria</strong><br>
+Parts of a cell that make energy (ATP). Think of them as the cell’s power plant.<br>
+<a href="lessons.html#gs">General Science lesson</a>`,
+
+      "photosynthesis": `<strong>Photosynthesis</strong><br>
+Plants use sunlight, water, and carbon dioxide to make food. This happens in chloroplasts.<br>
+<a href="lessons.html#gs">GS lesson</a>`,
+
+      "pythagorean": `<strong>Pythagorean Theorem</strong><br>
+In a right triangle: a² + b² = c².<br>
+c is the longest side (hypotenuse).<br>
+Example: 3-4-5 triangle. 9 + 16 = 25.<br>
+<a href="lessons.html#mk">Math Knowledge lesson</a>`,
+
+      "area": `<strong>Area Formulas</strong><br>
+Rectangle = length × width.<br>
+Circle ≈ 3.14 × radius × radius.<br>
+Square perimeter = 4 × side.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "series": `<strong>Series Circuit</strong><br>
+One path for electricity. Resistances add together. Current is the same everywhere.<br>
+<a href="lessons.html#ei">Electronics lesson</a>`,
+
+      "parallel": `<strong>Parallel Circuit</strong><br>
+More than one path. Voltage is the same across each branch.<br>
+<a href="lessons.html#ei">EI lesson</a>`,
+
+      "four-stroke": `<strong>Four-Stroke Engine</strong><br>
+Order: intake, compression, power, exhaust.<br>
+<a href="lessons.html#as">Auto & Shop lesson</a>`,
+
+      "alternator": `<strong>Alternator</strong><br>
+Charges the battery while the engine is running.<br>
+<a href="lessons.html#as">Auto lesson</a>`,
+
+      "distance": `<strong>Distance, Rate, and Time</strong><br>
+Distance = Rate × Time.<br>
+Example: 60 miles per hour for 3 hours = 180 miles.<br>
+If you know distance and time, rate = distance ÷ time.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "interest": `<strong>Simple Interest</strong><br>
+Interest = Principal × Rate × Time.<br>
+Example: $1000 at 5% for 2 years = 1000 × 0.05 × 2 = $100 interest.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "tax": `<strong>Sales Tax</strong><br>
+Tax amount = price × tax rate (as decimal).<br>
+Total = price + tax.<br>
+Example: $50 item with 6% tax → 50 × 0.06 = $3 tax. Total = $53.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "discount": `<strong>Discount</strong><br>
+Discount amount = original price × discount percent (as decimal).<br>
+Sale price = original − discount.<br>
+Example: $120 at 15% off → 120 × 0.15 = $18 off. Sale price = $102.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "exponent": `<strong>Exponents</strong><br>
+a^m × a^n = a^(m+n).<br>
+Example: 2³ × 2² = 2⁵ = 32.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "fraction": `<strong>Fractions</strong><br>
+To add or subtract, use a common denominator.<br>
+To multiply, multiply tops and bottoms.<br>
+Example: 2/5 + 1/5 = 3/5. 3/4 as a decimal = 0.75.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "volume": `<strong>Volume</strong><br>
+Rectangular box volume = length × width × height.<br>
+Example: 4 × 3 × 2 = 24 cubic units.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "perimeter": `<strong>Perimeter</strong><br>
+Perimeter is the distance around a shape.<br>
+Square = 4 × side. Rectangle = 2 × (length + width).<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "ambiguous": `<strong>Ambiguous</strong><br>
+Means unclear or having more than one possible meaning.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "prudent": `<strong>Prudent</strong><br>
+Means wise and careful about the future.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "reluctant": `<strong>Reluctant</strong><br>
+Means unwilling or hesitant.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "detail": `<strong>Supporting Detail</strong><br>
+A detail is a specific fact in the paragraph that supports the main idea.<br>
+Read the question, then go back to the paragraph to find the exact fact.<br>
+<a href="lessons.html#pc">PC lesson</a>`,
+
+      "atom": `<strong>Atom</strong><br>
+The smallest unit of an element. Contains protons, neutrons, and electrons.<br>
+<a href="lessons.html#gs">General Science lesson</a>`,
+
+      "h2o": `<strong>Water</strong><br>
+Chemical formula is H₂O (two hydrogen atoms and one oxygen atom).<br>
+<a href="lessons.html#gs">GS lesson</a>`,
+
+      "tool": `<strong>Shop Tools</strong><br>
+Wrench turns nuts and bolts. Screwdriver turns screws. Micrometer measures precisely. Pliers grip or bend. Level checks alignment.<br>
+Always use safety glasses when needed.<br>
+<a href="lessons.html#as">Auto & Shop lesson</a>`,
+
+      "battery": `<strong>Battery</strong><br>
+Provides power to start the engine and run accessories when the engine is off.<br>
+<a href="lessons.html#as">Auto lesson</a>`,
+
+      "strategy": `<strong>Best Study Strategy for the ASVAB</strong><br>
+1. Focus first on the four AFQT subjects: Arithmetic Reasoning, Math Knowledge, Word Knowledge, and Paragraph Comprehension.<br>
+2. Do a short lesson, then practice 5–10 questions.<br>
+3. Review every mistake and ask why the correct answer works.<br>
+4. Use the AI Tutor for anything that is still unclear.<br>
+5. Take a full practice test when you feel ready.<br>
+Most branches want AFQT 31+ with a high school diploma.<br>
+<a href="onboarding.html">Get a personalized path</a>`,
+
+      "obsolete": `<strong>Obsolete</strong><br>
+Means outdated or no longer used.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "explicit": `<strong>Explicit</strong><br>
+Means clear and stated directly.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "diligent": `<strong>Diligent</strong><br>
+Means hardworking and careful.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "precarious": `<strong>Precarious</strong><br>
+Means uncertain or risky.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "adequate": `<strong>Adequate</strong><br>
+Means enough or sufficient.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "vague": `<strong>Vague</strong><br>
+Means unclear or not specific.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "resolve": `<strong>Resolve</strong><br>
+Means strong determination or to decide firmly.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "benevolent": `<strong>Benevolent</strong><br>
+Means kind and wanting to help others.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "lcm": `<strong>Least Common Multiple (LCM)</strong><br>
+The smallest number that two or more numbers divide into evenly.<br>
+Example: LCM of 4 and 6 is 12.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "factor": `<strong>Factoring</strong><br>
+Breaking a number or expression into parts that multiply to make it.<br>
+Difference of squares: x² − 9 = (x − 3)(x + 3).<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "slope": `<strong>Slope</strong><br>
+Slope measures how steep a line is. Rise over run.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "friction": `<strong>Friction</strong><br>
+A force that opposes motion. It makes things harder to slide.<br>
+<a href="lessons.html#mc">Mechanical lesson</a>`,
+
+      "wedge": `<strong>Wedge</strong><br>
+A type of inclined plane used to split or separate things.<br>
+<a href="lessons.html#mc">MC lesson</a>`,
+
+      "inclined": `<strong>Inclined Plane</strong><br>
+A ramp that reduces the force needed to raise an object.<br>
+<a href="lessons.html#mc">MC lesson</a>`,
+
+      "hydraulic": `<strong>Hydraulic System</strong><br>
+Uses fluid to transmit force. Common in brakes and lifts.<br>
+<a href="lessons.html#mc">MC lesson</a>`,
+
+      "capacitor": `<strong>Capacitor</strong><br>
+Stores electrical charge.<br>
+<a href="lessons.html#ei">Electronics lesson</a>`,
+
+      "fuse": `<strong>Fuse</strong><br>
+Protects a circuit by opening (breaking) if too much current flows.<br>
+<a href="lessons.html#ei">EI lesson</a>`,
+
+      "ground": `<strong>Ground</strong><br>
+Usually the zero-voltage reference point in a circuit.<br>
+<a href="lessons.html#ei">EI lesson</a>`,
+
+      "chloroplast": `<strong>Chloroplast</strong><br>
+The part of a plant cell where photosynthesis happens.<br>
+<a href="lessons.html#gs">GS lesson</a>`,
+
+      "atp": `<strong>ATP</strong><br>
+The energy molecule produced by mitochondria in cells.<br>
+<a href="lessons.html#gs">GS lesson</a>`,
+
+      "thermostat": `<strong>Thermostat</strong><br>
+Regulates coolant temperature in an engine.<br>
+<a href="lessons.html#as">Auto lesson</a>`,
+
+      "starter": `<strong>Starter Motor</strong><br>
+Uses battery power to turn the engine over so it can start.<br>
+<a href="lessons.html#as">Auto lesson</a>`,
+
+      "brake": `<strong>Brakes</strong><br>
+Disc brakes use pads and rotors. Hydraulic fluid transmits the force from the pedal.<br>
+<a href="lessons.html#as">Auto lesson</a>`,
+
+      "synonym": `<strong>Synonyms</strong><br>
+A synonym is a word that means the same or nearly the same as another word.<br>
+On Word Knowledge, look for the answer that means the same as the given word.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "context": `<strong>Context Clues</strong><br>
+Use the other words in the sentence to figure out the meaning of an unknown word.<br>
+Tone (positive or negative) often helps.<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "prefix": `<strong>Prefixes</strong><br>
+A prefix is added to the beginning of a word and changes its meaning.<br>
+Examples: un- (not), re- (again), pre- (before).<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "root": `<strong>Word Roots</strong><br>
+The main part of a word that carries the core meaning.<br>
+Examples: bio (life), geo (earth).<br>
+<a href="lessons.html#wk">WK lesson</a>`,
+
+      "topic sentence": `<strong>Topic Sentence</strong><br>
+The sentence that states the main idea of a paragraph. Often the first or last sentence.<br>
+<a href="lessons.html#pc">PC lesson</a>`,
+
+      "time management": `<strong>Time Management on the ASVAB</strong><br>
+Arithmetic Reasoning gives the most time per question. Word Knowledge is faster.<br>
+Answer what you know first. Do not spend too long on one hard question.<br>
+<a href="lessons.html">Lessons</a>`,
+
+      "no calculator": `<strong>No Calculator</strong><br>
+You cannot use a calculator on the ASVAB. Practice doing arithmetic and basic algebra by hand.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "guessing": `<strong>Guessing Strategy</strong><br>
+There is no penalty for wrong answers on the ASVAB. If you are running out of time, make your best guess rather than leaving a question blank.<br>
+<a href="lessons.html">Lessons</a>`,
+
+      "order of operations": `<strong>Order of Operations</strong><br>
+Do parentheses first, then exponents, then multiply/divide left to right, then add/subtract left to right.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "decimal": `<strong>Decimals</strong><br>
+A decimal is another way to write a fraction. 0.75 = 3/4. 0.5 = 1/2.<br>
+Line up decimal points when adding or subtracting.<br>
+<a href="lessons.html#mk">MK lesson</a>`,
+
+      "percent of": `<strong>Percent Of</strong><br>
+“Percent of” means multiply. Change the percent to a decimal first.<br>
+15% of 240 = 0.15 × 240 = 36.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "combined work": `<strong>Combined Work Rates</strong><br>
+Add the individual rates (1/time) to find how fast they work together.<br>
+Example: One pipe fills in 4 hours (rate 1/4), another in 6 hours (rate 1/6). Together rate = 1/4 + 1/6 = 5/12, so time = 12/5 = 2.4 hours.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "map scale": `<strong>Map Scale</strong><br>
+If 1 inch = 20 miles, then 3.5 inches = 70 miles.<br>
+Multiply the map distance by the scale.<br>
+<a href="lessons.html#ar">AR lesson</a>`,
+
+      "unit conversion": `<strong>Unit Conversion</strong><br>
+Make sure units match before you calculate. Convert minutes to hours or feet to miles when needed.<br>
+<a href="lessons.html#ar">AR lesson</a>`
+    };
+
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    function addMsg(html, type) {
+      const div = document.createElement('div');
+      div.className = `msg ${type}`;
+      div.innerHTML = html;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function getResponse(query) {
+      const q = query.toLowerCase().trim();
+      if (!q) return "Please type a question.";
+
+      for (const [key, answer] of Object.entries(knowledge)) {
+        if (q.includes(key)) return answer;
+      }
+
+      if (q.includes("how") || q.includes("what") || q.includes("explain") || q.includes("mean") || q.includes("define")) {
+        return "I can walk you through ASVAB topics step by step. Try:<br>• what is Ohm’s law<br>• how do percentages work<br>• what is arithmetic reasoning<br>• how do levers work<br>• what is the AFQT<br>• what does meticulous mean<br>• main idea<br>• pythagorean<br><br>Or use the buttons above.";
+      }
+
+      return "Ask a specific ASVAB question and I will explain it in simple steps. Examples: Ohm’s law, percentages, AFQT, levers, main idea, or a vocabulary word.";
+    }
+
+    function send() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMsg(text, 'user');
+      input.value = '';
+      setTimeout(() => addMsg(getResponse(text), 'tutor'), 180);
+    }
+
+    sendBtn.onclick = send;
+    input.onkeypress = (e) => { if (e.key === 'Enter') send(); };
+
+    document.querySelectorAll('.topic-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const q = btn.dataset.q;
+        addMsg(q, 'user');
+        setTimeout(() => addMsg(getResponse(q), 'tutor'), 180);
+      };
+    });
+  </script>
+</body>
+</html>

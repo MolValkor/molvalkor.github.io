@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Started | ASVAB Focus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="onboarding.html" class="active">Get Started</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="full-test.html">Full Test</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Your Study Path</h1>
+      <p>Answer a few questions to get a recommended starting path focused on the AFQT.</p>
+      <div class="card" id="form">
+        <label>Target AFQT goal</label>
+        <select id="goal">
+          <option value="31">31+ (just need to pass / basic qualification)</option>
+          <option value="50">50+ (stronger options)</option>
+          <option value="70">70+ (competitive jobs)</option>
+        </select>
+        <label style="margin-top:1rem; display:block;">Time available before test</label>
+        <select id="time">
+          <option value="few">A few hours</option>
+          <option value="week">About a week</option>
+          <option value="more">More than a week</option>
+        </select>
+        <label style="margin-top:1rem; display:block;">Weakest area (optional)</label>
+        <select id="weak">
+          <option value="">Not sure</option>
+          <option value="AR">Arithmetic Reasoning</option>
+          <option value="MK">Mathematics Knowledge</option>
+          <option value="WK">Word Knowledge</option>
+          <option value="PC">Paragraph Comprehension</option>
+        </select>
+        <button id="gen" class="btn" style="margin-top:1rem;">Generate Path</button>
+      </div>
+      <div id="path" style="display:none;" class="card">
+        <h2>Recommended Path</h2>
+        <div id="path-content"></div>
+        <a href="diagnostic.html" class="btn">Start with Diagnostic</a>
+        <a href="lessons.html" class="btn" style="margin-left:0.5rem;">Go to Lessons</a>
+      </div>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    document.getElementById('gen').onclick = () => {
+      const goal = document.getElementById('goal').value;
+      const time = document.getElementById('time').value;
+      const weak = document.getElementById('weak').value;
+      let html = `<p>Goal: AFQT ${goal}+. Time: ${time}.</p><ol>`;
+      html += '<li>Take the AFQT Diagnostic to identify gaps.</li>';
+      if (weak) html += `<li>Prioritize Lessons and Practice for ${weak}.</li>`;
+      else html += '<li>Start with Arithmetic Reasoning and Word Knowledge (highest AFQT impact).</li>';
+      html += '<li>Complete the Quick Reference sheet.</li>';
+      html += '<li>Use Flashcards daily for vocabulary and formulas.</li>';
+      html += '<li>Run the Full Test once for a realistic estimate.</li>';
+      html += '<li>Review the adaptive queue after every quiz.</li>';
+      if (time === 'few') html += '<li>Focus only on AR, MK, WK, and PC for maximum efficiency.</li>';
+      html += '</ol><p>Check the dashboard for ranks and progress.</p>';
+      document.getElementById('path-content').innerHTML = html;
+      document.getElementById('form').style.display = 'none';
+      document.getElementById('path').style.display = 'block';
+      localStorage.setItem('asvabPath', JSON.stringify({goal, time, weak, date: new Date().toISOString()}));
+    };
+  </script>
+</body>
+</html>

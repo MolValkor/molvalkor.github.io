@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards | ASVAB Focus</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .card-flip { min-height: 180px; display: flex; align-items: center; justify-content: center; text-align: center; cursor: pointer; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ASVAB <span>Focus</span></div>
+        <div>
+          <a href="index.html">Home</a>
+          <a href="lessons.html">Lessons</a>
+          <a href="practice.html">Practice</a>
+          <a href="ai-tutor.html">AI Tutor</a>
+          <a href="reference.html">Reference</a>
+          <a href="flashcards.html" class="active">Flashcards</a>
+          <a href="dashboard.html">Progress</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Flashcards</h1>
+      <p>Click the card to flip. Mark as known to track progress (stored locally).</p>
+      <div class="tabs">
+        <button class="tab active" data-deck="wk">Word Knowledge</button>
+        <button class="tab" data-deck="formulas">Formulas</button>
+        <button class="tab" data-deck="tools">Tools & Auto</button>
+      </div>
+      <div class="card card-flip" id="flash-card">Click to start</div>
+      <p style="text-align:center; margin-top:1rem;">
+        <button id="known-btn" class="btn">Mark Known</button>
+        <button id="next-btn" class="btn btn-secondary" style="margin-left:0.5rem;">Next</button>
+      </p>
+      <p id="known-count" style="text-align:center;"></p>
+    </div>
+  </main>
+  <footer><div class="container"><p>ASVAB Focus Prep — Independent. Not official.</p>
+      <p class="affil">Independent study tool. Not affiliated with or endorsed by the U.S. Department of Defense or any military branch.</p></div></footer>
+
+  <script>
+    const decks = {
+      wk: [
+        {front: "Abolish", back: "To end or cancel formally"},
+        {front: "Meticulous", back: "Very careful and precise"},
+        {front: "Arduous", back: "Difficult and requiring effort"},
+        {front: "Concise", back: "Brief and clear"},
+        {front: "Ambiguous", back: "Unclear; open to more than one meaning"},
+        {front: "Prudent", back: "Wise and careful"},
+        {front: "Benevolent", back: "Kind and well-meaning"},
+        {front: "Reluctant", back: "Unwilling or hesitant"},
+        {front: "Obsolete", back: "Outdated; no longer used"},
+        {front: "Diligent", back: "Hardworking and careful"}
+      ],
+      formulas: [
+        {front: "Ohm’s Law", back: "V = I × R"},
+        {front: "Power", back: "P = V × I"},
+        {front: "Rectangle Area", back: "length × width"},
+        {front: "Circle Area", back: "≈ 3.14 × r²"},
+        {front: "Pythagorean", back: "a² + b² = c²"},
+        {front: "Percent Change", back: "(difference / original) × 100"},
+        {front: "Average", back: "sum / count"}
+      ],
+      tools: [
+        {front: "Alternator", back: "Charges the battery and powers electrical system while engine runs"},
+        {front: "Four-stroke cycle", back: "Intake, compression, power, exhaust"},
+        {front: "Micrometer", back: "Precise measurement of small dimensions"},
+        {front: "Fixed pulley", back: "Changes direction of force"},
+        {front: "Movable pulley", back: "Reduces force required"}
+      ]
+    };
+
+    let currentDeck = 'wk';
+    let index = 0;
+    let flipped = false;
+    let known = JSON.parse(localStorage.getItem('asvabKnownCards') || '{}');
+
+    function showCard() {
+      const deck = decks[currentDeck];
+      const card = deck[index % deck.length];
+      const el = document.getElementById('flash-card');
+      el.textContent = flipped ? card.back : card.front;
+      updateCount();
+    }
+
+    function updateCount() {
+      const deckKey = currentDeck;
+      const count = (known[deckKey] || []).length;
+      document.getElementById('known-count').textContent = `Known in this deck: ${count}`;
+    }
+
+    document.getElementById('flash-card').onclick = () => {
+      flipped = !flipped;
+      showCard();
+    };
+
+    document.getElementById('next-btn').onclick = () => {
+      index++;
+      flipped = false;
+      showCard();
+    };
+
+    document.getElementById('known-btn').onclick = () => {
+      const deck = decks[currentDeck];
+      const card = deck[index % deck.length];
+      if (!known[currentDeck]) known[currentDeck] = [];
+      if (!known[currentDeck].includes(card.front)) {
+        known[currentDeck].push(card.front);
+        localStorage.setItem('asvabKnownCards', JSON.stringify(known));
+        // Award points
+        const pts = parseInt(localStorage.getItem('asvabPoints') || '0') + 2;
+        localStorage.setItem('asvabPoints', pts);
+      }
+      index++;
+      flipped = false;
+      showCard();
+    };
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentDeck = tab.dataset.deck;
+        index = 0;
+        flipped = false;
+        showCard();
+      };
+    });
+
+    showCard();
+  </script>
+</body>
+</html>
