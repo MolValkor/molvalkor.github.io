@@ -140,3 +140,20 @@ a:focus-visible { outline: 2px solid var(--ember-2); outline-offset: 3px; border
   .mark { width: 38px; height: 38px; }
 }
 @media (prefers-reduced-motion: reduce) { .card, .site { transition: none; } .card:hover, .site:hover { transform: none; } }
+
+/* Projects */
+.projects { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.proj { display: grid; grid-template-columns: 1fr auto minmax(150px, auto); align-items: center; gap: 16px; padding: 14px 18px;
+  background: linear-gradient(180deg, var(--card-2), var(--card)); border: 1px solid var(--line); border-radius: 12px; }
+.proj h3 { font-size: 16px; }
+.proj .desc { font-size: 14px; margin-top: 2px; }
+.status { font: 600 11px/1 var(--mono); padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line-2); white-space: nowrap; text-transform: uppercase; letter-spacing: .06em; }
+.s-live { color: #9fd89a; border-color: rgba(120,200,110,.35); background: rgba(120,200,110,.08); }
+.s-progress { color: var(--ember-2); border-color: rgba(232,131,58,.35); background: var(--glow); }
+.s-planned { color: #a9c3e0; border-color: rgba(140,170,210,.3); background: rgba(140,170,210,.07); }
+.s-paused { color: var(--dim); }
+.proj-links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; font-size: 14px; }
+.proj-links a { text-decoration: none; font-weight: 600; }
+.proj-links a:hover { text-decoration: underline; }
+.nolink { color: var(--dim); font-size: 13px; }
+@media (max-width: 640px) { .proj { grid-template-columns: 1fr auto; } .proj-links { grid-column: 1 / -1; justify-content: flex-start; } }
