@@ -1,22 +1,9 @@
-const CACHE = 'asvab-focus-v1';
-const ASSETS = [
-  './',
-  './index.html',
-  './lessons.html',
-  './practice.html',
-  './ai-tutor.html',
-  './dashboard.html',
-  './reference.html',
-  './flashcards.html',
-  './styles.css'
-];
-
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
-});
-
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
-  );
+// Retires the old study-app service worker so returning visitors get the new build.
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', (e) => {
+  e.waitUntil((async () => {
+    for (const k of await caches.keys()) await caches.delete(k);
+    await self.registration.unregister();
+    for (const c of await self.clients.matchAll({ type: 'window' })) c.navigate(c.url);
+  })());
 });

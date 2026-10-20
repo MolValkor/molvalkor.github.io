@@ -1,0 +1,1 @@
+import{s as e}from"./link-CbLTYCOY.js";import{W as t}from"./index-2WWJBGZA.js";var n=e(),r=()=>(0,n.jsx)(t,{title:`Restore a pass`});export{r as component};
