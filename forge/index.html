@@ -1,0 +1,827 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Forge · Zach's Parts Workshop</title><link rel="canonical" href="https://molvalkor.github.io/forge/"><link rel="icon" href="../favicon.ico" sizes="any"><style>:root{--bg:#0d0b0a;--bg2:#15120f;--panel:#1b1714;--panel2:#221d18;--line:#3a3128;--brass:#c9a24a;--brass2:#ffd27a;--ember:#ff7a2a;--text:#e8e0d2;--mut:#a89f90;--good:#5fbf6a;--warn:#ff8a3d;--bad:#e05a4a;--ok:#c9a24a;--needs:#d65bd6}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#2a1608 0%,transparent 60%),radial-gradient(900px 500px at -10% 10%,#1c1208 0%,transparent 55%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+a{color:var(--brass2)}code{font-family:ui-monospace,Consolas,monospace;color:var(--brass2)}
+.hdr{padding:22px 28px 10px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#1a130d,transparent)}
+.brand{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sigil{width:52px;height:52px;flex:none}
+.brand h1{margin:0;font:700 26px/1.1 Georgia,"Times New Roman",serif;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(180deg,#ffe3a3,#c9a24a 60%,#8a6a28);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand p{margin:2px 0 0;color:var(--mut);font-size:13px;letter-spacing:.06em}
+.stats{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;text-align:center;min-width:84px}.stat b{display:block;font:700 20px Georgia,serif;color:var(--brass2)}.stat span{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+.tabs{display:flex;gap:6px;padding:12px 28px 0;overflow-x:auto;position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--bg) 70%,transparent);scrollbar-width:none}
+.tabs button{flex:none;background:var(--panel);color:var(--mut);border:1px solid var(--line);border-bottom:none;border-radius:10px 10px 0 0;padding:9px 16px 8px;cursor:pointer;font:600 14px Georgia,serif;letter-spacing:.06em;text-align:left}
+.tabs button small{display:block;font:500 11px system-ui,sans-serif;letter-spacing:.04em;color:#7d7466}
+.tabs button.on{color:var(--brass2);background:linear-gradient(180deg,#2c2118,var(--panel));border-color:#6b5428;box-shadow:inset 0 2px 0 var(--ember)}
+main{padding:0 28px 60px}.tab{display:none;border-top:1px solid #6b5428;padding-top:20px}.tab.on{display:block}
+.intro{color:var(--mut);max-width:980px;margin:0 0 14px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+input,select,textarea,button{font:inherit;color:var(--text)}
+input[type=search],input[type=text],input[type=number],input[type=url],select,textarea,input:not([type]){background:#120f0d;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+input[type=search]{min-width:240px;flex:1;max-width:420px}
+button{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}button:hover{border-color:var(--brass)}
+button.pri{background:linear-gradient(180deg,#d9832f,#a8521a);border-color:#ff9a4a;color:#fff}button.danger{border-color:var(--bad);color:#ffb4a8}
+.count{color:var(--mut);font-size:13px;margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card,.proj,.rec{background:linear-gradient(180deg,var(--panel),#16120f);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
+.card:hover,.rec:hover{border-color:#6b5428;transform:translateY(-2px)}
+.ph{position:relative;aspect-ratio:4/3;background:#0b0908;overflow:hidden}.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.imgk{position:absolute;left:8px;bottom:8px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:#000b;color:#cfc6b6;border:1px solid #fff2}.imgk.exact{color:#9ef0a6}.imgk.illus{color:var(--brass2)}
+.kitb{position:absolute;right:8px;top:8px;font-size:10px;padding:2px 7px;border-radius:20px;background:#3a2a0bdd;color:var(--brass2);border:1px solid #c9a24a66}
+.cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.row1{display:flex;justify-content:space-between;gap:8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.cat{color:var(--mut)}
+.st{padding:1px 8px;border-radius:20px;border:1px solid var(--line)}.st-in-use{color:#9ef0a6;border-color:#2f6b3a}.st-valkor{color:#ffb06a;border-color:#8a4a1a;background:#2a160a}.st-spare{color:#9fd3ff;border-color:#2a4f6b}.st-kit{color:var(--brass2);border-color:#6b5428}.st-tool{color:#ccc}.st-missing{color:#ffb4a8;border-color:var(--bad)}.st-ordered{color:#d9b3ff}
+.card h3{margin:0;font:600 16px/1.25 Georgia,serif}.card h3 em{color:var(--brass);font-style:normal;font-size:13px}
+.meta{display:flex;gap:12px;font-size:12px;color:var(--mut);flex-wrap:wrap}.meta b{color:var(--text)}
+.ifs{display:flex;flex-wrap:wrap;gap:4px}.ifs span,.tags span{font-size:10.5px;padding:1px 7px;border-radius:5px;background:#2a221a;color:#d8c9a8;border:1px solid #3e3326}
+.uses{margin:0;font-size:13px;color:#cfc6b6}.note{margin:0;font-size:12.5px;color:#9fd3ff}
+.cact{display:flex;gap:6px;margin-top:auto;padding-top:6px}.cact button{flex:1;font-size:12.5px;padding:6px}
+.empty{color:var(--mut)}
+/* modal */
+#modal{position:fixed;inset:0;background:#000c;display:none;align-items:flex-start;justify-content:center;z-index:50;padding:40px 16px;overflow:auto}#modal.on{display:flex}
+#modal .mbox{background:var(--panel);border:1px solid #6b5428;border-radius:16px;max-width:980px;width:100%;padding:22px;position:relative;box-shadow:0 20px 80px #000}
+.mx-close{position:absolute;right:12px;top:10px;font-size:18px}
+.det{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:20px}.dimg img{width:100%;border-radius:10px;border:1px solid var(--line)}.dimg small{color:var(--mut);font-size:11px}
+.det h2,#modal h2{margin:0 0 4px;font:600 22px Georgia,serif;color:var(--brass2)}.sub{color:var(--mut);margin:0 0 10px}.warn{color:var(--brass2)}
+dl{margin:0;display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:14px}dt{color:var(--brass);font-weight:600}dd{margin:0}dd ul{margin:0;padding-left:18px}.got li{color:#ffcfa8}
+.ef{display:grid;gap:12px;max-width:520px}.ef label{display:grid;gap:4px;color:var(--mut);font-size:13px}.fa{display:flex;gap:8px;flex-wrap:wrap}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(40px);opacity:0;background:#2a1d12;border:1px solid var(--ember);padding:8px 16px;border-radius:30px;transition:.25s;z-index:60}#toast.on{opacity:1;transform:translateX(-50%)}
+/* combos */
+.cbw{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.panel h3{margin:0 0 8px;font:600 17px Georgia,serif;color:var(--brass2)}
+.mxw{overflow:auto;max-height:640px}
+table.mx{border-collapse:separate;border-spacing:2px;font-size:12.5px;width:100%}.mx th{position:sticky;top:0;background:var(--panel);font-weight:600;color:var(--brass);padding:6px 4px;text-align:center}.mx th small{display:block;color:var(--mut);font-weight:400}
+.mx tbody th{position:static;text-align:left;color:var(--text);font-weight:500;cursor:pointer;white-space:nowrap}.mx tbody th:hover{color:var(--brass2)}
+.mx td{text-align:center;border-radius:6px;cursor:pointer;padding:5px;font-weight:700;min-width:54px}
+.lv-good{background:#173a1f;color:#9ef0a6}.lv-ok{background:#2c2410;color:var(--brass2)}.lv-caution{background:#3a210e;color:#ffb06a}.lv-needs{background:#33173a;color:#f0b0f0}.lv-no{background:#1d1a18;color:#6b635a}
+.legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin:8px 0}.legend span{padding:2px 8px;border-radius:6px}
+.pk-head{display:flex;gap:12px;align-items:center}.pk-head img{width:84px;height:64px;object-fit:cover;border-radius:8px}.pk-head h3{margin:0}.pk-head p{margin:0;color:var(--mut);font-size:13px}
+ul.pk{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;max-height:420px;overflow:auto}ul.pk li{border-radius:8px;padding:7px 10px;display:grid;gap:2px;background:#1d1915!important;border-left:4px solid}ul.pk li.lv-good{border-color:var(--good)}ul.pk li.lv-ok{border-color:var(--ok)}ul.pk li.lv-caution{border-color:var(--warn)}ul.pk li.lv-needs{border-color:var(--needs)}ul.pk li.lv-no{border-color:#555;opacity:.7}
+ul.pk li span{font-size:13px;color:#cfc6b6}ul.pk i{font-style:normal;color:var(--brass)}
+#cb-graph{width:100%;height:auto;background:#120f0d;border-radius:12px;border:1px solid var(--line);margin-top:12px}#cb-graph .gn{cursor:pointer}
+p.lvl{display:inline-block;padding:3px 10px;border-radius:6px}
+/* projects */
+.proj{padding:14px 16px}.proj header{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px}.proj header span{padding:2px 8px;border-radius:20px;border:1px solid var(--line)}
+.diff{color:var(--brass2)}.ok{color:#9ef0a6;border-color:#2f6b3a!important}.need{color:#ffb06a;border-color:#8a4a1a!important}.bad{color:#ffb4a8;border-color:var(--bad)!important}.borrow{color:#ff9b4a;background:#2a160a}
+.proj h3{margin:8px 0 4px;font:600 18px Georgia,serif;color:var(--brass2)}.proj h4{margin:10px 0 4px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}.proj h4.ex{color:#ffb06a}
+.proj p,.proj ol{margin:0;font-size:13.5px;color:#d6ccbb}.proj ol{padding-left:18px}.tags{display:flex;gap:4px;flex-wrap:wrap}
+ul.pl{list-style:none;padding:0;margin:0;display:grid;gap:4px}ul.pl li{display:flex;justify-content:space-between;align-items:center;font-size:13px}ul.pl a{display:flex;gap:8px;align-items:center;text-decoration:none;color:var(--text)}ul.pl a:hover{color:var(--brass2)}ul.pl img{width:30px;height:24px;object-fit:cover;border-radius:4px}ul.pl li.miss a{color:#ffb4a8;text-decoration:line-through}
+ul.exl{margin:0;padding-left:18px;font-size:13px;color:#ffd0a8}
+.proj.flash{animation:fl 1.4s}@keyframes fl{0%,60%{box-shadow:0 0 0 3px var(--ember)}100%{box-shadow:none}}
+label.chk{display:flex;gap:6px;align-items:center;background:var(--panel2);border:1px solid #6b5428;padding:7px 12px;border-radius:8px;cursor:pointer;color:var(--brass2);font-weight:600}
+/* bench */
+.bbw{display:grid;grid-template-columns:230px minmax(0,1fr);gap:14px;align-items:start}
+.side{display:grid;gap:12px}.side h4{margin:0 0 6px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
+#bb-pal{display:grid;grid-template-columns:1fr 1fr;gap:5px}#bb-pal button{font-size:12px;padding:6px 4px}
+#bb-colors{display:flex;flex-wrap:wrap;gap:6px}.sw{width:26px;height:26px;border-radius:50%;padding:0;border:2px solid #000}.sw.on{outline:2px solid var(--brass2);outline-offset:2px}
+.svgw{background:#14110f;border:1px solid var(--line);border-radius:14px;overflow:auto}.svgw.pan #bb{touch-action:auto}.svgw.pan #bb *{cursor:move!important}
+#bb{width:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+#bb .comp{cursor:grab}#bb .comp.sel>*:first-child{filter:drop-shadow(0 0 4px #ffd27a)}#bb .wire{cursor:pointer}#bb .wire.sel path:last-of-type{stroke-width:5}#bb .wire.lit path:first-child{stroke:#ff8a3d;stroke-width:9}
+#bb .pin{cursor:crosshair}#bb .hole{cursor:crosshair}
+.ghost{opacity:.6;pointer-events:none}.ghost.bad{filter:drop-shadow(0 0 3px red) saturate(0)}
+.info{font-size:13px;color:#d6ccbb;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-height:38px;margin-top:8px}
+.pk-actual,.pk-example{font-size:11px;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:5px;margin-right:6px}.pk-actual{background:#173a1f;color:#9ef0a6}.pk-example{background:#3a2a0b;color:var(--brass2)}
+.note2{font-size:13px;color:#cfc6b6;margin:8px 0}
+.help{font-size:12.5px;color:var(--mut);margin:0;padding-left:16px}
+/* schem */
+.scbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.seg{display:inline-flex;border:1px solid #6b5428;border-radius:8px;overflow:hidden}.seg label{padding:7px 14px;cursor:pointer;color:var(--mut)}.seg input{display:none}.seg label:has(input:checked){background:#2c2118;color:var(--brass2)}
+#sc-svg{width:100%;display:block;background:#100d0b;background-image:linear-gradient(#1c1814 1px,transparent 1px),linear-gradient(90deg,#1c1814 1px,transparent 1px);background-size:20px 20px;border-radius:14px;border:1px solid var(--line)}
+table.pt{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}.pt th{text-align:left;color:var(--brass);border-bottom:1px solid #6b5428;padding:7px}.pt td{border-bottom:1px solid var(--line);padding:7px}.wc{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid #000}
+.tblw{overflow-x:auto}
+/* recs */
+.prio{align-self:flex-start;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px}.p-Buyfirst{background:#5a1f0a;color:#ffb06a}.p-High{background:#3a2a0b;color:var(--brass2)}.p-Medium{background:#1d2b3a;color:#9fd3ff}.p-Nicetohave{background:#222;color:#bbb}
+.rec h3{margin:0;font:600 16px Georgia,serif}.rec p{margin:0;font-size:13.5px;color:#d6ccbb}.unl a{color:var(--brass2)}.price{color:var(--mut)!important;font-size:12.5px!important}
+.tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:10px}.tip{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--ember);border-radius:10px;padding:10px 14px}.tip h4{margin:0 0 4px;color:var(--brass2);font:600 15px Georgia,serif}.tip p{margin:0;font-size:13.5px;color:#d6ccbb}
+h2.sec{font:600 20px Georgia,serif;color:var(--brass2);letter-spacing:.05em;margin:26px 0 6px}
+footer{color:#6b635a;font-size:12px;padding:20px 28px;border-top:1px solid var(--line)}
+.bbtool{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.bbtool select{flex:1;min-width:200px;max-width:380px}.seg button{border:none;border-radius:0;background:transparent;color:var(--mut)}.seg button.on{background:#2c2118;color:var(--brass2)}#bb-pan.on{border-color:var(--ember);color:var(--brass2)}
+@media (max-width:900px){.cbw,.bbw{grid-template-columns:minmax(0,1fr)}.bbmain{order:-1}.cbw>.panel:last-child{order:-1}.mx tbody th{white-space:normal;min-width:110px;font-size:11.5px}.det{grid-template-columns:1fr}#bb-pal{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:600px){.hdr{padding:16px 14px 8px}.brand h1{font-size:20px}.stats{margin-left:0;width:100%}.stat{flex:1;min-width:0;padding:4px 6px}.stat b{font-size:17px}.tabs{padding:10px 14px 0}.tabs button{padding:7px 11px}main{padding:0 14px 40px}input[type=search]{min-width:0;flex:1 1 100%;max-width:none}.stat span{font-size:9px;white-space:nowrap;letter-spacing:.03em}.bbtool select{min-width:0;flex:1 1 100%;max-width:none}.grid{grid-template-columns:1fr 1fr;gap:10px}.card h3{font-size:14px}.uses,.ifs{display:none}.cb{padding:9px}.cact button{font-size:11px;padding:5px 2px}#bb-pal{grid-template-columns:repeat(3,1fr)}dl{grid-template-columns:1fr}.count{margin-left:0;width:100%}}
+</style></head><body>
+<header class="hdr"><div class="brand"><svg class="sigil" viewBox="0 0 64 64"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3a3"/><stop offset="1" stop-color="#8a6a28"/></linearGradient></defs><circle cx="32" cy="32" r="29" fill="none" stroke="url(#sg)" stroke-width="3"/><g fill="url(#sg)">
+<path d="M32 9l3 6h-6zM32 55l3-6h-6zM9 32l6 3v-6zM55 32l-6 3v-6zM16 16l6 2-4 4zM48 48l-6-2 4-4zM48 16l-2 6-4-4zM16 48l2-6 4 4z"/></g><circle cx="32" cy="32" r="14" fill="#1b1410" stroke="url(#sg)" stroke-width="2.5"/><path d="M32 22c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" fill="#ff7a2a"/><path d="M32 29c2 2.5 3 4 3 5.5a3 3 0 0 1-6 0c0-1.5 1-3 3-5.5z" fill="#ffd27a"/></svg>
+<div><h1>The Forge</h1><p>Zach's robotics &amp; electronics parts workshop · Valkor and beyond</p></div>
+<div class="stats"><div class="stat"><b id="st-parts">0</b><span>Parts</span></div><div class="stat"><b id="st-proj">0</b><span>Projects</span></div><div class="stat"><b id="st-build">0</b><span>Buildable now</span></div><div class="stat"><b id="st-kit">0</b><span>Kit: verify</span></div></div></div></header>
+<nav class="tabs"><button data-tab="inventory">Armory<small>Inventory</small></button><button data-tab="combos">Concordance<small>What works with what</small></button><button data-tab="projects">Works<small>Project ideas</small></button><button data-tab="bench">Forge Bench<small>Breadboard</small></button><button data-tab="schem">Blueprints<small>Schematics</small></button><button data-tab="recs">Requisitions<small>Recommendations</small></button></nav>
+<main>
+<section class="tab" id="tab-inventory"><p class="intro">Everything in the workshop. Click a card for specs, pinouts, gotchas and docs. Edits (qty, status, notes) save in this browser; use <b>Export</b> to back them up or move them to another PC. Cards marked <i>“Typical kit contents: verify”</i> are what an Elegoo Mega kit usually contains; your exact kit variant is unknown.</p>
+<div class="bar"><input type="search" id="inv-q" placeholder="Search parts, specs, uses, notes…"><select id="inv-cat"></select><select id="inv-if"></select><select id="inv-st"></select><button id="inv-add">＋ Add part</button><button id="inv-export">Export JSON</button><button id="inv-import">Import JSON</button><input type="file" id="inv-file" accept="application/json" hidden><span class="count" id="inv-count"></span></div>
+<div class="grid" id="inv-grid"></div></section>
+<section class="tab" id="tab-combos"><p class="intro">Pick any part to see what it connects to and how: bus, voltage concerns, level shifting and power. The matrix shows every module against each of your five controller boards; click a cell for details.</p>
+<div class="cbw"><div class="panel"><h3>Compatibility matrix</h3><div class="legend"><span class="lv-good">✔ Direct</span><span class="lv-ok">◆ Via helper part</span><span class="lv-caution">! Caution (power/level)</span><span class="lv-needs">＋ Needs extra part</span><span class="lv-no">✕ Not compatible</span></div><div class="mxw" id="mx"></div></div>
+<div class="panel"><h3>Pick a part</h3><select id="cb-pick" style="width:100%"></select><div id="cb-detail"></div><svg id="cb-graph"></svg></div></div></section>
+<section class="tab" id="tab-projects"><p class="intro">Projects built from parts you already own. Any part you'd need to buy is flagged. Difficulty: ◆ Initiate · ◆◆ Adept · ◆◆◆ Magos. “Buildable now” checks your current quantities from the Armory.</p>
+<div class="bar"><label class="chk"><input type="checkbox" id="pj-can"> What can I build right now?</label><select id="pj-tag"></select><select id="pj-diff"><option value="">Any difficulty</option><option value="1">Initiate</option><option value="2">Adept</option><option value="3">Magos</option></select><span class="count" id="pj-count"></span></div>
+<div class="grid" id="pj-grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))"></div></section>
+<section class="tab" id="tab-bench"><div class="bbw"><aside class="side">
+<div class="panel"><h4>Add part</h4><div id="bb-pal"></div></div><div class="panel"><h4>Wire color</h4><div id="bb-colors"></div></div>
+<div class="panel"><h4>Layouts</h4><div style="display:grid;gap:6px"><button id="bb-save" class="pri">Save layout</button><select id="bb-layouts"></select><div style="display:flex;gap:6px"><button id="bb-load" style="flex:1">Load</button><button id="bb-ldel" style="flex:1">Delete</button></div><button id="bb-del">Delete selected</button><button id="bb-clear" class="danger">Clear bench</button></div></div>
+<div class="panel"><h4>How to</h4><ul class="help"><li>Drag from any hole or pin to another to lay a wire.</li><li>Drag a part to move it (it snaps to holes).</li><li>Hover a hole to light up everything it's connected to.</li><li>Select a part or wire, then press Delete (or right-click it). Double-click a wire to remove it.</li><li>Board rails are drawn continuous; check whether yours split in the middle.</li></ul></div></aside>
+<div class="bbmain"><div class="bbtool"><select id="bb-preset"></select><button id="bb-toschem">View as schematic →</button><span class="seg" id="bb-zoom"><button data-z="1" class="on">Fit</button><button data-z="1.6">1.6×</button><button data-z="2.4">2.4×</button></span><button id="bb-pan" title="Toggle between editing and scrolling the board (useful on touch screens)">✋ Pan mode: off</button></div><div class="note2" id="bb-note"></div><div class="svgw"><svg id="bb"></svg></div><div class="info" id="bb-info">Hover a hole to see what it's connected to.</div><div class="note2"><span id="bb-hint"></span> <span id="bb-info2" style="float:right;color:var(--mut)"></span></div></div></div></section>
+<section class="tab" id="tab-schem"><div class="scbar"><select id="sc-preset"></select><span class="seg"><label><input type="radio" name="scv" value="schem" checked>Schematic</label><label><input type="radio" name="scv" value="bb">Breadboard</label></span></div>
+<div class="note2" id="sc-note"></div><svg id="sc-svg"></svg><div class="tblw" id="sc-table"></div>
+<p class="note2" style="color:var(--mut)">Pin numbers are physical header positions: DevKit V1 30-pin counter-clockwise from EN = 1; XIAO D0 = 1 … 5V = 14; module pins follow the silkscreen order. Matching net labels are connected. Power symbols: ▲ supply, ⏚ ground. NC = not connected.</p></section>
+<section class="tab" id="tab-recs"><p class="intro">What to add next and why, ordered by how much it unlocks. Prices aren't listed because they change; the links are example listings, so check the current price.</p><div class="grid" id="rc-grid"></div>
+<h2 class="sec">Forge best practices</h2><div class="tips" id="rc-tips"></div></section>
+</main>
+<footer>The Forge · built Nov 2026 for Zach · <a href="https://molvalkor.github.io/">MolValkor Forge</a>. Photos are official or reference product photos from Seeed, Waveshare, Elegoo, Espressif/Adafruit listings; “Illustration” tiles are generated. Data lives in your browser (localStorage). Export to back it up.</footer>
+<div id="modal"><div class="mbox"><button class="mx-close" aria-label="Close">✕</button><div class="mc"></div></div></div><div id="toast"></div>
+<script>/* ===== Forge data: parts, projects, recommendations ===== */
+const AF = id => 'https://www.adafruit.com/product/' + id;
+// imgKind: exact = official photo of this exact product; ref = reference photo of the same part type (yours may look different); illus = generated illustration
+const PARTS = [
+ // ---------- Controllers ----------
+ {id:'xiao', name:'Seeed XIAO ESP32-S3 Sense', nick:'Valkor body', cat:'Controller', qty:1, status:'valkor', volt:'5V USB-C in, 3.3V logic', logic:'3.3', iface:['GPIO','PWM','I2C','SPI','I2S','UART','Camera','Mic','Wi-Fi','BLE'],
+  specs:['ESP32-S3 dual-core 240 MHz, 8 MB PSRAM, 8 MB flash','OV2640/OV3660 camera on the Sense expansion board','Onboard PDM mic (GPIO41 data / GPIO42 clk)','11 edge GPIO (D0–D10), microSD slot on the Sense board'],
+  pinout:'Valkor map (pins.h): D0=GPIO1 pan servo, D1=GPIO2 tilt servo, D2=GPIO3 I2S BCLK, D3=GPIO4 I2S LRC, D6=GPIO43 I2S DIN, D4=GPIO5 SDA, D5=GPIO6 SCL. D7–D10 (GPIO44,7,8,9) reserved for the ST7789. BOOT=GPIO0 push-to-talk.',
+  gotchas:['3.3V logic only. Never feed 5V into a GPIO.','The 5V pin is USB VBUS passthrough: fine for 2 SG90s with a 1000 µF cap, but brownouts happen under load. A separate 5V supply is safer.','SD card uses D8–D10. Don\'t use SD while the ST7789 is on those pins.','Headers are a beginner soldering risk. Practice first or use a pre-soldered unit.'],
+  uses:'Valkor body: face display, servos, glow, audio.', doc:'https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/', img:'xiao-esp32s3-sense.jpg', imgKind:'exact', imgSrc:'Seeed Studio product page', bb:'xiao'},
+ {id:'devkit', name:'ESP32 DevKit V1 (ESP-WROOM-32)', nick:'Bench board', cat:'Controller', qty:null, status:'in-use', volt:'5V USB / VIN, 3.3V logic', logic:'3.3', iface:['GPIO','PWM','I2C','SPI','I2S','UART','ADC','DAC','Wi-Fi','BLE'],
+  specs:['ESP32 dual-core 240 MHz, 520 KB SRAM, 4 MB flash','30-pin DOIT layout, CP2102/CH340 USB-serial','Arduino: board "ESP32 Dev Module", core 3.3.12, COM3 on your PC','2 × 8-bit DAC (GPIO25/26), 18 ADC channels'],
+  pinout:'Working ST7789 test: SCK=D18, MOSI=D23, CS=D5, DC=RX2 (GPIO16), RST=TX2 (GPIO17), BL not driven. Default I2C: SDA=21, SCL=22. GPIO34–39 are input-only. Avoid GPIO6–11 (flash).',
+  gotchas:['3.3V logic. HC-SR04 echo and other 5V outputs need a divider or level shifter.','Strapping pins GPIO0, 2, 5, 12, 15 affect boot. GPIO12 HIGH at boot can break flashing.','ADC2 pins (e.g. 25–27, 12–15) stop working as ADC when Wi-Fi is on.','VIN while USB-powered is ~4.7V after the diode. Don\'t run motors from it.'],
+  uses:'Breadboard testing: screen and face tests now, learning projects next.', doc:'https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html', img:'esp32-devkit.jpg', imgKind:'ref', imgSrc:'Espressif dev board (Adafruit listing). Similar to your DOIT V1, not identical', bb:'devkit'},
+ {id:'hatch', name:'Waveshare ESP32-S3 Touch AMOLED 2.06"', nick:'Hatch', cat:'Controller', qty:1, status:'spare', volt:'5V USB-C / LiPo, 3.3V logic', logic:'3.3', iface:['Touch','QSPI display','I2C','I2S codec','IMU','RTC','Wi-Fi','BLE'],
+  specs:['ESP32-S3R8, 8 MB PSRAM, 32 MB flash','2.06" 410×502 AMOLED (QSPI) + capacitive touch','QMI8658 6-axis IMU, PCF85063 RTC, ES8311 audio codec, AXP2101 power management','Watch form factor with LiPo support and a microSD slot'],
+  pinout:'Mostly internal. Very few broken-out GPIO, so check the Waveshare pinout before wiring anything external.',
+  gotchas:['Separate device. Never flash Valkor firmware onto it.','Needs Waveshare\'s display/touch libraries (or LVGL demos) at the exact versions in their wiki.','Few exposed pins: treat it as a standalone screen, sensor and Wi-Fi node, not a wiring hub.'],
+  uses:'Standalone touch dashboard, remote control, or wearable for your other builds.', doc:'https://www.waveshare.com/wiki/ESP32-S3-Touch-AMOLED-2.06', img:'hatch-amoled-206.jpg', imgKind:'exact', imgSrc:'Waveshare product page'},
+ {id:'pi4', name:'Raspberry Pi 4 Model B (2 GB)', nick:'', cat:'Controller', qty:1, status:'spare', volt:'5V 3A USB-C, 3.3V GPIO', logic:'3.3', iface:['GPIO','I2C','SPI','UART','I2S','PWM','CSI camera','USB','Ethernet','Wi-Fi','BLE','HDMI'],
+  specs:['Quad Cortex-A72 1.5 GHz, 2 GB RAM','40-pin header, 2× micro-HDMI, 2× USB3, 2× USB2','CSI camera connector (Camera Module 3)','Runs Linux and Python with OpenCV, Picamera2, ROS 2'],
+  pinout:'Header pin 1 = 3V3, 2/4 = 5V, 6 = GND. I2C1 SDA = GPIO2 (pin 3), SCL = GPIO3 (pin 5). Hardware PWM on GPIO12/13/18/19.',
+  gotchas:['GPIO is 3.3V and not 5V tolerant.','Needs a solid 5V 3A supply. Under-voltage causes throttling and SD corruption.','No analog inputs (add an ADC if needed).','Servo jitter with software PWM. Use hardware PWM, pigpio, or a PCA9685.'],
+  uses:'Vision station, Valkor\'s optional offline brain host, ROS 2 learning.', doc:'https://www.raspberrypi.com/documentation/computers/raspberry-pi.html', img:'pi4.jpg', imgKind:'exact', imgSrc:'Raspberry Pi 4 2GB official product photo (Adafruit listing)'},
+ {id:'mega', name:'Elegoo Mega 2560 R3', nick:'', cat:'Controller', qty:1, status:'kit', kit:true, volt:'7–12V barrel or 5V USB, 5V logic', logic:'5', iface:['GPIO','PWM','ADC','I2C','SPI','UART'],
+  specs:['ATmega2560 16 MHz, 256 KB flash, 8 KB SRAM','54 digital I/O (15 PWM), 16 analog in, 4 UARTs','5V logic: easiest board for the kit\'s 5V modules'],
+  pinout:'I2C SDA=20, SCL=21. SPI MOSI=51, MISO=50, SCK=52, SS=53. PWM on 2–13 and 44–46.',
+  gotchas:['5V logic. Don\'t wire it straight into ESP32, Pi, RC522 or ST7789 pins without level shifting.','No Wi-Fi or I2S. It\'s best for sensor and motor learning.','The 5V regulator is weak. Power servos and motors separately.'],
+  uses:'Kit lessons, 5V sensor experiments, motor and stepper practice.', doc:'https://docs.arduino.cc/hardware/mega-2560/', img:'mega2560.jpg', imgKind:'ref', imgSrc:'Arduino Mega 2560 (Adafruit listing). Elegoo\'s is a compatible clone'},
+ {id:'elegookit', name:'Elegoo Mega 2560 Starter Kit (box)', nick:'', cat:'Kit', qty:1, status:'kit', kit:true, volt:'—', logic:'—', iface:[],
+  specs:['200+ components, with a PDF tutorial of 35+ lessons','Exact variant unknown. Every "kit" card below is typical contents, so verify against your box'],
+  pinout:'—', gotchas:['Kit items here are typical contents: verify and edit quantities, or set the status to "missing".'],
+  uses:'Source of most sensors and modules below.', doc:'https://www.elegoo.com/products/elegoo-mega-2560-the-most-complete-starter-kit', img:'elegoo-mega-kit.jpg', imgKind:'exact', imgSrc:'Elegoo product page (Most Complete Starter Kit)'},
+ // ---------- Vision ----------
+ {id:'picam3', name:'Raspberry Pi Camera Module 3', nick:'', cat:'Sensor', qty:1, status:'spare', volt:'From Pi (3.3V)', logic:'3.3', iface:['CSI camera'],
+  specs:['12 MP Sony IMX708, autofocus','1080p50 / 720p100 video, HDR mode','15-pin to 22-pin FFC needed for Pi 5 (Pi 4 uses the 15-pin it ships with)'],
+  pinout:'Ribbon into the Pi 4 CAMERA port: contacts face the HDMI ports.', gotchas:['Use Picamera2 / libcamera (rpicam-apps), not legacy raspistill.','Don\'t hot-plug the ribbon. Power off first.'],
+  uses:'Pi vision station: face/object detection, time-lapse.', doc:'https://www.raspberrypi.com/documentation/accessories/camera.html', img:'picam3.jpg', imgKind:'exact', imgSrc:'Camera Module 3 official product photo (Adafruit listing)'},
+ // ---------- Displays ----------
+ {id:'st7789', name:'Waveshare 1.47" LCD (ST7789, 172×320)', nick:'Valkor face', cat:'Display', qty:1, status:'in-use', volt:'3.3V (3.3–5V module)', logic:'3.3', iface:['SPI'],
+  specs:['262K color IPS, 172×320 portrait','ST7789V3 controller; Adafruit_ST7789 init(172,320), column offset 34 (handled by library)','8-pin: VCC GND DIN CLK CS DC RST BL'],
+  pinout:'Your working DevKit pins: CLK→D18, DIN→D23, CS→D5, DC→RX2/GPIO16, RST→TX2/GPIO17, VCC→3V3, GND→GND, BL left undriven.',
+  gotchas:['Keep SPI at about 10 MHz on long jumpers (your sketch does).','invertDisplay(true) is needed for correct colors.','Don\'t drive BL until the transistor-driven input is confirmed (see your screen-test README).'],
+  uses:'Valkor\'s animated face (working: screen + face tests passed on the DevKit).', doc:'https://www.waveshare.com/wiki/1.47inch_LCD_Module', img:'st7789-147.jpg', imgKind:'exact', imgSrc:'Waveshare product page', bb:'st7789'},
+ {id:'ssd1306', name:'SSD1306 0.96" OLED (128×64, I2C)', nick:'', cat:'Display', qty:null, status:'spare', volt:'3.3–5V', logic:'3.3', iface:['I2C'],
+  specs:['128×64 monochrome','Address 0x3C (some 0x3D)','About 20 mA typical'],
+  pinout:'GND, VCC, SCL, SDA (check the silkscreen: some swap GND/VCC).', gotchas:['Pin order varies between sellers. Read the silkscreen.','Burn-in on static images: dim or move content.'],
+  uses:'Practice displays, status readouts, small dashboards.', doc:'https://learn.adafruit.com/monochrome-oled-breakouts', img:'ssd1306.jpg', imgKind:'ref', imgSrc:'Adafruit 0.96" OLED. Yours is likely a generic blue/black board', bb:'ssd1306'},
+ {id:'lcd1602', name:'LCD1602 character display', nick:'', cat:'Display', qty:1, status:'kit', kit:true, volt:'5V', logic:'5', iface:['GPIO (4-bit parallel)'],
+  specs:['16×2 characters, HD44780','6 GPIO in 4-bit mode + contrast pot'],
+  pinout:'RS, E, D4–D7, V0 to the pot wiper, RW to GND.', gotchas:['Needs 5V supply. Works with a Mega directly; on ESP32 it usually reads 3.3V logic but power it from 5V.','Blank screen = contrast pot not adjusted.'],
+  uses:'Kit lessons, menu systems.', doc:'https://learn.adafruit.com/character-lcds', img:'lcd1602.jpg', imgKind:'ref', imgSrc:'Adafruit 16×2 LCD'},
+ {id:'seg7', name:'4-digit 7-segment display', nick:'', cat:'Display', qty:1, status:'kit', kit:true, volt:'Per segment ~2V LED', logic:'any', iface:['GPIO (multiplexed)'],
+  specs:['Common-cathode (usually 5461AS)','12 pins: 8 segments + 4 digit selects'], pinout:'Use 220 Ω per segment; scan the digits fast.', gotchas:['Needs 12 GPIO. Drive it through a 74HC595 to save pins.'],
+  uses:'Clocks, timers, counters.', doc:AF(865), img:'seg7.jpg', imgKind:'ref', imgSrc:'Adafruit 7-segment'},
+ {id:'matrix8x8', name:'8×8 LED dot matrix', nick:'', cat:'Display', qty:1, status:'kit', kit:true, volt:'LED', logic:'any', iface:['GPIO (multiplexed)'],
+  specs:['1088AS-type 16-pin matrix'], pinout:'Rows/cols multiplexed; usually driven by 2× 74HC595 or a MAX7219.', gotchas:['16 GPIO if direct. Use shift registers.'],
+  uses:'Icons, eyes, scrolling text.', doc:AF(1047), img:'matrix8x8.jpg', imgKind:'ref', imgSrc:'Adafruit 8×8 matrix'},
+ // ---------- Audio ----------
+ {id:'max98357', name:'MAX98357A I2S class-D amp', nick:'', cat:'Audio', qty:2, status:'valkor', volt:'2.5–5.5V (use 5V for volume)', logic:'3.3', iface:['I2S'],
+  specs:['3.2 W into 4 Ω at 5V','Digital I2S in, no DAC needed','GAIN pin: open = 9 dB; SD pin: open = L+R mix'],
+  pinout:'LRC, BCLK, DIN, GAIN, SD, GND, VIN + speaker +/−. Valkor: BCLK=GPIO3, LRC=GPIO4, DIN=GPIO43.',
+  gotchas:['Never ground either speaker lead: it\'s a bridged (BTL) output.','Power from 5V with a short ground. Hum or clicks usually mean the ground or supply is noisy.','You soldered one already. Check joints with a continuity test.'],
+  uses:'Valkor voice output (one in Valkor, one spare).', doc:'https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp', img:'max98357.jpg', imgKind:'ref', imgSrc:'Adafruit MAX98357A breakout', bb:'max98357'},
+ {id:'speaker', name:'Speaker 4 Ω 3 W', nick:'', cat:'Audio', qty:4, status:'spare', volt:'Driven by amp', logic:'—', iface:['Analog'],
+  specs:['4 Ω, 3 W'], pinout:'Two terminals: + / −.', gotchas:['Pair with MAX98357 (≤3.2 W). An enclosure greatly improves bass.'],
+  uses:'Valkor voice, talking bots, alarms.', doc:AF(1314), img:'speaker4ohm.jpg', imgKind:'ref', imgSrc:'Adafruit 4 Ω 3 W speaker', bb:'speaker'},
+ {id:'buzzer', name:'Buzzers (active + passive)', nick:'', cat:'Audio', qty:2, status:'kit', kit:true, volt:'3.3–5V', logic:'any', iface:['GPIO','PWM'],
+  specs:['Active = beeps on DC; passive = needs PWM tone'], pinout:'+ (long leg) to GPIO, − to GND.', gotchas:['Use tone()/ledcWriteTone for passive. Active ones just need HIGH.'],
+  uses:'Alerts, alarms, chirps.', doc:AF(160), img:'buzzer.jpg', imgKind:'ref', imgSrc:'Adafruit piezo buzzer', bb:'buzzer'},
+ // ---------- Motion ----------
+ {id:'sg90', name:'SG90 micro servo (spare)', nick:'', cat:'Motion', qty:4, status:'spare', volt:'4.8–6V supply, 3.3–5V signal', logic:'3.3', iface:['PWM'],
+  specs:['~1.8 kg·cm, 180°','50 Hz PWM, 500–2400 µs','Stall current up to ~650 mA each'],
+  pinout:'Brown = GND, Red = +5V, Orange = signal.', gotchas:['Needs a separate regulated 5V supply. Never power it from 3V3, and don\'t rely on a board\'s regulator.','Tie the servo ground to the controller ground (common ground).','Add 1000 µF across 5V/GND near the servos.','Jitter means a weak supply or a noisy ground.'],
+  uses:'Pan-tilt, grippers, flags, walkers.', doc:AF(169), img:'sg90.jpg', imgKind:'ref', imgSrc:'Adafruit micro servo (SG92R, same form)', bb:'sg90'},
+ {id:'pantilt', name:'Pan-tilt kit with 2× SG90', nick:'Valkor neck', cat:'Motion', qty:1, status:'valkor', volt:'5V servos', logic:'3.3', iface:['PWM'],
+  specs:['Two-axis bracket with 2 SG90s','About 180° pan, ~150° tilt'], pinout:'Pan SG90 + tilt SG90, 3 wires each.', gotchas:['Same power rules as SG90. Total stall can reach ~1.3 A.','Limit travel in code to avoid hitting the bracket stops.'],
+  uses:'Valkor\'s neck / camera gimbal.', doc:AF(1967), img:'pantilt.jpg', imgKind:'ref', imgSrc:'Adafruit mini pan-tilt kit'},
+ {id:'stepper', name:'28BYJ-48 stepper + ULN2003 driver', nick:'', cat:'Motion', qty:1, status:'kit', kit:true, volt:'5V', logic:'any', iface:['GPIO'],
+  specs:['Unipolar, ~2048 steps/rev (64:1 gear)','ULN2003 Darlington board with LEDs'], pinout:'IN1–IN4 to 4 GPIO; driver + to 5V, − to GND.', gotchas:['~200–250 mA. Use an external 5V, not the board\'s 5V pin under long runs.','Slow (about 15 RPM). Great for dials, not wheels.'],
+  uses:'Gauges, turntables, clock hands.', doc:AF(858), img:'stepper.jpg', imgKind:'ref', imgSrc:'Adafruit 28BYJ-48 stepper'},
+ {id:'dcmotor', name:'DC hobby motor + fan blade', nick:'', cat:'Motion', qty:1, status:'kit', kit:true, volt:'3–6V', logic:'—', iface:['Driver'],
+  specs:['130-size brushed motor'], pinout:'Two leads via L293D or a transistor.', gotchas:['Never drive it from a GPIO directly.','Add a flyback diode (1N4007) if switching with a transistor.'],
+  uses:'Fans, spinners, simple rover practice.', doc:AF(711), img:'dcmotor.jpg', imgKind:'ref', imgSrc:'Adafruit 130 motor'},
+ {id:'l293d', name:'L293D dual H-bridge IC', nick:'', cat:'Logic/IC', qty:1, status:'kit', kit:true, volt:'4.5–36V motor, 5V logic', logic:'5', iface:['GPIO','PWM'],
+  specs:['2 DC motors bidirectional, 600 mA/ch','Built-in flyback diodes'], pinout:'EN1/EN2 PWM, IN1–IN4 direction, VCC1 logic 5V, VCC2 motor supply.', gotchas:['It drops ~1.5–2V, so a 5V motor sees ~3.5V.','The logic threshold works with 3.3V inputs in practice (VIH 2.3V).'],
+  uses:'Rover drive, fans with reverse.', doc:'https://www.ti.com/lit/ds/symlink/l293.pdf', img:'l293d.jpg', imgKind:'ref', imgSrc:'Adafruit L293D'},
+ {id:'relay', name:'5V relay module (1-ch)', nick:'', cat:'Motion', qty:1, status:'kit', kit:true, volt:'5V coil', logic:'5', iface:['GPIO'],
+  specs:['SRD-05VDC, contacts 10 A rating (keep to low voltage)'], pinout:'VCC, GND, IN; COM/NO/NC screw terminals.', gotchas:['Low-voltage only for you. Don\'t switch mains.','Some boards are active-LOW and may not trigger reliably at 3.3V.'],
+  uses:'Switching LED strips, pumps, lamps (low-voltage).', doc:'https://www.elegoo.com/products/elegoo-mega-2560-the-most-complete-starter-kit', img:null, illus:'relay', imgKind:'illus'},
+ // ---------- Sensors ----------
+ {id:'hcsr04', name:'HC-SR04 ultrasonic sensor', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'5V', logic:'5', iface:['GPIO'],
+  specs:['2–400 cm, 15° cone'], pinout:'VCC, TRIG, ECHO, GND.', gotchas:['ECHO outputs 5V. Use a 1k/2k divider into an ESP32 or Pi.','Soft or angled surfaces read poorly.'],
+  uses:'Rover obstacle avoidance, presence detection.', doc:AF(3942), img:'hcsr04.jpg', imgKind:'ref', imgSrc:'Adafruit HC-SR04', bb:'hcsr04'},
+ {id:'dht11', name:'DHT11 temp/humidity', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'3.3–5V', logic:'3.3', iface:['GPIO (1-wire-ish)'],
+  specs:['0–50 °C ±2 °C, 20–90% RH ±5%','One read per second at most'], pinout:'Module: S (data), +, −.', gotchas:['Slow and coarse, fine for a desk dashboard.','Needs a 10k pull-up if it\'s the bare 4-pin part.'],
+  uses:'Desk/weather dashboard.', doc:'https://learn.adafruit.com/dht', img:'dht11.jpg', imgKind:'ref', imgSrc:'Adafruit DHT11', bb:'dht11'},
+ {id:'pir', name:'HC-SR501 PIR motion sensor', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'5V supply (4.5–20V), 3.3V out', logic:'3.3', iface:['GPIO'],
+  specs:['~7 m range, adjustable delay and sensitivity'], pinout:'VCC, OUT, GND.', gotchas:['Allow about 60 s warm-up.','The output is 3.3V, so it\'s safe for an ESP32 even when powered from 5V.'],
+  uses:'Wake Valkor when you sit down; room alarm.', doc:'https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor', img:'pir.jpg', imgKind:'ref', imgSrc:'Adafruit PIR'},
+ {id:'irrecv', name:'IR receiver + remote', nick:'', cat:'Input', qty:1, status:'kit', kit:true, volt:'3.3–5V', logic:'3.3', iface:['GPIO'],
+  specs:['38 kHz demodulator, NEC remote'], pinout:'OUT, GND, VCC (check module order).', gotchas:['Use IRremote (Mega) or IRremoteESP8266 (ESP32).'],
+  uses:'Remote control for any build.', doc:'https://learn.adafruit.com/ir-sensor', img:'irremote.jpg', imgKind:'ref', imgSrc:'Adafruit mini remote'},
+ {id:'photocell', name:'Photoresistor (LDR)', nick:'', cat:'Sensor', qty:2, status:'kit', kit:true, volt:'any', logic:'analog', iface:['ADC'],
+  specs:['CdS cell, ~1k bright to ~10k+ dark'], pinout:'Voltage divider with 10k into an ADC pin.', gotchas:['Use ADC1 pins (32–39) on the ESP32 when Wi-Fi is on.'],
+  uses:'Auto-dim screens, day/night logic.', doc:AF(161), img:'photocell.jpg', imgKind:'ref', imgSrc:'Adafruit photocell'},
+ {id:'tilt', name:'Tilt ball switch', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'any', logic:'any', iface:['GPIO'], specs:['Closed when upright'], pinout:'Pin to GPIO with INPUT_PULLUP, other to GND.', gotchas:['Debounce in software.'], uses:'Knock-over alarm, shake-to-wake.', doc:AF(173), img:'tilt.jpg', imgKind:'ref', imgSrc:'Adafruit tilt switch'},
+ {id:'mpu6050', name:'GY-521 MPU-6050 accel/gyro', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'3.3–5V (onboard LDO)', logic:'3.3', iface:['I2C'],
+  specs:['3-axis accel + 3-axis gyro','I2C 0x68 (0x69 with AD0 high)'], pinout:'VCC, GND, SCL, SDA, (XDA, XCL, AD0, INT).', gotchas:['Gyro drifts. Fuse with the accelerometer (complementary filter).'],
+  uses:'Gesture input, balance, rover heading.', doc:'https://learn.adafruit.com/mpu6050-6-dof-accelerometer-and-gyro', img:'mpu6050.jpg', imgKind:'ref', imgSrc:'Adafruit MPU-6050'},
+ {id:'soundsensor', name:'Sound sensor module', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'3.3–5V', logic:'analog', iface:['ADC','GPIO'], specs:['Electret mic + comparator, analog + digital out'], pinout:'AO, GND, VCC, DO.', gotchas:['Not for speech. It only detects loudness (clap detection).'], uses:'Clap-to-wake, VU meter.', doc:AF(1063), img:'soundsensor.jpg', imgKind:'ref', imgSrc:'Adafruit electret mic amp (similar concept)'},
+ {id:'rc522', name:'RFID RC522 reader + tags', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'3.3V ONLY', logic:'3.3', iface:['SPI'],
+  specs:['13.56 MHz MIFARE, card + key fob'], pinout:'SDA(SS), SCK, MOSI, MISO, IRQ, GND, RST, 3.3V.', gotchas:['3.3V supply only. On a Mega, power from 3.3V; its 5V logic is out of spec (level shift to be safe).','Native fit on ESP32 SPI.'],
+  uses:'Badge unlock for Valkor, inventory tags.', doc:'https://www.nxp.com/docs/en/data-sheet/MFRC522.pdf', img:null, illus:'rfid', imgKind:'illus'},
+ {id:'waterlevel', name:'Water level sensor', nick:'', cat:'Sensor', qty:1, status:'kit', kit:true, volt:'3.3–5V', logic:'analog', iface:['ADC'], specs:['Exposed traces, analog out'], pinout:'S, +, −.', gotchas:['Traces corrode if powered constantly. Power it from a GPIO only when reading.'], uses:'Plant/reservoir monitor.', doc:AF(4965), img:null, illus:'water', imgKind:'illus'},
+ // ---------- Input ----------
+ {id:'joystick', name:'Analog joystick module', nick:'', cat:'Input', qty:1, status:'kit', kit:true, volt:'3.3–5V', logic:'analog', iface:['ADC','GPIO'], specs:['2 pots + push button'], pinout:'GND, +5V, VRx, VRy, SW.', gotchas:['Power from 3V3 on an ESP32 so outputs stay under 3.3V.'], uses:'Manual pan-tilt control, rover remote.', doc:AF(512), img:'joystick.jpg', imgKind:'ref', imgSrc:'Adafruit thumb joystick'},
+ {id:'keypad', name:'4×4 membrane keypad', nick:'', cat:'Input', qty:1, status:'kit', kit:true, volt:'any', logic:'any', iface:['GPIO'], specs:['16 keys, 8-pin matrix'], pinout:'4 rows + 4 cols to 8 GPIO.', gotchas:['Uses 8 GPIO. Use the Keypad library.'], uses:'PIN lock, menus.', doc:AF(3844), img:'keypad.jpg', imgKind:'ref', imgSrc:'Adafruit 4×4 keypad'},
+ {id:'pot', name:'Potentiometers 10k', nick:'', cat:'Input', qty:2, status:'kit', kit:true, volt:'any', logic:'analog', iface:['ADC'], specs:['Linear 10 kΩ'], pinout:'Outer legs to 3V3/GND, wiper to ADC.', gotchas:['On the ESP32 use 3V3 (not 5V) on the outer leg.'], uses:'Knobs, servo dial, LCD contrast.', doc:AF(562), img:'pot.jpg', imgKind:'ref', imgSrc:'Adafruit 10k pot', bb:'pot'},
+ {id:'buttons', name:'Tactile push buttons', nick:'', cat:'Input', qty:null, status:'kit', kit:true, volt:'any', logic:'any', iface:['GPIO'], specs:['6 mm, 4-leg'], pinout:'Straddle the center channel; legs on the same side are already connected.', gotchas:['Use INPUT_PULLUP and debounce.'], uses:'Push-to-talk, menus.', doc:AF(367), img:'buttons.jpg', imgKind:'ref', imgSrc:'Adafruit tactile buttons', bb:'button'},
+ // ---------- Logic / passives ----------
+ {id:'hc595', name:'74HC595 shift register', nick:'', cat:'Logic/IC', qty:1, status:'kit', kit:true, volt:'2–6V', logic:'any', iface:['SPI-like (3 GPIO)'], specs:['8 outputs from 3 pins, chainable'], pinout:'DS (data), SHCP (clock), STCP (latch), OE→GND, MR→VCC.', gotchas:['Power at 3.3V when driven by an ESP32.','Each output ~6 mA safe; use resistors.'], uses:'Drive 7-seg, 8×8 matrix, LED bars.', doc:'https://www.ti.com/lit/ds/symlink/sn74hc595.pdf', img:'hc595.jpg', imgKind:'ref', imgSrc:'Adafruit 74HC595'},
+ {id:'leds', name:'LEDs (assorted + RGB)', nick:'', cat:'Passive', qty:null, status:'kit', kit:true, volt:'~2–3.2V forward', logic:'any', iface:['GPIO','PWM'], specs:['5 mm red/green/blue/yellow/white + RGB'], pinout:'Long leg = anode (+).', gotchas:['Always use a series resistor (220–330 Ω).'], uses:'Status lights, Valkor glow tests.', doc:AF(299), img:'leds.jpg', imgKind:'ref', imgSrc:'Adafruit 5 mm LEDs', bb:'led'},
+ {id:'resistors', name:'Resistor assortment', nick:'', cat:'Passive', qty:null, status:'kit', kit:true, volt:'—', logic:'—', iface:[], specs:['Typical: 10 Ω–1 MΩ, 1/4 W'], pinout:'—', gotchas:['220 Ω for LEDs, 10k pull-ups, 1k+2k for a 5V→3.3V divider.'], uses:'Everything.', doc:AF(2784), img:'resistors.jpg', imgKind:'ref', imgSrc:'Adafruit resistors', bb:'resistor'},
+ {id:'cap1000', name:'1000 µF electrolytic capacitors', nick:'', cat:'Passive', qty:null, status:'valkor', volt:'Check rating (≥10V for a 5V rail)', logic:'—', iface:['Power'], specs:['Bulk reservoir for servo/amp current spikes'], pinout:'Stripe = negative (−). Long leg = +.', gotchas:['Backwards = it can pop. Stripe to GND.','Place it close to the servo connectors.'], uses:'Valkor servo rail.', doc:AF(2193), img:'capacitor.jpg', imgKind:'ref', imgSrc:'Adafruit electrolytic capacitor (100 µF shown)', bb:'cap'},
+ {id:'diodes', name:'Diodes 1N4007', nick:'', cat:'Passive', qty:null, status:'kit', kit:true, volt:'1000 V, 1 A', logic:'—', iface:[], specs:['Rectifier/flyback'], pinout:'Band = cathode.', gotchas:['Across motor/relay coils, reverse-biased.'], uses:'Flyback protection.', doc:AF(755), img:'diodes.jpg', imgKind:'ref', imgSrc:'Adafruit 1N4001 (same family)'},
+ {id:'transistors', name:'NPN transistors (PN2222 / S8050)', nick:'', cat:'Passive', qty:null, status:'kit', kit:true, volt:'—', logic:'—', iface:['GPIO'], specs:['Small-signal NPN, ~500 mA'], pinout:'E-B-C (check the datasheet for your type).', gotchas:['1k base resistor from the GPIO.'], uses:'Switch motors, buzzers, LED strips.', doc:AF(756), img:'transistors.jpg', imgKind:'ref', imgSrc:'Adafruit PN2222'},
+ // ---------- Power ----------
+ {id:'charger45', name:'45 W USB-C charger', nick:'', cat:'Power', qty:1, status:'in-use', volt:'5V/9V/15V/20V PD', logic:'—', iface:['Power'], specs:['Gives 5V by default to simple USB-C sinks; higher voltages only after PD negotiation'], pinout:'—', gotchas:['A USB-C breakout without PD gets 5V (up to ~3A on most chargers).'], uses:'Powers Valkor and your servo rail.', doc:'https://www.usb.org/usb-charger-pd', img:null, illus:'charger', imgKind:'illus'},
+ {id:'mb102', name:'Breadboard power module (MB102)', nick:'', cat:'Power', qty:1, status:'kit', kit:true, volt:'In 6.5–12V barrel/USB; out 3.3V/5V', logic:'—', iface:['Power'], specs:['Jumper-select 3.3V/5V per rail, ~700 mA max'], pinout:'Plugs into one end of the breadboard rails.', gotchas:['Not enough for several servos under load.','Check polarity alignment with the rails.'], uses:'Quick breadboard power.', doc:'https://www.elegoo.com/products/elegoo-mega-2560-the-most-complete-starter-kit', img:null, illus:'mb102', imgKind:'illus'},
+ // ---------- Prototyping ----------
+ {id:'breadboard', name:'Breadboards (830 + half)', nick:'', cat:'Prototyping', qty:null, status:'in-use', volt:'—', logic:'—', iface:[], specs:['830 tie points, rails on both sides'], pinout:'Columns of 5 connected; rails run lengthwise (some split in the middle!).', gotchas:['Check whether your rails are split in the middle with a continuity test.'], uses:'Every prototype.', doc:AF(239), img:'breadboard.jpg', imgKind:'ref', imgSrc:'Adafruit 830 breadboard'},
+ {id:'jumpers', name:'Jumper wires (M-M, M-F, F-F)', nick:'', cat:'Prototyping', qty:null, status:'in-use', volt:'—', logic:'—', iface:[], specs:['Dupont 2.54 mm'], pinout:'—', gotchas:['Cheap jumpers can be open-circuit. Test the suspicious ones.'], uses:'Every prototype.', doc:AF(758), img:'jumpers.jpg', imgKind:'ref', imgSrc:'Adafruit jumper wires'},
+ // ---------- Mechanical / tools ----------
+ {id:'fasteners', name:'M2–M5 screws, nuts, standoffs', nick:'', cat:'Mechanical', qty:null, status:'spare', volt:'—', logic:'—', iface:[], specs:['Assorted metric hardware'], pinout:'—', gotchas:['Design 3D-printed holes 0.2–0.3 mm oversize for clearance.'], uses:'Mounting boards, servos, the Valkor body.', doc:AF(3299), img:null, illus:'fasteners', imgKind:'illus'},
+ {id:'heatset', name:'M3 heat-set inserts', nick:'', cat:'Mechanical', qty:null, status:'spare', volt:'—', logic:'—', iface:[], specs:['Brass, pressed in with the soldering iron'], pinout:'—', gotchas:['Use a dedicated tip at about 220–250 °C for PLA. Press straight and slowly.','Arrival was pending in late Oct. Confirm you have them.'], uses:'Valkor body final assembly.', doc:AF(4255), img:'heatset.jpg', imgKind:'ref', imgSrc:'Adafruit M3 heat-set inserts'},
+ {id:'iron', name:'Soldering iron', nick:'', cat:'Tool', qty:1, status:'tool', volt:'—', logic:'—', iface:[], specs:['Used for the MAX98357 headers'], pinout:'—', gotchas:['Tin the tip; ~330 °C for leaded and ~360 °C for lead-free; ventilate.'], uses:'Headers, wires, heat-set inserts.', doc:'https://learn.adafruit.com/adafruit-guide-excellent-soldering', img:'solder.jpg', imgKind:'ref', imgSrc:'Adafruit soldering iron (not your exact model)'},
+ {id:'printer3d', name:'3D printer', nick:'', cat:'Tool', qty:1, status:'tool', volt:'—', logic:'—', iface:[], specs:['Printing the Valkor crystal body (two-part, hollow)'], pinout:'—', gotchas:['Leave about 0.3 mm tolerance for press fits and screw bosses for inserts.'], uses:'Enclosures, mounts, rover chassis.', doc:'https://www.tinkercad.com/', img:null, illus:'printer', imgKind:'illus'},
+ {id:'software', name:'PC toolchain', nick:'', cat:'Software', qty:1, status:'in-use', volt:'—', logic:'—', iface:['USB serial'], specs:['Arduino IDE + ESP32 core 3.3.12','Python, esptool, pyserial','Adafruit ST7789 1.12 / GFX 1.13 / BusIO 1.17.4'], pinout:'—', gotchas:['Keep library versions pinned once a sketch works.'], uses:'Flashing and talking to every board.', doc:'https://docs.espressif.com/projects/arduino-esp32/en/latest/', img:null, illus:'software', imgKind:'illus'},
+ {id:'dronestack', name:'Drone/rover stack', nick:'', cat:'Kit', qty:null, status:'spare', volt:'?', logic:'?', iface:[], specs:['Listed in your Oct 14 hardware notes. Contents not recorded'], pinout:'—', gotchas:['Edit this card with what\'s in it (frame, motors, ESCs, flight controller, battery).'], uses:'Future rover/drone builds.', doc:'', img:null, illus:'drone', imgKind:'illus'}
+];
+
+/* Compatibility profile per part: what it needs from a controller */
+const NEEDS = {
+ picam3:{bus:'CSI'}, st7789:{bus:'SPI',pins:5,v:3.3}, ssd1306:{bus:'I2C',pins:2,v:3.3}, lcd1602:{bus:'GPIO',pins:6,supply5:true}, seg7:{bus:'GPIO',pins:12,via:'hc595'}, matrix8x8:{bus:'GPIO',pins:16,via:'hc595'},
+ max98357:{bus:'I2S',pins:3}, speaker:{via:'max98357'}, buzzer:{bus:'GPIO',pins:1}, sg90:{bus:'PWM',pins:1,ext5:true}, pantilt:{bus:'PWM',pins:2,ext5:true}, stepper:{bus:'GPIO',pins:4,ext5:true}, dcmotor:{via:'l293d',ext5:true},
+ l293d:{bus:'GPIO',pins:3,supply5:true}, relay:{bus:'GPIO',pins:1,supply5:true,logic5:'soft'}, hcsr04:{bus:'GPIO',pins:2,supply5:true,out5:true}, dht11:{bus:'GPIO',pins:1}, pir:{bus:'GPIO',pins:1,supply5:true}, irrecv:{bus:'GPIO',pins:1},
+ photocell:{bus:'ADC',pins:1}, tilt:{bus:'GPIO',pins:1}, mpu6050:{bus:'I2C',pins:2}, soundsensor:{bus:'ADC',pins:1}, rc522:{bus:'SPI',pins:5,v33only:true}, waterlevel:{bus:'ADC',pins:1}, joystick:{bus:'ADC',pins:3}, keypad:{bus:'GPIO',pins:8}, pot:{bus:'ADC',pins:1}, buttons:{bus:'GPIO',pins:1}, hc595:{bus:'GPIO',pins:3}, leds:{bus:'GPIO',pins:1}
+};
+const CONTROLLERS = {
+ xiao:{logic:3.3, buses:['I2C','SPI','I2S','PWM','GPIO','ADC'], free:0, note:'All 11 edge pins are taken in the Valkor build. Anything new means freeing a pin or adding an I2C expander.'},
+ devkit:{logic:3.3, buses:['I2C','SPI','I2S','PWM','GPIO','ADC'], free:20, note:'About 20 usable GPIO, your most flexible bench board.'},
+ hatch:{logic:3.3, buses:['I2C'], free:2, note:'Very few exposed pins; onboard IMU/RTC/codec/touch.'},
+ pi4:{logic:3.3, buses:['I2C','SPI','I2S','PWM','GPIO','CSI'], free:26, note:'No ADC; Linux timing (servo jitter without hardware PWM).'},
+ mega:{logic:5, buses:['I2C','SPI','PWM','GPIO','ADC'], free:60, note:'5V logic, no I2S/Wi-Fi.'}
+};
+/* Explicit part-to-part pairings */
+const PAIRS = [
+ ['sg90','pantilt','The 4 spare SG90s are drop-in replacements for the pan-tilt servos.','good'],
+ ['sg90','cap1000','1000 µF across the servo 5V/GND rail soaks up current spikes (stripe to GND).','good'],
+ ['pantilt','cap1000','Same: cap at the servo connectors prevents brownouts.','good'],
+ ['max98357','speaker','Speaker on the amp\'s +/− terminals. Never ground a speaker lead (bridged output). 4 Ω 3 W matches the 3.2 W at 5V.','good'],
+ ['stepper','pot','Pot on an ADC sets stepper position/speed.','good'],
+ ['dcmotor','l293d','L293D drives the motor in both directions with PWM speed; motor supply on VCC2.','good'],
+ ['dcmotor','transistors','NPN + 1N4007 flyback for one-direction on/off or PWM.','good'],
+ ['dcmotor','diodes','Flyback diode across the motor when switching with a transistor.','good'],
+ ['relay','diodes','Most relay modules include a flyback diode; add one if you wire a bare relay.','ok'],
+ ['hc595','seg7','Shift register drives the segments; 3 GPIO instead of 12.','good'],
+ ['hc595','matrix8x8','Two chained 74HC595s run the matrix with 3 GPIO.','good'],
+ ['hc595','leds','8 LEDs from 3 pins, 220 Ω each.','good'],
+ ['picam3','pi4','CSI ribbon. Picamera2 + OpenCV for vision.','good'],
+ ['pantilt','picam3','Camera Module 3 fits a pan-tilt bracket for a Pi tracking head (print an adapter).','ok'],
+ ['pantilt','xiao','XIAO camera on the pan-tilt = face tracker (Valkor\'s Sight level).','good'],
+ ['ssd1306','mpu6050','Both I2C, same bus (0x3C + 0x68), no conflict.','good'],
+ ['ssd1306','dht11','Classic mini weather readout.','good'],
+ ['joystick','pantilt','Joystick → ADC → servo angles for manual aiming.','good'],
+ ['hcsr04','resistors','1k + 2k divider drops ECHO from 5V to ~3.3V for ESP32/Pi.','good'],
+ ['photocell','resistors','10k divider makes the LDR readable on ADC.','good'],
+ ['leds','resistors','220–330 Ω series resistor per LED.','good'],
+ ['lcd1602','pot','Pot sets LCD contrast (V0).','good'],
+ ['st7789','ssd1306','Two displays on one ESP32: SPI + I2C use different pins.','ok'],
+ ['charger45','sg90','A USB-C 5V breakout off the charger gives a clean servo rail (to buy: breakout/trigger board).','needs'],
+ ['mb102','sg90','MB102 (~700 mA) can run 1 servo lightly. Not 2 under load.','caution'],
+ ['irrecv','pantilt','IR remote buttons nudge pan/tilt.','good'],
+ ['rc522','mega','RC522 is 3.3V. On a Mega, power from 3.3V and level-shift the SPI lines.','caution'],
+ ['speaker','buzzer','Speaker via amp for voice; buzzer for cheap beeps. Choose per need.','ok'],
+ ['heatset','printer3d','Print bosses about 4.0–4.2 mm for M3 inserts, then press in with the iron.','good'],
+ ['heatset','iron','The iron (with a spare tip) installs the inserts.','good'],
+ ['fasteners','printer3d','M2 for the XIAO/OLED, M2.5 for the Pi, M3 for the body with inserts.','good']
+];
+
+/* ===== Projects ===== */
+const PROJECTS = [
+ {id:'p-valkor-voice', name:'Valkor: Whisper level (voice out)', diff:2, tags:['Valkor'], parts:[['xiao',1],['max98357',1],['speaker',1],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['I2S audio timing','Streaming PCM from the PC over serial or Wi-Fi','Grounding to kill hum'], steps:['Wire the MAX98357 per Valkor WIRING.md (BCLK D2, LRC D3, DIN D6, VIN 5V).','Play a test tone with ESP32 I2S (16 kHz, 16-bit mono).','Stream Piper TTS audio from the studio and sync mouth movement to its loudness.']},
+ {id:'p-valkor-gaze', name:'Valkor: Gaze level (pan-tilt neck)', diff:2, tags:['Valkor'], parts:[['xiao',1],['pantilt',1],['cap1000',1],['breadboard',1],['jumpers',1]], extra:[{n:'USB-C 5V breakout or 5V 3A buck', why:'clean separate servo rail; the XIAO 5V pin works but browns out under stall'}],
+  learn:['Servo PWM','Power budgeting and common ground','Smooth easing motion'], steps:['Servo 5V/GND to a separate 5V supply, ground tied to the XIAO GND, 1000 µF across.','Signals on D0 (pan) / D1 (tilt).','Implement eased moves for the [move:] tags with soft travel limits.']},
+ {id:'p-valkor-sight', name:'Valkor: Sight level (face tracking)', diff:3, tags:['Valkor','Vision'], parts:[['xiao',1],['pantilt',1],['cap1000',1],['jumpers',1]], extra:[{n:'5V 3A supply for servos', why:'tracking moves servos constantly'}],
+  learn:['Camera capture on ESP32-S3','Offloading detection to the PC','PID / proportional control loops'], steps:['Stream low-res JPEG frames from the XIAO camera to the studio.','Run face detection on the PC (OpenCV / MediaPipe).','Send pan/tilt corrections back; tune P gain to avoid oscillation.']},
+ {id:'p-valkor-glow', name:'Valkor: body glow + wake sensor', diff:1, tags:['Valkor'], parts:[['devkit',1],['leds',3],['resistors',3],['pir',1],['breadboard',1],['jumpers',1]], extra:[{opt:true,n:'WS2812 LED', why:'single addressable glow LED planned for v7'}],
+  learn:['PWM breathing effects','Motion-triggered wake'], steps:['Prototype on the DevKit first: an RGB or red/orange LED with 220 Ω on PWM pins.','Add the PIR (5V supply, 3.3V out) to wake Valkor when you sit down.','Port the glow levels (dim/normal/bright/pulse/flicker) to the final pin or WS2812.']},
+ {id:'p-tracker', name:'Pan-tilt face tracker (bench version)', diff:3, tags:['Vision','Motion'], parts:[['xiao',1],['sg90',2],['cap1000',1],['breadboard',1],['jumpers',1]], extra:[{n:'5V 3A buck/BEC or USB-C 5V breakout', why:'servo power'},{n:'Second pan-tilt bracket (or 3D print one)', why:'keeps Valkor\'s neck intact'}],
+  learn:['Camera + actuator closed loop','Mechanical design for gimbals'], steps:['Print a mini pan-tilt using 2 spare SG90s.','Mount the XIAO camera on the tilt arm.','Reuse the Sight-level code; experiment with a Kalman/alpha filter.']},
+ {id:'p-talkbot', name:'Talking speaker bot (DevKit + spare amp)', diff:2, tags:['Audio'], parts:[['devkit',1],['max98357',1],['speaker',1],['buttons',1],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['I2S on the classic ESP32','Playing WAV from flash (LittleFS)','Wi-Fi audio streaming'], steps:['Load preset "ESP32 + MAX98357" on the Forge Bench.','Play WAV clips stored in LittleFS on button press.','Stretch goal: an ESP32 internet radio / TTS speaker.']},
+ {id:'p-pivision', name:'Pi 4 vision station', diff:2, tags:['Vision','Pi'], parts:[['pi4',1],['picam3',1]], extra:[{opt:true,n:'Official 5V 3A USB-C Pi supply', why:'Pi 4 throttles on weak supplies'},{opt:true,n:'microSD card 32 GB+', why:'for the OS. You likely have one, so verify'}],
+  learn:['Linux + Picamera2','OpenCV pipelines','Object detection (TFLite / MediaPipe)'], steps:['Flash Raspberry Pi OS 64-bit, enable SSH.','Capture with Picamera2, show live preview over VNC or a web stream.','Add face/object detection and log detections to a CSV.']},
+ {id:'p-pi-gimbal', name:'Pi camera turret', diff:3, tags:['Vision','Pi','Motion'], parts:[['pi4',1],['picam3',1],['sg90',2],['cap1000',1],['jumpers',1]], extra:[{n:'PCA9685 servo driver', why:'jitter-free servo PWM from Linux'},{n:'5V 3A buck for servos', why:'never power servos from the Pi'}],
+  learn:['I2C servo control','Tracking from a Linux host'], steps:['PCA9685 on Pi I2C (3.3V logic, V+ from the 5V buck).','Mount Cam 3 on a printed pan-tilt.','Track faces with OpenCV and move servos via adafruit-circuitpython-servokit.']},
+ {id:'p-hatch-dash', name:'Hatch desk dashboard (AMOLED)', diff:2, tags:['Display','Wi-Fi'], parts:[['hatch',1]], extra:[],
+  learn:['LVGL UI design','Wi-Fi + HTTP JSON APIs','Touch input and the IMU'], steps:['Run Waveshare\'s LVGL demo to confirm the toolchain.','Fetch weather (Open-Meteo, no key) and show time from the RTC.','Add touch pages: Valkor status, timers, todo; flip the IMU to switch pages.']},
+ {id:'p-weather', name:'Mini weather station (OLED)', diff:1, tags:['Sensor','Display'], parts:[['devkit',1],['ssd1306',1],['dht11',1],['photocell',1],['resistors',1],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['I2C bus basics','Sensor reading cadence','Voltage dividers'], steps:['Load preset "ESP32 + SSD1306 I2C".','Add the DHT11 data pin on GPIO4 and the LDR divider on GPIO34.','Show temp/humidity/light; auto-dim the OLED in the dark.']},
+ {id:'p-rover', name:'Ultrasonic mini rover', diff:3, tags:['Motion','Rover'], parts:[['devkit',1],['l293d',1],['dcmotor',1],['hcsr04',1],['resistors',2],['breadboard',1],['jumpers',1]], extra:[{n:'Second DC gear motor + wheels (TT motors)', why:'the kit has only one motor; a rover needs 2'},{n:'2S LiPo/18650 pack + 5V buck', why:'mobile power'}],
+  learn:['H-bridge motor control','Obstacle avoidance state machine','Battery power'], steps:['Print a simple chassis with a caster.','L293D: EN pins on PWM, IN1–IN4 on GPIO, VCC2 from the battery.','HC-SR04 echo through a 1k/2k divider; turn away when < 20 cm.']},
+ {id:'p-stepper-gauge', name:'Stepper "forge gauge" (CPU/usage dial)', diff:2, tags:['Motion','PC'], parts:[['devkit',1],['stepper',1],['buttons',1],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['Stepper sequencing','PC→serial data (pyserial)','Homing'], steps:['ULN2003 IN1–IN4 to 4 GPIO, driver power from 5V.','A Python script sends CPU% over serial.','Needle on a 3D-printed dial; button for homing at zero.']},
+ {id:'p-rfid-lock', name:'RFID badge "vault" unlock', diff:2, tags:['Sensor','Security'], parts:[['devkit',1],['rc522',1],['sg90',1],['ssd1306',1],['buzzer',1],['breadboard',1],['jumpers',1]], extra:[{n:'5V supply for the servo', why:'servo latch'}],
+  learn:['SPI devices','UID allow-lists','Servo latch mechanics'], steps:['RC522 on VSPI (SCK18, MISO19, MOSI23, SS5, RST pick).','OLED shows Access granted/denied; buzzer chirps.','Servo swings a printed latch; log tags to serial.']},
+ {id:'p-matrix-eyes', name:'8×8 matrix eyes via shift registers', diff:2, tags:['Display','Logic'], parts:[['mega',1],['matrix8x8',1],['hc595',1],['resistors',8],['breadboard',1],['jumpers',1]], extra:[{n:'Second 74HC595 (if the kit has only one)', why:'rows + columns'}],
+  learn:['Multiplexing','Shift registers','Persistence of vision'], steps:['Do it on the Mega (5V, kit lesson style).','Chain the 595s for columns; rows through resistors.','Animate blinking eyes, a cheap Valkor face prototype.']},
+ {id:'p-clock', name:'7-segment forge clock with alarm', diff:1, tags:['Display','Logic'], parts:[['mega',1],['seg7',1],['hc595',1],['buzzer',1],['buttons',2],['resistors',8],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['Multiplexed displays','millis() timing','Button debouncing'], steps:['Kit lesson wiring: 595 drives segments, 4 GPIO select digits.','Keep time with millis (optional RTC later).','Buttons set the alarm, the buzzer rings.']},
+ {id:'p-joy-turret', name:'Joystick-controlled pan-tilt', diff:1, tags:['Motion','Input'], parts:[['devkit',1],['sg90',2],['joystick',1],['cap1000',1],['breadboard',1],['jumpers',1]], extra:[{n:'5V buck/BEC or USB-C 5V breakout', why:'servo power'}],
+  learn:['ADC reading','Mapping and filtering inputs','Servo power rules'], steps:['Load preset "ESP32 + 2 SG90 pan-tilt".','Joystick VRx/VRy to GPIO34/35 (joystick powered from 3V3).','Map to angles with dead-zone + smoothing.']},
+ {id:'p-ir-desk', name:'IR-remote desk controller', diff:1, tags:['Input'], parts:[['devkit',1],['irrecv',1],['relay',1],['leds',2],['resistors',2],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['IR decoding','Relays (low-voltage!)'], steps:['IR receiver OUT to GPIO15, decode NEC codes.','Map buttons to LED scenes or a low-voltage relay (e.g. a 5V USB lamp).','Forward codes to the PC over serial for macros.']},
+ {id:'p-gesture', name:'Tilt/gesture controller for Valkor', diff:2, tags:['Valkor','Input'], parts:[['devkit',1],['mpu6050',1],['ssd1306',1],['breadboard',1],['jumpers',1]], extra:[],
+  learn:['IMU fusion','ESP-NOW wireless between ESP32s'], steps:['MPU-6050 + OLED share I2C (21/22).','Detect tilt and shake gestures with a complementary filter.','Send commands to Valkor/studio over serial or ESP-NOW.']}
+];
+
+/* ===== Recommendations ===== */
+const RECS = [
+ {id:'r-buck', name:'Regulated 5V 3A buck / UBEC (or USB-C 5V breakout)', img:'ubec.jpg', prio:'Buy first', why:'Servos and motors must not share your board\'s regulator. A dedicated 5V rail (common ground, 1000 µF) ends brownouts and jitter. A USB-C breakout off your 45 W charger is the simplest path for the desk; a buck is for battery builds.', unlocks:['p-valkor-gaze','p-valkor-sight','p-tracker','p-pi-gimbal','p-joy-turret','p-rfid-lock','p-rover'], link:AF(1385), alt:AF(4090)},
+ {id:'r-pca', name:'PCA9685 16-channel servo driver', img:'pca9685.jpg', prio:'High', why:'Hardware PWM for up to 16 servos over 2 I2C pins. It frees XIAO pins and makes Pi servo control jitter-free.', unlocks:['p-pi-gimbal','p-tracker','p-valkor-gaze'], link:AF(815)},
+ {id:'r-multimeter', name:'Digital multimeter (if you don\'t own one)', img:'multimeter.jpg', prio:'High', why:'Continuity-check your solder joints and jumpers, verify the 5V rail under load, and find split breadboard rails. The single most useful debug tool.', unlocks:['*'], link:AF(2034)},
+ {id:'r-level', name:'Logic level shifter (BSS138 4-ch)', img:'levelshift.jpg', prio:'Medium', why:'Safely connect 5V parts (HC-SR04 echo, Mega) to 3.3V boards (ESP32, Pi), and the RC522 to the Mega.', unlocks:['p-rover','p-rfid-lock'], link:AF(757)},
+ {id:'r-lipo', name:'LiPo battery + USB-C charger board', img:'lipocharger.jpg', prio:'Medium', why:'Untethered builds: rover, wearable controller, and Hatch (supports a LiPo). Use protected cells and never charge unattended.', unlocks:['p-rover','p-gesture','p-hatch-dash'], link:AF(4410), alt:AF(1578)},
+ {id:'r-perma', name:'Perfboard / Perma-Proto boards', img:'permaproto.jpg', prio:'Medium', why:'Move a proven breadboard circuit (Valkor body) to a soldered board that fits inside the 3D-printed shell. No loose jumpers.', unlocks:['p-valkor-voice','p-valkor-gaze','p-valkor-glow'], link:AF(1609)},
+ {id:'r-dupont', name:'Dupont crimp kit + JST connectors', img:null, illus:'crimp', prio:'Medium', why:'Make exact-length servo and screen cables so Valkor\'s body isn\'t a rat\'s nest; swap modules without re-soldering.', unlocks:['p-valkor-gaze','p-valkor-sight'], link:''},
+ {id:'r-ws2812', name:'WS2812B addressable LED(s)', img:'neopixel.jpg', prio:'Nice to have', why:'Planned Valkor v7 body glow on a single pin, any color, with flicker effects.', unlocks:['p-valkor-glow'], link:AF(4684)},
+ {id:'r-motors', name:'2× TT gear motors + wheels + caster', img:null, illus:'chassis', prio:'Nice to have', why:'The kit motor is a bare hobby motor; a rover needs two geared motors.', unlocks:['p-rover'], link:''},
+ {id:'r-logic', name:'USB logic analyzer (8-ch, sigrok-compatible)', img:null, illus:'analyzer', prio:'Nice to have', why:'See I2S, SPI and I2C signals when a screen or amp misbehaves; works with free PulseView.', unlocks:['p-valkor-voice','p-talkbot'], link:'https://sigrok.org/wiki/Supported_hardware'},
+ {id:'r-helping', name:'Silicone wire, heat-shrink, helping hands, brass tip cleaner', img:null, illus:'wire', prio:'Nice to have', why:'Makes soldering the XIAO headers and speaker leads much easier and safer for beginners.', unlocks:['*'], link:'https://learn.adafruit.com/adafruit-guide-excellent-soldering'}
+];
+const TIPS = [
+ ['Common ground, always','Every supply (servo 5V, USB, battery) must share GND with the controller, or signals have no reference.'],
+ ['Power budget first','Add up worst-case currents: SG90 stall ~650 mA each, MAX98357 ~650 mA peak at full volume, ESP32 Wi-Fi bursts ~350 mA. Pick a supply with 30%+ headroom.'],
+ ['Decouple','1000 µF bulk at the servo connectors; 0.1 µF ceramic near each module\'s VCC if you see random resets.'],
+ ['3.3V vs 5V','ESP32 and Pi pins are 3.3V only. A 5V signal in (HC-SR04 echo) needs a 1k/2k divider or a level shifter.'],
+ ['Test parts alone','Like the screen test: prove each module alone on the DevKit before it touches the XIAO.'],
+ ['Strapping pins','On the classic ESP32 avoid GPIO0/2/5/12/15 for inputs that might be held at boot; never use GPIO6–11.'],
+ ['Short, twisted power leads','Long thin jumpers drop voltage. Use short, thicker wires for 5V/GND to servos and the amp.'],
+ ['Pin your library versions','Your working stack: ESP32 core 3.3.12, Adafruit ST7789 1.12, GFX 1.13, BusIO 1.17.4. Note it in each sketch header.']
+];
+
+/* ===== Forge Bench: breadboard simulator ===== */
+const NS='http://www.w3.org/2000/svg';
+const P=14, COLS=63, BX=40, BY=230;
+const ROWNAMES=['T−','T+','a','b','c','d','e','f','g','h','i','j','B+','B−'];
+const ROWY=[14,28,56,70,84,98,112,154,168,182,196,210,238,252];
+const BOARD_W=30+62*P+30, BOARD_H=268, VBW=BX*2+BOARD_W, VBH=BY+BOARD_H+200;
+const isRail=r=>r<2||r>11;
+const holeExists=(c,r)=>c>=1&&c<=COLS&&r>=0&&r<=13&&(!isRail(r)||((c-1)%6)!==5);
+const hx=c=>BX+30+(c-1)*P, hy=r=>BY+ROWY[r];
+const holeId=(c,r)=>`h:${c}:${r}`;
+const stripOf=(c,r)=>isRail(r)?`rail:${r}`:(r<=6?`s:${c}:t`:`s:${c}:b`);
+const holeLabel=(c,r)=>isRail(r)?`${ROWNAMES[r]} rail @${c}`:`${ROWNAMES[r]}${c}`;
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+
+/* ---- footprints ---- */
+const DK_TOP=['D23','D22','TX0','RX0','D21','D19','D18','D5','TX2','RX2','D4','D2','D15','GND','3V3'];
+const DK_BOT=['EN','VP','VN','D34','D35','D32','D33','D25','D26','D27','D14','D12','D13','GND','VIN'];
+const XI_TOP=['5V','GND','3V3','D10','D9','D8','D7'];
+const XI_BOT=['D0','D1','D2','D3','D4','D5','D6'];
+const FP={
+ devkit:{label:'ESP32 DevKit V1',board:true,pins:[...DK_TOP.map((n,i)=>({n,dc:i,dr:0})),...DK_BOT.map((n,i)=>({n,dc:i,dr:7}))],internal:[[13,28]],
+  body:{x0:-0.7,y0:-0.6,x1:14.7,dr1:7,fill:'#1d2b3a'},draw:(g,c,x,y,hh)=>{el('rect',{x:x-30,y:y+hh/2-14,width:20,height:28,rx:2,fill:'#9aa4ad',stroke:'#5f6870'},g);el('rect',{x:x+8,y:y+16,width:118,height:hh-32,rx:3,fill:'#b8bec4',stroke:'#7b8288'},g);txt(g,x+67,y+hh/2-2,'ESP-WROOM-32',10,'#30363c');txt(g,x+67,y+hh/2+12,'ESP32 DevKit V1',8,'#30363c');el('rect',{x:x+150,y:y+hh/2-14,width:28,height:28,fill:'#222'},g);txt(g,x+164,y+hh/2+30,'USB-UART',7,'#9ab');}},
+ xiao:{label:'XIAO ESP32-S3 Sense',board:true,pins:[...XI_TOP.map((n,i)=>({n,dc:i,dr:0})),...XI_BOT.map((n,i)=>({n,dc:i,dr:4}))],
+  body:{x0:-0.7,y0:-0.6,x1:6.7,dr1:4,fill:'#1b1b1b'},draw:(g,c,x,y,hh)=>{el('rect',{x:x-26,y:y+hh/2-12,width:18,height:24,rx:3,fill:'#9aa4ad'},g);el('rect',{x:x+6,y:y+14,width:72,height:hh-28,rx:3,fill:'#c3c7cc'},g);txt(g,x+42,y+hh/2,'XIAO S3',9,'#222');txt(g,x+42,y+hh/2+12,'Sense',7,'#333');}},
+ ssd1306:{label:'SSD1306 OLED',pins:['GND','VCC','SCL','SDA'].map((n,i)=>({n,dc:i,dr:0})),
+  body:{custom:(g,x,y)=>{el('rect',{x:x-44,y:y-150,width:130,height:142,rx:6,fill:'#1a3c8c',stroke:'#0d2563'},g);el('rect',{x:x-34,y:y-128,width:110,height:62,fill:'#05070c'},g);txt(g,x+21,y-92,'128×64',10,'#7fb6ff');}}},
+ max98357:{label:'MAX98357A',pins:[...['LRC','BCLK','DIN','GAIN','SD','GND','VIN'].map((n,i)=>({n,dc:i,dr:0})),{n:'SPK+',ox:22,oy:-96},{n:'SPK−',ox:62,oy:-96}],
+  body:{custom:(g,x,y)=>{el('rect',{x:x-12,y:y-110,width:108,height:102,rx:6,fill:'#2b1d5c',stroke:'#160c38'},g);el('rect',{x:x+8,y:y-104,width:68,height:20,rx:3,fill:'#2e8b57'},g);el('rect',{x:x+28,y:y-62,width:28,height:22,fill:'#111'},g);txt(g,x+42,y-24,'MAX98357',9,'#d8ccff');}}},
+ led:{label:'LED',pins:[{n:'A+',dc:0,dr:0},{n:'K−',dc:1,dr:0}],body:{custom:(g,x,y,c)=>{el('path',{d:`M${x-2} ${y} L${x-2} ${y-16} M${x+P+2} ${y} L${x+P+2} ${y-14}`,stroke:'#aaa','stroke-width':1.5},g);el('circle',{cx:x+P/2,cy:y-22,r:9,fill:c.color||'#e33',stroke:'#0006'},g);}}},
+ resistor:{label:'Resistor',pins:[{n:'1',dc:0,dr:0},{n:'2',dc:4,dr:0}],body:{custom:(g,x,y,c)=>{el('line',{x1:x,y1:y,x2:x+4*P,y2:y,stroke:'#bbb','stroke-width':1.6},g);el('rect',{x:x+P*0.9,y:y-6,width:P*2.2,height:12,rx:5,fill:'#d9c29a',stroke:'#8a7550'},g);['#a52a2a','#000','#8b4513'].forEach((col,i)=>el('rect',{x:x+P*1.2+i*8,y:y-6,width:3,height:12,fill:col},g));txt(g,x+2*P,y-10,c.value||'220Ω',8,'#e8dcc0');}}},
+ button:{label:'Push button',pins:[{n:'1a',dc:0,dr:0},{n:'2a',dc:2,dr:0},{n:'1b',dc:0,dr:1},{n:'2b',dc:2,dr:1}],internal:[[0,2],[1,3]],body:{custom:(g,x,y)=>{el('rect',{x:x-5,y:y-4,width:2*P+10,height:3*P+8,rx:3,fill:'#2a2a2a',stroke:'#000'},g);el('circle',{cx:x+P,cy:y+1.5*P,r:9,fill:'#6b4b2a',stroke:'#000'},g);}}},
+ pot:{label:'Potentiometer',pins:['1','W','3'].map((n,i)=>({n,dc:i,dr:0})),body:{custom:(g,x,y)=>{el('rect',{x:x-6,y:y-30,width:2*P+12,height:24,rx:4,fill:'#1e4fa8'},g);el('circle',{cx:x+P,cy:y-18,r:9,fill:'#ddd',stroke:'#555'},g);}}},
+ buzzer:{label:'Buzzer',pins:[{n:'+',dc:0,dr:0},{n:'−',dc:2,dr:0}],body:{custom:(g,x,y)=>{el('circle',{cx:x+P,cy:y-14,r:16,fill:'#111',stroke:'#444'},g);el('circle',{cx:x+P,cy:y-14,r:3,fill:'#333'},g);}}},
+ hcsr04:{label:'HC-SR04',pins:['VCC','TRIG','ECHO','GND'].map((n,i)=>({n,dc:i,dr:0})),body:{custom:(g,x,y)=>{el('rect',{x:x-66,y:y-70,width:174,height:62,rx:4,fill:'#1563b8'},g);[x-28,x+70].forEach(cx=>{el('circle',{cx,cy:y-40,r:22,fill:'#c9c9c9',stroke:'#777'},g);el('circle',{cx,cy:y-40,r:14,fill:'#3a3a3a'},g);});}}},
+ dht11:{label:'DHT11',pins:['S','+','−'].map((n,i)=>({n,dc:i,dr:0})),body:{custom:(g,x,y)=>{el('rect',{x:x-8,y:y-52,width:2*P+16,height:44,rx:3,fill:'#2a8fd6'},g);for(let i=0;i<4;i++)el('line',{x1:x-2,y1:y-46+i*9,x2:x+2*P+2,y2:y-46+i*9,stroke:'#cfeaff'},g);}}},
+ cap:{label:'1000µF cap',pins:[{n:'+',dc:0,dr:0},{n:'−',dc:0,dr:1}],body:{custom:(g,x,y)=>{el('rect',{x:x+6,y:y-14,width:24,height:40,rx:6,fill:'#1f2f6b',stroke:'#0c1636'},g);el('rect',{x:x+24,y:y-14,width:6,height:40,fill:'#cfd6e6'},g);el('path',{d:`M${x} ${y} H${x+6} M${x} ${y+P} H${x+6}`,stroke:'#bbb','stroke-width':1.5},g);txt(g,x+18,y-18,'1000µF',8,'#e8dcc0');}}},
+ // off-board parts (free placement)
+ st7789:{label:'Waveshare 1.47" ST7789',off:true,pins:['VCC','GND','DIN','CLK','CS','DC','RST','BL'].map((n,i)=>({n,ox:i*22,oy:0})),
+  body:{custom:(g,x,y)=>{el('rect',{x:x-6,y:y-160,width:166,height:150,rx:8,fill:'#161616',stroke:'#444'},g);el('rect',{x:x+40,y:y-150,width:76,height:118,rx:3,fill:'#0a1a2a'},g);txt(g,x+78,y-92,'VALKOR',10,'#ff9b4a');txt(g,x+78,y-76,'172×320',8,'#7aa');}}},
+ sg90:{label:'SG90 servo',off:true,pins:[{n:'GND (brown)',ox:0,oy:0,w:'#6b3b1d'},{n:'+5V (red)',ox:12,oy:0,w:'#d22'},{n:'SIG (orange)',ox:24,oy:0,w:'#f08a1c'}],
+  body:{custom:(g,x,y,c)=>{el('rect',{x:x-26,y:y-92,width:76,height:46,rx:4,fill:'#1d4fd0',stroke:'#10307f'},g);el('circle',{cx:x-8,cy:y-69,r:10,fill:'#eee'},g);el('rect',{x:x-14,y:y-108,width:60,height:10,rx:5,fill:'#f4f4f4'},g);txt(g,x+18,y-58,c.tag||'SG90',9,'#e6eeff');el('path',{d:`M${x} ${y} C${x} ${y-24} ${x+12} ${y-30} ${x+12} ${y-46} M${x+12} ${y} V${y-46} M${x+24} ${y} C${x+24} ${y-24} ${x+12} ${y-30} ${x+12} ${y-46}`,fill:'none',stroke:'#888','stroke-width':2},g);}}},
+ speaker:{label:'Speaker 4Ω 3W',off:true,pins:[{n:'+',ox:0,oy:0},{n:'−',ox:30,oy:0}],body:{custom:(g,x,y)=>{el('circle',{cx:x+15,cy:y-48,r:40,fill:'#222',stroke:'#555','stroke-width':3},g);el('circle',{cx:x+15,cy:y-48,r:22,fill:'#111',stroke:'#444'},g);el('circle',{cx:x+15,cy:y-48,r:8,fill:'#333'},g);}}},
+ supply5:{label:'5V 3A supply (to buy)',off:true,pins:[{n:'+5V',ox:0,oy:0},{n:'GND',ox:24,oy:0}],body:{custom:(g,x,y)=>{el('rect',{x:x-30,y:y-64,width:84,height:54,rx:4,fill:'#2c2c2c',stroke:'#c9a24a','stroke-dasharray':'4 3'},g);txt(g,x+12,y-42,'5V 3A',11,'#ffd27a');txt(g,x+12,y-26,'buck / USB-C',8,'#bbb');}}}
+};
+function txt(g,x,y,s,size,fill,anchor){const t=el('text',{x,y,'font-size':size||10,fill:fill||'#ddd','text-anchor':anchor||'middle','font-family':'ui-monospace,Consolas,monospace','pointer-events':'none'},g);t.textContent=s;return t;}
+
+/* ---- state helpers ---- */
+let uid=1; const nid=p=>p+(uid++);
+function pinPos(c,i){const f=FP[c.type],p=f.pins[i];
+ if(f.off) return {x:c.x+p.ox,y:c.y+p.oy,hole:null};
+ if(p.ox!==undefined) return {x:hx(c.col)+p.ox,y:hy(c.row)+p.oy,hole:null};
+ const col=c.col+p.dc,row=c.row+p.dr; return {x:hx(col),y:hy(row),hole:holeId(col,row),col,row};}
+function nodePos(state,node){if(node.startsWith('h:')){const [,c,r]=node.split(':').map(Number);return{x:hx(c),y:hy(r)};}
+ const [,cid,pi]=node.split(':');const c=state.comps.find(k=>k.id===cid);if(!c)return null;return pinPos(c,+pi);}
+function validPlacement(state,type,col,row,ignoreId){const f=FP[type];for(const p of f.pins){if(p.ox!==undefined)continue;if(!holeExists(col+p.dc,row+p.dr))return false;}return true;}
+
+/* ---- nets (union-find) ---- */
+function computeNets(state){const par={};const find=x=>{if(par[x]===undefined)par[x]=x;while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;};const uni=(a,b)=>{a=find(a);b=find(b);if(a!==b)par[a]=b;};
+ const holeKey=h=>{const [,c,r]=h.split(':').map(Number);return stripOf(c,r);};
+ const nodeKey=n=>n.startsWith('h:')?holeKey(n):n;
+ for(const c of state.comps){const f=FP[c.type];f.pins.forEach((p,i)=>{const pp=pinPos(c,i);const k=`p:${c.id}:${i}`;find(k);if(pp.hole)uni(k,holeKey(pp.hole));});(f.internal||[]).forEach(([a,b])=>{ if(c.type==='button')return; uni(`p:${c.id}:${a}`,`p:${c.id}:${b}`);});}
+ for(const w of state.wires)uni(nodeKey(w.a),nodeKey(w.b));
+ return {find,nodeKey,root:n=>find(nodeKey(n))};}
+function netMembers(state,nets,root){const pins=[];for(const c of state.comps){FP[c.type].pins.forEach((p,i)=>{if(nets.find(`p:${c.id}:${i}`)===root)pins.push(`${c.tag||FP[c.type].label}.${p.n}`);});}return pins;}
+
+/* ---- render ---- */
+function renderBench(svg,state,opts={}){
+ svg.innerHTML='';svg.setAttribute('viewBox',`0 0 ${VBW} ${VBH}`);
+ const defs=el('defs',{},svg);const gr=el('linearGradient',{id:'bbg',x1:0,y1:0,x2:0,y2:1},defs);el('stop',{offset:0,'stop-color':'#f4f1ea'},gr);el('stop',{offset:1,'stop-color':'#e2ddd2'},gr);
+ el('rect',{x:0,y:0,width:VBW,height:VBH,fill:'#14110f'},svg);
+ // grid dots for workspace
+ const pat=el('pattern',{id:'dots',width:20,height:20,patternUnits:'userSpaceOnUse'},defs);el('circle',{cx:2,cy:2,r:1,fill:'#2a2522'},pat);el('rect',{x:0,y:0,width:VBW,height:VBH,fill:'url(#dots)'},svg);
+ const gB=el('g',{class:'board'},svg);
+ el('rect',{x:BX,y:BY,width:BOARD_W,height:BOARD_H,rx:10,fill:'url(#bbg)',stroke:'#b9b2a3'},gB);
+ el('rect',{x:BX+20,y:BY+ROWY[6]+12,width:BOARD_W-40,height:18,rx:3,fill:'#d4cec2'},gB);
+ // rail stripes
+ [[0,'#2b62c9'],[1,'#d23a2a'],[12,'#d23a2a'],[13,'#2b62c9']].forEach(([r,col])=>{const yy=BY+ROWY[r]+(r===0||r===12?-9:9);el('line',{x1:BX+24,y1:yy,x2:BX+BOARD_W-24,y2:yy,stroke:col,'stroke-width':1.5},gB);txt(gB,BX+12,BY+ROWY[r]+4,ROWNAMES[r].slice(-1),11,col);});
+ for(let r=2;r<=11;r++){txt(gB,BX+14,BY+ROWY[r]+3.5,ROWNAMES[r],8,'#8b8478');txt(gB,BX+BOARD_W-14,BY+ROWY[r]+3.5,ROWNAMES[r],8,'#8b8478');}
+ for(let c=1;c<=COLS;c++){if(c===1||c%5===0){txt(gB,hx(c),BY+ROWY[2]-8,String(c),7,'#8b8478');txt(gB,hx(c),BY+ROWY[11]+15,String(c),7,'#8b8478');}}
+ const gH=el('g',{class:'holes'},svg);
+ for(let r=0;r<=13;r++)for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;el('rect',{x:hx(c)-3,y:hy(r)-3,width:6,height:6,rx:1,fill:'#3b3631',class:'hole','data-node':holeId(c,r)},gH);}
+ const gHL=el('g',{class:'hl','pointer-events':'none'},svg);
+ const gC=el('g',{class:'comps'},svg);
+ for(const c of state.comps){const f=FP[c.type];const g=el('g',{class:'comp'+(opts.sel===c.id?' sel':''),'data-comp':c.id},gC);
+  const x=f.off?c.x:hx(c.col),y=f.off?c.y:hy(c.row);
+  if(f.body.custom)f.body.custom(g,x,y,c);else{const b=f.body;const hh=hy(c.row+b.dr1)-hy(c.row);el('rect',{x:x+b.x0*P,y:y+b.y0*P,width:(b.x1-b.x0)*P,height:hh-2*b.y0*P,rx:5,fill:b.fill,stroke:'#000',class:'body'},g);f.draw&&f.draw(g,c,x,y,hh);}
+  f.pins.forEach((p,i)=>{const pp=pinPos(c,i);el('rect',{x:pp.x-3.5,y:pp.y-3.5,width:7,height:7,rx:1.5,fill:'#c9b26a',stroke:'#5a4a1a',class:'pin','data-node':`p:${c.id}:${i}`},g);
+   if(f.board){const above=p.dr===0;txt(g,pp.x,pp.y+(above?12:-7),p.n,6.5,'#e8e2d0');}
+   else txt(g,pp.x,pp.y+(f.off?14:-7)+(f.off&&i%2?8:0),p.n.replace(/ \(.*\)/,''),7,'#f1e7c8');});
+  if(c.tag&&!f.board){const span=f.off?Math.max(...f.pins.map(p=>p.ox)):Math.max(...f.pins.map(p=>(p.dc||0)*P));txt(g,x+span/2,f.off?y+34:y+(c.type==='cap'?40:20),c.tag,8.5,'#ffcf73');}
+ }
+ const gW=el('g',{class:'wires'},svg);
+ for(const w of state.wires){const a=nodePos(state,w.a),b=nodePos(state,w.b);if(!a||!b)continue;
+  const mx=(a.x+b.x)/2,my=(a.y+b.y)/2-Math.min(60,Math.abs(a.x-b.x)*0.15+12);
+  const d=`M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`;
+  const g=el('g',{class:'wire'+(opts.sel===w.id?' sel':''),'data-wire':w.id},gW);
+  el('path',{d,stroke:'#000a','stroke-width':6,fill:'none','stroke-linecap':'round'},g);
+  el('path',{d,stroke:w.color,'stroke-width':3.6,fill:'none','stroke-linecap':'round'},g);
+  el('circle',{cx:a.x,cy:a.y,r:3.2,fill:w.color,stroke:'#000'},g);el('circle',{cx:b.x,cy:b.y,r:3.2,fill:w.color,stroke:'#000'},g);
+  if(w.label){txt(g,mx,my+6,w.label,8,'#fff');}}
+ el('g',{class:'overlay','pointer-events':'none'},svg);
+ return {gHL};
+}
+function highlightNet(svg,state,node){const g=svg.querySelector('g.hl');if(!g)return null;g.innerHTML='';if(!node)return null;
+ const nets=computeNets(state);const root=nets.root(node);
+ for(let r=0;r<=13;r++)for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;if(nets.find(stripOf(c,r))===root)el('rect',{x:hx(c)-5,y:hy(r)-5,width:10,height:10,rx:2,fill:'#ff8a3d55',stroke:'#ff8a3d'},g);}
+ const members=netMembers(state,nets,root);
+ svg.querySelectorAll('g.wire').forEach(wg=>{const w=state.wires.find(x=>x.id===wg.dataset.wire);wg.classList.toggle('lit',!!w&&nets.root(w.a)===root);});
+ return members;}
+
+/* ---- presets ---- */
+function W(a,b,color,label){return{id:nid('w'),a,b,color,label};}
+const PIN=(cid,i)=>`p:${cid}:${i}`;
+const dkTop=(n)=>DK_TOP.indexOf(n), dkBot=(n)=>DK_BOT.indexOf(n);
+function presetState(key){uid=1;const C=[],Wr=[];const D0=8; // DevKit anchor col
+ const dk={id:'dk',type:'devkit',col:D0,row:3,tag:'ESP32 DevKit'};
+ const topHole=n=>holeId(D0+dkTop(n),2), botHole=n=>holeId(D0+dkBot(n),11);
+ if(key==='st7789'){C.push(dk);C.push({id:'lcd',type:'st7789',x:hx(D0)+250,y:BY-40,tag:'ST7789 1.47"'});
+  [['3V3',0,'#d22'],['GND',1,'#222'],['D23',2,'#2b7de9'],['D18',3,'#f2c80f'],['D5',4,'#2fbf4a'],['RX2',5,'#9b59b6'],['TX2',6,'#f08a1c']].forEach(([n,pi,col])=>Wr.push(W(topHole(n),PIN('lcd',pi),col)));
+  return {comps:C,wires:Wr};}
+ if(key==='max98357'){C.push(dk);C.push({id:'amp',type:'max98357',col:40,row:2,tag:'MAX98357'});C.push({id:'spk',type:'speaker',x:hx(52),y:BY-70,tag:'Speaker 4Ω'});
+  Wr.push(W(botHole('VIN'),holeId(25,12),'#d22','5V'));Wr.push(W(botHole('GND'),holeId(23,13),'#222'));
+  Wr.push(W(topHole('D22'),holeId(42,4),'#2b7de9','DIN'));Wr.push(W(botHole('D26'),holeId(41,4),'#f2c80f','BCLK'));Wr.push(W(botHole('D25'),holeId(40,4),'#2fbf4a','LRC'));
+  Wr.push(W(holeId(45,5),holeId(45,13),'#222'));Wr.push(W(holeId(46,5),holeId(49,12),'#d22'));
+  Wr.push(W(PIN('amp',7),PIN('spk',0),'#d22'));Wr.push(W(PIN('amp',8),PIN('spk',1),'#222'));
+  return {comps:C,wires:Wr};}
+ if(key==='pantilt'){C.push(dk);C.push({id:'psu',type:'supply5',x:hx(54),y:BY+BOARD_H+120,tag:'5V 3A'});
+  C.push({id:'pan',type:'sg90',x:hx(33),y:BY+BOARD_H+165,tag:'PAN'},{id:'tilt',type:'sg90',x:hx(41),y:BY+BOARD_H+165,tag:'TILT'});
+  C.push({id:'c1',type:'cap',col:31,row:12,tag:'C1'});
+  Wr.push(W(PIN('psu',0),holeId(56,12),'#d22','+5V'));Wr.push(W(PIN('psu',1),holeId(57,13),'#222','GND'));
+  Wr.push(W(botHole('GND'),holeId(21,13),'#222','common GND'));
+  [['pan',33],['tilt',39]].forEach(([id,c])=>{Wr.push(W(PIN(id,0),holeId(c,13),'#6b3b1d'));Wr.push(W(PIN(id,1),holeId(c+1,12),'#d22'));});
+  Wr.push(W(botHole('D13'),PIN('pan',2),'#f08a1c','PAN'));Wr.push(W(botHole('D27'),PIN('tilt',2),'#f2c80f','TILT'));
+  return {comps:C,wires:Wr};}
+ if(key==='ssd1306'){C.push(dk);C.push({id:'oled',type:'ssd1306',col:34,row:2,tag:'OLED 0x3C'});
+  Wr.push(W(topHole('GND'),holeId(34,4),'#222'));Wr.push(W(topHole('3V3'),holeId(35,5),'#d22'));Wr.push(W(topHole('D22'),holeId(36,4),'#f2c80f','SCL'));Wr.push(W(topHole('D21'),holeId(37,5),'#2b7de9','SDA'));
+  return {comps:C,wires:Wr};}
+ if(key==='valkor'){const X0=8;C.push({id:'xi',type:'xiao',col:X0,row:5,tag:'XIAO'});
+  const t=n=>holeId(X0+XI_TOP.indexOf(n),2), b=n=>holeId(X0+XI_BOT.indexOf(n),11);
+  C.push({id:'amp',type:'max98357',col:24,row:2,tag:'MAX98357'},{id:'oled',type:'ssd1306',col:44,row:2,tag:'OLED'},{id:'c1',type:'cap',col:55,row:12,tag:'C1'});
+  C.push({id:'pan',type:'sg90',x:hx(36),y:BY+BOARD_H+165,tag:'PAN'},{id:'tilt',type:'sg90',x:hx(46),y:BY+BOARD_H+165,tag:'TILT'},{id:'spk',type:'speaker',x:hx(14),y:BY-70,tag:'Speaker'});
+  Wr.push(W(t('5V'),holeId(X0,1),'#d22','5V'));Wr.push(W(t('GND'),holeId(X0+1,0),'#222'));
+  Wr.push(W(holeId(61,1),holeId(61,12),'#d22','5V bridge'));Wr.push(W(holeId(62,0),holeId(62,13),'#222'));
+  Wr.push(W(b('D3'),holeId(24,4),'#2fbf4a','LRC'));Wr.push(W(b('D2'),holeId(25,4),'#f2c80f','BCLK'));Wr.push(W(b('D6'),holeId(26,4),'#2b7de9','DIN'));
+  Wr.push(W(holeId(29,5),holeId(33,0),'#222'));Wr.push(W(holeId(30,5),holeId(34,1),'#d22'));
+  Wr.push(W(PIN('amp',7),PIN('spk',0),'#d22'));Wr.push(W(PIN('amp',8),PIN('spk',1),'#222'));
+  Wr.push(W(holeId(44,4),holeId(44,0),'#222'));Wr.push(W(t('3V3'),holeId(45,4),'#ff6b6b','3V3'));
+  Wr.push(W(b('D5'),holeId(46,5),'#f08a1c','SCL'));Wr.push(W(b('D4'),holeId(47,5),'#9b59b6','SDA'));
+  [['pan',38],['tilt',49]].forEach(([id,c])=>{Wr.push(W(PIN(id,0),holeId(c,13),'#6b3b1d'));Wr.push(W(PIN(id,1),holeId(c+1,12),'#d22'));});
+  Wr.push(W(b('D0'),PIN('pan',2),'#f08a1c','PAN'));Wr.push(W(b('D1'),PIN('tilt',2),'#f2c80f','TILT'));
+  return {comps:C,wires:Wr};}
+ return {comps:[],wires:[]};}
+
+/* ===== Blueprints: schematic renderer + preset metadata ===== */
+const DKNUM=n=>{const t=DK_TOP.indexOf(n);if(t>=0)return 30-t;return DK_BOT.indexOf(n)+1;};
+const XINUM=n=>({D0:1,D1:2,D2:3,D3:4,D4:5,D5:6,D6:7,D7:8,D8:9,D9:10,D10:11,'3V3':12,GND:13,'5V':14})[n];
+const PRESETS={
+ st7789:{name:'ESP32 DevKit + ST7789 1.47" LCD',pinsKind:'actual',pinsNote:'Your actual working pins, read from ValkorScreenTest.ino (SCK18, MOSI23, CS5, DC=RX2/GPIO16, RST=TX2/GPIO17). BL is intentionally not driven, matching the sketch.',
+  sch:{blocks:[{ref:'U1',name:'ESP32 DevKit V1',x:120,y:60,w:150,R:[[DKNUM('3V3'),'3V3','3V3'],[DKNUM('GND'),'GND','GND'],[DKNUM('D23'),'D23 / GPIO23 (MOSI)','LCD_DIN'],[DKNUM('D18'),'D18 / GPIO18 (SCK)','LCD_CLK'],[DKNUM('D5'),'D5 / GPIO5 (CS)','LCD_CS'],[DKNUM('RX2'),'RX2 / GPIO16','LCD_DC'],[DKNUM('TX2'),'TX2 / GPIO17','LCD_RST'],[DKNUM('D4'),'D4 / GPIO4','NC']]},
+   {ref:'DS1',name:'Waveshare 1.47" ST7789',x:560,y:60,w:150,L:[[1,'VCC','3V3'],[2,'GND','GND'],[3,'DIN','LCD_DIN'],[4,'CLK','LCD_CLK'],[5,'CS','LCD_CS'],[6,'DC','LCD_DC'],[7,'RST','LCD_RST'],[8,'BL','NC']]}]},
+  table:[['DevKit 3V3 (pin 16)','LCD VCC (1)','3V3','red','3.3V supply'],['DevKit GND (17)','LCD GND (2)','GND','black',''],['D23 / GPIO23 (30)','LCD DIN (3)','LCD_DIN','blue','SPI MOSI'],['D18 / GPIO18 (24)','LCD CLK (4)','LCD_CLK','yellow','SPI SCK, 10 MHz'],['D5 / GPIO5 (23)','LCD CS (5)','LCD_CS','green','Strapping pin: fine as CS'],['RX2 / GPIO16 (21)','LCD DC (6)','LCD_DC','purple','printed RX2'],['TX2 / GPIO17 (22)','LCD RST (7)','LCD_RST','orange','printed TX2'],['GPIO4 (reserved)','LCD BL (8)','NC','—','Not driven. Confirm BL circuit before enabling']]},
+ max98357:{name:'ESP32 DevKit + MAX98357 + speaker',pinsKind:'example',pinsNote:'Example pins (BCLK GPIO26, LRC GPIO25, DIN GPIO22). No DevKit audio sketch was found in your workspace. Valkor\'s XIAO uses BCLK GPIO3, LRC GPIO4, DIN GPIO43.',
+  sch:{blocks:[{ref:'U1',name:'ESP32 DevKit V1',x:110,y:60,w:150,R:[[DKNUM('VIN'),'VIN (USB 5V)','+5V'],[DKNUM('GND'),'GND','GND'],[DKNUM('D26'),'D26 / GPIO26','I2S_BCLK'],[DKNUM('D25'),'D25 / GPIO25','I2S_LRC'],[DKNUM('D22'),'D22 / GPIO22','I2S_DIN']]},
+   {ref:'U2',name:'MAX98357A breakout',x:520,y:60,w:130,L:[[7,'VIN','+5V'],[6,'GND','GND'],[2,'BCLK','I2S_BCLK'],[1,'LRC','I2S_LRC'],[3,'DIN','I2S_DIN'],[4,'GAIN','NC'],[5,'SD','NC']],R:[[8,'OUT+','SPK+'],[9,'OUT−','SPK−']]}],
+   parts:[{type:'spk',ref:'LS1',val:'4Ω 3W',x:850,y:120,a:'SPK+',b:'SPK−'}]},
+  table:[['DevKit VIN (15)','Amp VIN (7)','+5V','red','USB 5V (~4.7V). Use a 5V supply for full volume'],['DevKit GND (14)','Amp GND (6)','GND','black','short ground = less hum'],['D26 / GPIO26 (9)','Amp BCLK (2)','I2S_BCLK','yellow','example pin'],['D25 / GPIO25 (8)','Amp LRC (1)','I2S_LRC','green','example pin'],['D22 / GPIO22 (29)','Amp DIN (3)','I2S_DIN','blue','example pin'],['—','Amp GAIN / SD','NC','—','open = 9 dB gain, L+R mix'],['Amp OUT+','Speaker +','SPK+','red','never ground a speaker lead'],['Amp OUT−','Speaker −','SPK−','black','']]},
+ pantilt:{name:'ESP32 DevKit + 2× SG90 pan-tilt (external 5V)',pinsKind:'example',pinsNote:'Example signal pins (pan GPIO13, tilt GPIO27). The servo 5V comes from a separate 5V 3A supply (to buy). Common ground plus 1000 µF across the servo rail. On the XIAO, Valkor uses D0/GPIO1 (pan) and D1/GPIO2 (tilt).',
+  sch:{blocks:[{ref:'U1',name:'ESP32 DevKit V1',x:110,y:60,w:150,R:[[DKNUM('GND'),'GND','GND'],[DKNUM('D13'),'D13 / GPIO13','SERVO_PAN'],[DKNUM('D27'),'D27 / GPIO27','SERVO_TILT']]},
+   {ref:'J1',name:'5V 3A supply (to buy)',x:110,y:260,w:150,R:[[1,'+5V','+5V_SERVO'],[2,'GND','GND']]},
+   {ref:'M1',name:'SG90 PAN',x:560,y:40,w:120,L:[[1,'GND (brown)','GND'],[2,'V+ (red)','+5V_SERVO'],[3,'SIG (orange)','SERVO_PAN']]},
+   {ref:'M2',name:'SG90 TILT',x:560,y:200,w:120,L:[[1,'GND (brown)','GND'],[2,'V+ (red)','+5V_SERVO'],[3,'SIG (orange)','SERVO_TILT']]}],
+   parts:[{type:'cap',ref:'C1',val:'1000µF ≥10V',x:860,y:150,a:'+5V_SERVO',b:'GND'}]},
+  table:[['5V supply +','Bottom + rail','+5V_SERVO','red','separate regulated 5V'],['5V supply −','Bottom − rail','GND','black',''],['DevKit GND (14)','Bottom − rail','GND','black','COMMON GROUND (required)'],['C1 + / −','+ rail / − rail','+5V_SERVO / GND','—','stripe to GND, near servos'],['D13 / GPIO13 (13)','Pan SG90 orange','SERVO_PAN','orange','example pin'],['D27 / GPIO27 (10)','Tilt SG90 orange','SERVO_TILT','yellow','example pin'],['+ rail','SG90 red ×2','+5V_SERVO','red','never from 3V3'],['− rail','SG90 brown ×2','GND','brown','']]},
+ ssd1306:{name:'ESP32 DevKit + SSD1306 OLED (I2C)',pinsKind:'example',pinsNote:'Default ESP32 I2C pins (SDA GPIO21, SCL GPIO22), address 0x3C. Check your OLED\'s pin order on the silkscreen.',
+  sch:{blocks:[{ref:'U1',name:'ESP32 DevKit V1',x:110,y:60,w:150,R:[[DKNUM('3V3'),'3V3','3V3'],[DKNUM('GND'),'GND','GND'],[DKNUM('D21'),'D21 / GPIO21 (SDA)','I2C_SDA'],[DKNUM('D22'),'D22 / GPIO22 (SCL)','I2C_SCL']]},
+   {ref:'DS1',name:'SSD1306 0.96" OLED',x:560,y:60,w:140,L:[[2,'VCC','3V3'],[1,'GND','GND'],[4,'SDA','I2C_SDA'],[3,'SCL','I2C_SCL']]}]},
+  table:[['DevKit 3V3 (16)','OLED VCC (2)','3V3','red',''],['DevKit GND (17)','OLED GND (1)','GND','black',''],['D21 / GPIO21 (26)','OLED SDA (4)','I2C_SDA','blue','module has pull-ups'],['D22 / GPIO22 (29)','OLED SCL (3)','I2C_SCL','yellow','address 0x3C']]},
+ valkor:{name:'Valkor body: XIAO ESP32-S3 (your WIRING.md)',pinsKind:'actual',pinsNote:'Your planned Valkor pin map from valkor-desk-ai/docs/WIRING.md and pins.h. ST7789 on D7–D10 is left off this board for clarity (see the DevKit preset for the screen). Servos are on the XIAO 5V rail with 1000 µF. A separate 5V supply is recommended.',
+  sch:{blocks:[{ref:'U1',name:'XIAO ESP32-S3 Sense',x:110,y:40,w:160,R:[[XINUM('5V'),'5V (VBUS)','+5V'],[XINUM('3V3'),'3V3','3V3'],[XINUM('GND'),'GND','GND'],[XINUM('D0'),'D0 / GPIO1','SERVO_PAN'],[XINUM('D1'),'D1 / GPIO2','SERVO_TILT'],[XINUM('D2'),'D2 / GPIO3','I2S_BCLK'],[XINUM('D3'),'D3 / GPIO4','I2S_LRC'],[XINUM('D6'),'D6 / GPIO43','I2S_DIN'],[XINUM('D4'),'D4 / GPIO5','I2C_SDA'],[XINUM('D5'),'D5 / GPIO6','I2C_SCL']]},
+   {ref:'U2',name:'MAX98357A',x:560,y:20,w:120,L:[[7,'VIN','+5V'],[6,'GND','GND'],[2,'BCLK','I2S_BCLK'],[1,'LRC','I2S_LRC'],[3,'DIN','I2S_DIN']],R:[[8,'OUT+','SPK+'],[9,'OUT−','SPK−']]},
+   {ref:'DS1',name:'SSD1306 OLED',x:560,y:220,w:120,L:[[2,'VCC','3V3'],[1,'GND','GND'],[4,'SDA','I2C_SDA'],[3,'SCL','I2C_SCL']]},
+   {ref:'M1',name:'SG90 PAN',x:560,y:395,w:120,L:[[1,'GND','GND'],[2,'V+','+5V'],[3,'SIG','SERVO_PAN']]},
+   {ref:'M2',name:'SG90 TILT',x:560,y:540,w:120,L:[[1,'GND','GND'],[2,'V+','+5V'],[3,'SIG','SERVO_TILT']]}],
+   parts:[{type:'spk',ref:'LS1',val:'4Ω 3W',x:880,y:60,a:'SPK+',b:'SPK−'},{type:'cap',ref:'C1',val:'1000µF',x:880,y:470,a:'+5V',b:'GND'}]},
+  table:[['XIAO 5V (14)','+ rail','+5V','red','USB VBUS from the 45 W charger'],['XIAO GND (13)','− rail','GND','black','common ground'],['D0 / GPIO1 (1)','Pan servo SIG','SERVO_PAN','orange',''],['D1 / GPIO2 (2)','Tilt servo SIG','SERVO_TILT','yellow',''],['D2 / GPIO3 (3)','Amp BCLK','I2S_BCLK','yellow',''],['D3 / GPIO4 (4)','Amp LRC','I2S_LRC','green',''],['D6 / GPIO43 (7)','Amp DIN','I2S_DIN','blue','TX pin; USB-CDC serial still works'],['D4 / GPIO5 (5)','OLED SDA','I2C_SDA','purple','0x3C'],['D5 / GPIO6 (6)','OLED SCL','I2C_SCL','orange',''],['XIAO 3V3 (12)','OLED VCC','3V3','pink',''],['+ rail','Amp VIN, servo red ×2, C1 +','+5V','red','1000 µF close to servos'],['D7–D10','ST7789 CS/SCK/DC/MOSI','—','—','Reserved for the face screen (see WIRING.md)']]}
+};
+const PWR_NETS=['3V3','+5V','+5V_SERVO'];
+function renderSchematic(svg,key){const def=PRESETS[key].sch;svg.innerHTML='';
+ const VW=1040;let maxY=0;
+ const root=el('g',{},svg);
+ const pinGap=24, stub=34;
+ const drawLabel=(g,x,y,net,dir)=>{ // dir: -1 left, 1 right
+  if(net==='NC'){el('path',{d:`M${x-5} ${y-5} L${x+5} ${y+5} M${x+5} ${y-5} L${x-5} ${y+5}`,stroke:'#e06c5a','stroke-width':2},g);txt(g,x+dir*16,y+4,'NC',9,'#e06c5a');return;}
+  if(net==='GND'){const a=x+dir*6,b2=x+dir*10,c2=x+dir*14;el('path',{d:`M${x} ${y} H${a} M${a} ${y-9} V${y+9} M${b2} ${y-6} V${y+6} M${c2} ${y-3} V${y+3}`,stroke:'#9fd3ff','stroke-width':1.6,fill:'none'},g);txt(g,x+dir*20,y+3.5,'GND',8.5,'#9fd3ff',dir>0?'start':'end');return;}
+  if(PWR_NETS.includes(net)){const a=x+dir*8;el('path',{d:`M${x} ${y} H${a} M${a} ${y-8} V${y+8} M${a} ${y-8} L${a+dir*6} ${y} L${a} ${y+8}`,stroke:'#ff7a59','stroke-width':1.8,fill:'#ff7a5944'},g);txt(g,x+dir*18,y+3.5,net,9,'#ff9b7a',dir>0?'start':'end');return;}
+  const w=net.length*6.4+14;const x0=dir>0?x:x-w;
+  const d=dir>0?`M${x0} ${y} L${x0+7} ${y-8} H${x0+w} V${y+8} H${x0+7} Z`:`M${x0+w} ${y} L${x0+w-7} ${y-8} H${x0} V${y+8} H${x0+w-7} Z`;
+  el('path',{d,fill:'#2a2216',stroke:'#c9a24a','stroke-width':1.2},g);txt(g,x0+w/2+(dir>0?3:-3),y+3.5,net,9,'#ffd27a');};
+ for(const b of def.blocks){const L=b.L||[],R=b.R||[];const n=Math.max(L.length,R.length);const h=n*pinGap+28;
+  const g=el('g',{class:'sblock'},root);
+  el('rect',{x:b.x,y:b.y,width:b.w,height:h,fill:'#1b1712',stroke:'#e8dcc0','stroke-width':1.6},g);
+  txt(g,b.x+b.w/2,b.y-18,b.ref,11,'#c9a24a');txt(g,b.x+b.w/2,b.y-5,b.name,10,'#e8dcc0');
+  L.forEach(([num,name,net],i)=>{const y=b.y+24+i*pinGap;el('line',{x1:b.x-stub,y1:y,x2:b.x,y2:y,stroke:'#e8dcc0','stroke-width':1.4},g);txt(g,b.x-stub/2,y-4,String(num),8,'#8fd18f');txt(g,b.x+6,y+3.5,name,9,'#e8dcc0','start');drawLabel(g,b.x-stub,y,net,-1);});
+  R.forEach(([num,name,net],i)=>{const y=b.y+24+i*pinGap;el('line',{x1:b.x+b.w,y1:y,x2:b.x+b.w+stub,y2:y,stroke:'#e8dcc0','stroke-width':1.4},g);txt(g,b.x+b.w+stub/2,y-4,String(num),8,'#8fd18f');txt(g,b.x+b.w-6,y+3.5,name,9,'#e8dcc0','end');drawLabel(g,b.x+b.w+stub,y,net,1);});
+  maxY=Math.max(maxY,b.y+h+40);}
+ for(const p of def.parts||[]){const g=el('g',{},root);const {x,y}=p;
+  if(p.type==='cap'){el('path',{d:`M${x} ${y-40} V${y-6} M${x-16} ${y-6} H${x+16} M${x} ${y+6} V${y+40}`,stroke:'#e8dcc0','stroke-width':1.6,fill:'none'},g);el('path',{d:`M${x-16} ${y+10} Q${x} ${y+2} ${x+16} ${y+10}`,stroke:'#e8dcc0','stroke-width':1.6,fill:'none'},g);txt(g,x-12,y-12,'+',11,'#ff9b7a');txt(g,x+26,y-2,p.ref,10,'#c9a24a','start');txt(g,x+26,y+12,p.val,9,'#e8dcc0','start');
+   drawVert(g,x,y-40,p.a,-1);drawVert(g,x,y+40,p.b,1);}
+  if(p.type==='spk'){el('rect',{x:x-8,y:y-14,width:12,height:28,fill:'none',stroke:'#e8dcc0','stroke-width':1.6},g);el('path',{d:`M${x+4} ${y-14} L${x+20} ${y-28} V${y+28} L${x+4} ${y+14}`,fill:'none',stroke:'#e8dcc0','stroke-width':1.6},g);
+   el('path',{d:`M${x-8} ${y-8} H${x-30} M${x-8} ${y+8} H${x-30}`,stroke:'#e8dcc0','stroke-width':1.4},g);txt(g,x-20,y-11,'1',8,'#8fd18f');txt(g,x-20,y+20,'2',8,'#8fd18f');drawLabel(g,x-30,y-8,p.a,-1);drawLabel(g,x-30,y+8,p.b,-1);txt(g,x+30,y-2,p.ref,10,'#c9a24a','start');txt(g,x+30,y+12,p.val,9,'#e8dcc0','start');}
+  maxY=Math.max(maxY,y+90);}
+ function drawVert(g,x,y,net,dir){if(net==='GND'){el('path',{d:`M${x-9} ${y} H${x+9} M${x-6} ${y+4} H${x+6} M${x-3} ${y+8} H${x+3}`,stroke:'#9fd3ff','stroke-width':1.6},g);txt(g,x,y+20,'GND',8,'#9fd3ff');}else{el('path',{d:`M${x-8} ${y} H${x+8}`,stroke:'#ff7a59','stroke-width':1.8},g);txt(g,x,y-6,net,9,'#ff9b7a');}}
+ // title block
+ const tb=el('g',{},root);el('rect',{x:VW-270,y:maxY,width:250,height:46,fill:'none',stroke:'#5a4a2a'},tb);txt(tb,VW-260,maxY+18,PRESETS[key].name.slice(0,40),9,'#e8dcc0','start');txt(tb,VW-260,maxY+34,(PRESETS[key].pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS')+' · Forge Blueprints',8,PRESETS[key].pinsKind==='actual'?'#8fd18f':'#ffcf73','start');
+ svg.setAttribute('viewBox',`0 0 ${VW} ${maxY+60}`);}
+
+/* ===== Forge app ===== */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS_INV='forge.inventory.v1', LS_LAY='forge.layouts.v1', LS_CUR='forge.bench.current.v1';
+const STATUS={'in-use':'In use','spare':'Spare','valkor':'In Valkor','kit':'In kit (verify)','tool':'Tool','missing':'Missing','ordered':'On order'};
+const DIFF=['','Initiate','Adept','Magos'];
+function imgURL(name){return (window.EMBED&&EMBED[name])||('img/'+name);}
+function illus(kind,label){const icons={
+ relay:'<rect x="40" y="50" width="120" height="70" rx="6" fill="#1f5fb0"/><rect x="60" y="62" width="60" height="44" rx="3" fill="#2b7de9"/><text x="90" y="90" font-size="10" fill="#fff" text-anchor="middle">SRD-05VDC</text><rect x="128" y="64" width="26" height="40" fill="#1a8a4a"/><circle cx="141" cy="74" r="5" fill="#ccc"/><circle cx="141" cy="94" r="5" fill="#ccc"/>',
+ rfid:'<rect x="40" y="35" width="110" height="90" rx="6" fill="#1f6fd0"/><rect x="56" y="50" width="78" height="60" rx="10" fill="none" stroke="#d9e6ff" stroke-width="3"/><rect x="70" y="64" width="50" height="32" rx="6" fill="none" stroke="#d9e6ff" stroke-width="2"/><rect x="150" y="55" width="36" height="56" rx="6" fill="#eee"/><circle cx="168" cy="68" r="5" fill="#bbb"/>',
+ water:'<rect x="80" y="20" width="44" height="120" rx="4" fill="#c0392b"/>'+[0,1,2,3,4,5,6,7,8].map(i=>`<rect x="${86+(i%2)*6}" y="${30+i*10}" width="26" height="3" fill="#f5d77a"/>`).join('')+'<path d="M60 100 q42 -16 84 0 v40 h-84z" fill="#3fa9f5" opacity=".55"/>',
+ charger:'<rect x="62" y="30" width="76" height="90" rx="12" fill="#e9e9e9" stroke="#999"/><rect x="88" y="120" width="24" height="18" fill="#777"/><text x="100" y="82" font-size="16" fill="#333" text-anchor="middle">45W</text><text x="100" y="100" font-size="9" fill="#666" text-anchor="middle">USB-C PD</text>',
+ mb102:'<rect x="40" y="45" width="120" height="70" rx="4" fill="#1f5fb0"/><rect x="50" y="58" width="30" height="24" fill="#222"/><rect x="50" y="88" width="20" height="16" fill="#aaa"/><rect x="100" y="60" width="44" height="10" fill="#111"/><rect x="100" y="96" width="44" height="10" fill="#111"/><text x="122" y="88" font-size="9" fill="#fff" text-anchor="middle">3V3 / 5V</text>',
+ fasteners:'<g fill="#bfc4c9" stroke="#6d7378">'+[0,1,2,3].map(i=>`<rect x="${50+i*28}" y="${50+i*4}" width="${6+i*2}" height="${60-i*6}" rx="1"/><rect x="${45+i*28}" y="${44+i*4}" width="${16+i*2}" height="8" rx="2"/>`).join('')+'<polygon points="160,80 172,73 184,80 184,94 172,101 160,94"/><circle cx="172" cy="87" r="5" fill="#2b2b2b"/></g>',
+ printer:'<rect x="40" y="25" width="120" height="110" rx="4" fill="none" stroke="#c9a24a" stroke-width="5"/><rect x="40" y="120" width="120" height="15" fill="#333"/><rect x="60" y="56" width="80" height="8" fill="#888"/><rect x="92" y="50" width="16" height="22" fill="#ff7a2a"/><path d="M80 112 h40 l-6 -16 h-28z" fill="#ff8a3d"/>',
+ software:'<rect x="35" y="30" width="130" height="86" rx="6" fill="#0f1720" stroke="#4a6b8a" stroke-width="3"/><text x="48" y="58" font-size="11" fill="#7fd1a3" font-family="monospace">$ esptool.py</text><text x="48" y="76" font-size="11" fill="#e8dcc0" font-family="monospace">&gt; Arduino IDE</text><text x="48" y="94" font-size="11" fill="#ffd27a" font-family="monospace">import serial</text><rect x="80" y="116" width="40" height="14" fill="#4a6b8a"/>',
+ drone:'<g stroke="#c9a24a" stroke-width="5"><line x1="60" y1="45" x2="140" y2="115"/><line x1="140" y1="45" x2="60" y2="115"/></g><g fill="none" stroke="#888" stroke-width="3">'+[[60,45],[140,45],[60,115],[140,115]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="24" ry="7"/>`).join('')+'</g><rect x="84" y="66" width="32" height="28" rx="4" fill="#333"/><text x="100" y="150" font-size="10" fill="#aaa" text-anchor="middle">contents unknown</text>',
+ crimp:'<path d="M50 120 L95 70 L105 80 L60 130z" fill="#c33"/><path d="M150 120 L105 70 L95 80 L140 130z" fill="#c33"/><rect x="88" y="40" width="24" height="40" rx="3" fill="#888"/><g fill="#222">'+[0,1,2,3].map(i=>`<rect x="${130+i*10}" y="30" width="7" height="22"/>`).join('')+'</g>',
+ chassis:'<rect x="55" y="55" width="90" height="50" rx="6" fill="#c9a24a" opacity=".85"/><rect x="35" y="48" width="20" height="64" rx="6" fill="#222"/><rect x="145" y="48" width="20" height="64" rx="6" fill="#222"/><rect x="70" y="62" width="30" height="16" fill="#ffd23f"/><rect x="100" y="62" width="30" height="16" fill="#ffd23f"/><circle cx="100" cy="118" r="7" fill="#999"/>',
+ analyzer:'<rect x="55" y="45" width="90" height="56" rx="6" fill="#222" stroke="#555"/><text x="100" y="78" font-size="10" fill="#7fd1a3" text-anchor="middle">LOGIC 8CH</text>'+[0,1,2,3,4,5,6,7].map(i=>`<line x1="${66+i*10}" y1="101" x2="${60+i*12}" y2="140" stroke="${['#000','#8b4513','#d22','#f80','#ff0','#2c2','#26f','#a3f'][i]}" stroke-width="3"/>`).join(''),
+ wire:'<path d="M30 110 C70 30 120 150 170 60" stroke="#d22" stroke-width="6" fill="none"/><path d="M30 120 C80 50 120 160 170 75" stroke="#222" stroke-width="6" fill="none"/><rect x="120" y="100" width="40" height="14" rx="4" fill="#333"/>'};
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160"><defs><radialGradient id="g" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#2a231c"/><stop offset="1" stop-color="#120f0c"/></radialGradient></defs><rect width="200" height="160" fill="url(#g)"/>${icons[kind]||''}<rect x="0" y="142" width="200" height="18" fill="#000a"/><text x="100" y="155" font-size="9" fill="#c9a24a" text-anchor="middle" font-family="sans-serif" letter-spacing="1">ILLUSTRATION</text></svg>`;
+ return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
+const partImg=p=>p.img?imgURL(p.img):illus(p.illus,p.name);
+
+/* ---------- inventory state ---------- */
+let INV=JSON.parse(localStorage.getItem(LS_INV)||'{}'); // {id:{qty,status,notes}} + custom:[...]
+if(!INV.__custom)INV.__custom=[];
+const saveInv=()=>localStorage.setItem(LS_INV,JSON.stringify(INV));
+const allParts=()=>[...PARTS,...INV.__custom];
+const P_=id=>allParts().find(p=>p.id===id);
+const qtyOf=p=>{const o=INV[p.id];return o&&o.qty!==undefined&&o.qty!==''?o.qty:p.qty;};
+const statusOf=p=>(INV[p.id]&&INV[p.id].status)||p.status;
+const notesOf=p=>(INV[p.id]&&INV[p.id].notes)||'';
+
+function renderInventory(){
+ const q=$('#inv-q').value.toLowerCase(), cat=$('#inv-cat').value, ifc=$('#inv-if').value, st=$('#inv-st').value;
+ const list=allParts().filter(p=>{const hay=[p.name,p.nick,p.cat,p.uses,(p.specs||[]).join(' '),(p.iface||[]).join(' '),notesOf(p)].join(' ').toLowerCase();
+  return(!q||hay.includes(q))&&(!cat||p.cat===cat)&&(!ifc||(p.iface||[]).some(i=>i.startsWith(ifc)))&&(!st||statusOf(p)===st);});
+ $('#inv-count').textContent=`${list.length} of ${allParts().length} parts`;
+ $('#inv-grid').innerHTML=list.map(p=>{const qty=qtyOf(p),s=statusOf(p);
+  return `<article class="card" data-id="${p.id}">
+   <div class="ph"><img src="${partImg(p)}" alt="${esc(p.name)}"><span class="imgk ${p.imgKind}">${p.imgKind==='exact'?'Official photo':p.imgKind==='ref'?'Reference photo':'Illustration'}</span>${p.kit?'<span class="kitb">Typical kit contents: verify</span>':''}</div>
+   <div class="cb"><div class="row1"><span class="cat">${esc(p.cat)}</span><span class="st st-${s}">${STATUS[s]||s}</span></div>
+   <h3>${esc(p.name)}${p.nick?` <em>“${esc(p.nick)}”</em>`:''}</h3>
+   <div class="meta"><span title="Quantity">qty <b>${qty===null||qty===undefined?'?':esc(qty)}</b></span><span>⚡ ${esc(p.volt)}</span></div>
+   <div class="ifs">${(p.iface||[]).map(i=>`<span>${esc(i)}</span>`).join('')}</div>
+   <p class="uses">${esc(p.uses)}</p>${notesOf(p)?`<p class="note">📝 ${esc(notesOf(p))}</p>`:''}
+   <div class="cact"><button class="b-det">Details</button><button class="b-edit">Edit</button><button class="b-combo">Combos</button></div></div></article>`;}).join('')||'<p class="empty">No parts match.</p>';
+}
+function partDetail(id){const p=P_(id);const projs=PROJECTS.filter(x=>x.parts.some(([pid])=>pid===id));
+ openModal(`<div class="det"><div class="dimg"><img src="${partImg(p)}" alt=""><small>${p.imgKind==='illus'?'Illustration (no official photo fetched)':esc(p.imgSrc||'')}</small></div><div>
+ <h2>${esc(p.name)}</h2><p class="sub">${esc(p.cat)} · ${STATUS[statusOf(p)]||statusOf(p)} · qty ${qtyOf(p)??'?'}${p.kit?' · <b class="warn">typical kit contents, verify</b>':''}</p>
+ <dl><dt>Power / logic</dt><dd>${esc(p.volt)}${p.logic&&p.logic!=='—'?` · logic ${esc(p.logic)}${/^\d/.test(p.logic)?'V':''}`:''}</dd><dt>Interfaces</dt><dd>${(p.iface||[]).map(esc).join(', ')||'—'}</dd>
+ <dt>Key specs</dt><dd><ul>${(p.specs||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul></dd><dt>Pinout</dt><dd>${esc(p.pinout)}</dd>
+ <dt>Gotchas</dt><dd><ul class="got">${(p.gotchas||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul></dd><dt>Used for</dt><dd>${esc(p.uses)}</dd>
+ <dt>Projects</dt><dd>${projs.map(x=>`<a href="#" data-goproj="${x.id}">${esc(x.name)}</a>`).join(' · ')||'—'}</dd>
+ <dt>Docs</dt><dd>${p.doc?`<a href="${esc(p.doc)}" target="_blank" rel="noopener">${esc(p.doc)}</a>`:'—'}</dd></dl></div></div>`);}
+function editPart(id){const p=P_(id);const q=qtyOf(p);
+ openModal(`<h2>Edit: ${esc(p.name)}</h2><form id="ef" class="ef"><label>Quantity <input name="qty" type="number" min="0" value="${q??''}" placeholder="?"></label>
+ <label>Status <select name="status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${statusOf(p)===k?'selected':''}>${v}</option>`).join('')}</select></label>
+ <label>Notes <textarea name="notes" rows="4" placeholder="Where it is, what it\'s wired to, condition…">${esc(notesOf(p))}</textarea></label>
+ <div class="fa"><button type="submit" class="pri">Save</button><button type="button" id="ef-reset">Reset to default</button>${p.custom?'<button type="button" id="ef-del" class="danger">Remove custom part</button>':''}</div></form>`);
+ $('#ef').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);INV[id]={qty:f.get('qty')===''?null:Number(f.get('qty')),status:f.get('status'),notes:f.get('notes')};saveInv();closeModal();renderAll();toast('Saved');};
+ $('#ef-reset').onclick=()=>{delete INV[id];saveInv();closeModal();renderAll();};
+ const d=$('#ef-del');if(d)d.onclick=()=>{if(confirm('Remove this custom part?')){INV.__custom=INV.__custom.filter(x=>x.id!==id);delete INV[id];saveInv();closeModal();renderAll();}};}
+function addCustom(){openModal(`<h2>Add a part</h2><form id="af" class="ef"><label>Name <input name="name" required></label><label>Category <select name="cat">${[...new Set(PARTS.map(p=>p.cat))].map(c=>`<option>${c}</option>`).join('')}</select></label>
+ <label>Quantity <input name="qty" type="number" min="0"></label><label>Interfaces (comma separated) <input name="iface" placeholder="I2C, SPI"></label><label>Voltage <input name="volt" placeholder="3.3V"></label><label>Used for <input name="uses"></label><label>Doc link <input name="doc" type="url"></label><div class="fa"><button class="pri">Add</button></div></form>`);
+ $('#af').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));INV.__custom.push({id:'c'+Date.now(),custom:true,name:f.name,cat:f.cat,qty:f.qty===''?null:+f.qty,status:'spare',volt:f.volt||'?',logic:'?',iface:f.iface?f.iface.split(',').map(s=>s.trim()).filter(Boolean):[],specs:[],pinout:'—',gotchas:[],uses:f.uses||'',doc:f.doc||'',img:null,illus:'software',imgKind:'illus'});saveInv();closeModal();renderAll();};}
+function exportJSON(){const data={app:'Forge Parts Workshop',exported:new Date().toISOString(),inventory:INV,layouts:JSON.parse(localStorage.getItem(LS_LAY)||'{}')};
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='forge-inventory.json';a.click();}
+function importJSON(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.inventory){INV=d.inventory;if(!INV.__custom)INV.__custom=[];saveInv();}if(d.layouts)localStorage.setItem(LS_LAY,JSON.stringify(d.layouts));renderAll();refreshLayouts();toast('Imported');}catch(e){alert('Not a valid export file');}};r.readAsText(file);}
+
+/* ---------- compatibility ---------- */
+function compat(ctrlId,pid){const C=CONTROLLERS[ctrlId],n=NEEDS[pid];if(!n)return null;const notes=[];let lvl='good';const bump=l=>{const o={good:0,ok:1,caution:2,needs:3,no:4};if(o[l]>o[lvl])lvl=l;};
+ if(n.via){const v=P_(n.via);notes.push(`Connect through the ${v?v.name:n.via}.`);bump('ok');}
+ if(n.bus==='CSI'){if(ctrlId!=='pi4')return{lvl:'no',notes:['CSI camera only plugs into the Raspberry Pi.']};notes.push('CSI ribbon; use Picamera2.');return{lvl,notes};}
+ if(n.bus==='I2S'&&!C.buses.includes('I2S'))return{lvl:'no',notes:['No I2S peripheral on this board.']};
+ if(n.bus==='ADC'&&!C.buses.includes('ADC')){bump('needs');notes.push('No analog inputs: add an ADC (e.g. ADS1115).');}
+ if(ctrlId==='hatch'&&n.bus!=='I2C'){bump('caution');notes.push('Hatch exposes very few pins. Check the Waveshare pinout first.');}
+ if(ctrlId==='xiao'){bump('caution');notes.push('All XIAO pins are used by Valkor. Free a pin, or test on the DevKit first.');}
+ if(C.logic===3.3){if(n.out5){bump('caution');notes.push('5V output signal: use a 1k/2k divider or a level shifter.');}
+  if(n.supply5)notes.push('Power the module from 5V (VIN/5V pin or external), share GND.');
+  if(n.logic5==='soft'){bump('caution');notes.push('Some 5V modules won\'t trigger reliably at 3.3V. Test it, or drive it via a transistor.');}}
+ if(C.logic===5){if(n.v33only){bump('caution');notes.push('3.3V-only part: power from 3.3V and level-shift the signals.');}else if(n.v===3.3){bump('caution');notes.push('3.3V logic part: use a level shifter from the 5V Mega.');}}
+ if(n.ext5){bump('caution');notes.push('Needs a separate regulated 5V supply with common ground and 1000 µF. Don\'t power it from the board.');}
+ if(ctrlId==='pi4'&&n.bus==='PWM'){bump('caution');notes.push('Use hardware PWM (GPIO12/13/18/19) or a PCA9685 to avoid jitter.');}
+ if(n.pins&&n.pins>C.free&&ctrlId!=='xiao'){bump('caution');notes.push(`Needs ${n.pins} pins; limited free pins.`);}
+ if(n.bus&&n.bus!=='CSI')notes.unshift(`${n.bus}${n.pins?` · ${n.pins} pin${n.pins>1?'s':''}`:''}.`);
+ return{lvl,notes};}
+const LVL={good:['✔','Direct'],ok:['◆','Via helper'],caution:['!','Caution'],needs:['＋','Needs part'],no:['✕','No']};
+function renderCombos(){const ctrls=Object.keys(CONTROLLERS);const peri=Object.keys(NEEDS);
+ $('#mx').innerHTML=`<table class="mx"><thead><tr><th>Part ↓ / Board →</th>${ctrls.map(c=>`<th>${esc(P_(c).nick||P_(c).name.split(' ').slice(0,3).join(' '))}<small>${CONTROLLERS[c].logic}V</small></th>`).join('')}</tr></thead><tbody>${peri.map(pid=>`<tr><th data-pick="${pid}">${esc(P_(pid).name)}</th>${ctrls.map(c=>{const r=compat(c,pid);return `<td class="lv-${r.lvl}" data-cell="${c}|${pid}" title="${esc(r.notes.join(' '))}">${LVL[r.lvl][0]}</td>`;}).join('')}</tr>`).join('')}</tbody></table>`;
+ const sel=$('#cb-pick');if(!sel.options.length){sel.innerHTML=allParts().map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');sel.value='sg90';}
+ renderPick(sel.value);}
+function renderPick(id){const p=P_(id);const out=[];
+ if(CONTROLLERS[id]){Object.keys(NEEDS).forEach(pid=>{const r=compat(id,pid);if(r.lvl!=='no')out.push({pid,lvl:r.lvl,how:r.notes.join(' ')});});out.push({pid:'_',lvl:'ok',how:CONTROLLERS[id].note});}
+ else if(NEEDS[id]){Object.keys(CONTROLLERS).forEach(c=>{const r=compat(c,id);out.push({pid:c,lvl:r.lvl,how:r.notes.join(' ')});});}
+ PAIRS.forEach(([a,b,how,l])=>{if(a===id)out.push({pid:b,lvl:l,how});else if(b===id)out.push({pid:a,lvl:l,how});});
+ $('#cb-detail').innerHTML=`<div class="pk-head"><img src="${partImg(p)}" alt=""><div><h3>${esc(p.name)}</h3><p>${esc(p.volt)} · ${(p.iface||[]).join(', ')||'—'}</p></div></div>
+ <ul class="pk">${out.map(o=>o.pid==='_'?`<li class="lv-ok"><b>Note</b><span>${esc(o.how)}</span></li>`:`<li class="lv-${o.lvl}"><b><i>${LVL[o.lvl][0]}</i> <a href="#" data-pickgo="${o.pid}">${esc(P_(o.pid)?.name||o.pid)}</a></b><span>${esc(o.how)}</span></li>`).join('')||'<li>No known combos yet. Add notes on the card.</li>'}</ul>`;
+ drawGraph(id,out.filter(o=>o.pid!=='_'));}
+function drawGraph(id,out){const svg=$('#cb-graph');svg.innerHTML='';const W=520,H=420,cx=W/2,cy=H/2;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+ const col={good:'#5fbf6a',ok:'#c9a24a',caution:'#ff8a3d',needs:'#d65bd6',no:'#666'};
+ const n=out.length;out.forEach((o,i)=>{const a=-Math.PI/2+i*2*Math.PI/Math.max(n,1);const r=165;const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a)*0.85;
+  el('line',{x1:cx,y1:cy,x2:x,y2:y,stroke:col[o.lvl],'stroke-width':o.lvl==='good'?3:2,'stroke-dasharray':o.lvl==='caution'||o.lvl==='needs'?'6 4':''},svg);
+  const g=el('g',{class:'gn','data-pickgo':o.pid},svg);el('circle',{cx:x,cy:y,r:8,fill:col[o.lvl]},g);const nm=(P_(o.pid)?.nick||P_(o.pid)?.name||o.pid);txt(g,x,y+(y<cy?-13:20),nm.length>22?nm.slice(0,21)+'…':nm,10,'#e8dcc0');});
+ el('circle',{cx,cy,r:34,fill:'#2a1d12',stroke:'#ff8a3d','stroke-width':2},svg);const nm=P_(id).nick||P_(id).name.split(' ').slice(0,2).join(' ');txt(svg,cx,cy+4,nm.slice(0,14),10,'#ffd27a');}
+
+/* ---------- projects ---------- */
+function projStatus(pr){const missing=[];let borrow=false;pr.parts.forEach(([pid,n])=>{const p=P_(pid);if(!p){missing.push(pid);return;}const q=qtyOf(p);const s=statusOf(p);if(s==='missing'||(q!==null&&q!==undefined&&q<n))missing.push(pid);if(s==='valkor')borrow=true;});
+ return{missing,borrow,full:missing.length===0&&pr.extra.filter(x=>!x.opt).length===0};}
+function renderProjects(){const only=$('#pj-can').checked, tag=$('#pj-tag').value, d=$('#pj-diff').value;
+ const list=PROJECTS.filter(pr=>{const s=projStatus(pr);return(!only||s.full)&&(!tag||pr.tags.includes(tag))&&(!d||pr.diff==d);});
+ $('#pj-count').textContent=`${list.length} of ${PROJECTS.length} projects · ${PROJECTS.filter(p=>projStatus(p).full).length} fully buildable now`;
+ $('#pj-grid').innerHTML=list.map(pr=>{const s=projStatus(pr);return `<article class="proj" id="${pr.id}"><header><span class="diff d${pr.diff}">${'◆'.repeat(pr.diff)}${'◇'.repeat(3-pr.diff)} ${DIFF[pr.diff]}</span>${s.full?'<span class="ok">✔ Buildable now</span>':s.missing.length?'<span class="bad">Short on parts</span>':'<span class="need">Needs 1+ purchase</span>'}${s.borrow?'<span class="borrow">Borrows Valkor parts</span>':''}</header>
+  <h3>${esc(pr.name)}</h3><div class="tags">${pr.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+  <h4>Parts you own</h4><ul class="pl">${pr.parts.map(([pid,n])=>{const p=P_(pid);return `<li class="${s.missing.includes(pid)?'miss':''}"><a href="#" data-part="${pid}"><img src="${partImg(p)}" alt="">${esc(p.name)}</a><b>×${n}</b></li>`;}).join('')}</ul>
+  ${pr.extra.length?`<h4 class="ex">Extra parts</h4><ul class="exl">${pr.extra.map(x=>`<li><b>${esc(x.n)}</b>${x.opt?' <i>(optional / likely owned)</i>':''}: ${esc(x.why)}</li>`).join('')}</ul>`:''}
+  <h4>You'll learn</h4><p>${pr.learn.map(esc).join(' · ')}</p><h4>Build outline</h4><ol>${pr.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></article>`;}).join('')||'<p class="empty">Nothing matches. Turn off the filter or update quantities in the Armory.</p>';}
+
+/* ---------- recommendations ---------- */
+function renderRecs(){$('#rc-grid').innerHTML=RECS.map(r=>`<article class="rec"><div class="ph"><img src="${r.img?imgURL(r.img):illus(r.illus)}" alt=""><span class="imgk ${r.img?'ref':'illus'}">${r.img?'Reference photo':'Illustration'}</span></div><div class="cb"><span class="prio p-${r.prio.replace(/\s/g,'')}">${r.prio}</span><h3>${esc(r.name)}</h3><p>${esc(r.why)}</p>
+ <p class="unl"><b>Unlocks:</b> ${r.unlocks[0]==='*'?'every project (debug and quality)':r.unlocks.map(u=>`<a href="#" data-goproj="${u}">${esc(PROJECTS.find(p=>p.id===u)?.name||u)}</a>`).join(', ')}</p>
+ <p class="price">Price: check current price${r.link?` · <a href="${r.link}" target="_blank" rel="noopener">example listing</a>`:''}${r.alt?` · <a href="${r.alt}" target="_blank" rel="noopener">alternative</a>`:''}</p></div></article>`).join('');
+ $('#rc-tips').innerHTML=TIPS.map(([h,t])=>`<div class="tip"><h4>${esc(h)}</h4><p>${esc(t)}</p></div>`).join('');}
+
+/* ---------- breadboard bench ---------- */
+let bench={comps:[],wires:[]}, sel=null, wireColor='#d22', drag=null, ghost=null, presetKey=null;
+const PALETTE=[['devkit','ESP32 DevKit'],['xiao','XIAO S3'],['ssd1306','SSD1306 OLED'],['max98357','MAX98357'],['led','LED'],['resistor','Resistor'],['button','Button'],['pot','Potentiometer'],['buzzer','Buzzer'],['hcsr04','HC-SR04'],['dht11','DHT11'],['cap','1000µF cap'],['st7789','ST7789 LCD'],['sg90','SG90 servo'],['speaker','Speaker'],['supply5','5V supply']];
+const WCOLORS=[['#d22','red'],['#222','black'],['#2b7de9','blue'],['#2fbf4a','green'],['#f2c80f','yellow'],['#f08a1c','orange'],['#9b59b6','purple'],['#eeeeee','white'],['#6b3b1d','brown']];
+function benchSave(){localStorage.setItem(LS_CUR,JSON.stringify({bench,presetKey}));}
+function drawBench(){const svg=$('#bb');renderBench(svg,bench,{sel});if(ghost){const g=el('g',{class:'ghost'+(ghost.ok?'':' bad')},svg);const f=FP[ghost.type];const fake={...ghost,id:'ghost'};
+  const tmp={comps:[fake],wires:[]};const s2=document.createElementNS(NS,'svg');renderBench(s2,tmp,{});const cg=s2.querySelector('g.comps');if(cg)g.appendChild(cg);}
+ $('#bb-info2').textContent=`${bench.comps.length} parts · ${bench.wires.length} wires`;}
+function svgPt(svg,e){const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse());}
+function nearestNode(x,y,exclude){let best=null,bd=11;for(let r=0;r<=13;r++){const dy=Math.abs(hy(r)-y);if(dy>bd)continue;for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;const d=Math.hypot(hx(c)-x,hy(r)-y);if(d<bd){bd=d;best=holeId(c,r);}}}
+ for(const c of bench.comps){FP[c.type].pins.forEach((p,i)=>{const pp=pinPos(c,i);if(pp.hole)return;const d=Math.hypot(pp.x-x,pp.y-y);if(d<bd){bd=d;best=`p:${c.id}:${i}`;}});}
+ return best===exclude?null:best;}
+function nearestHole(x,y){let best=null,bd=1e9;for(let r=0;r<=13;r++)for(let c=1;c<=COLS;c++){const d=Math.hypot(hx(c)-x,hy(r)-y);if(d<bd){bd=d;best={col:c,row:r};}}return best;}
+function nodeLabel(n){if(n.startsWith('h:')){const [,c,r]=n.split(':').map(Number);return holeLabel(c,r);}const [,cid,pi]=n.split(':');const c=bench.comps.find(k=>k.id===cid);return c?`${c.tag||FP[c.type].label}.${FP[c.type].pins[+pi].n}`:n;}
+function setupBench(){const svg=$('#bb');
+ $('#bb-pal').innerHTML=PALETTE.map(([t,n])=>`<button data-add="${t}" title="Click, then click on the board to place">${n}</button>`).join('');
+ $('#bb-colors').innerHTML=WCOLORS.map(([c,n])=>`<button class="sw ${c===wireColor?'on':''}" data-color="${c}" title="${n}" style="background:${c}"></button>`).join('');
+ $('#bb-pal').onclick=e=>{const t=e.target.dataset.add;if(!t)return;const f=FP[t];ghost=f.off?{type:t,x:400,y:120,tag:f.label}:{type:t,col:30,row:f.board?3:2,tag:f.label,ok:true};$('#bb-hint').textContent=`Placing ${f.label}: click to drop · Esc to cancel`;drawBench();};
+ $('#bb-colors').onclick=e=>{const c=e.target.dataset.color;if(!c)return;wireColor=c;$$('#bb-colors .sw').forEach(b=>b.classList.toggle('on',b.dataset.color===c));if(sel&&sel.startsWith('w')){const w=bench.wires.find(w=>w.id===sel);if(w){w.color=c;benchSave();drawBench();}}};
+ let panMode=false;
+ $('#bb-pan').onclick=()=>{panMode=!panMode;$('.svgw').classList.toggle('pan',panMode);$('#bb-pan').classList.toggle('on',panMode);$('#bb-pan').textContent=panMode?'✋ Pan mode: on (editing paused)':'✋ Pan mode: off';};
+ $('#bb-zoom').onclick=e=>{const z=e.target.dataset.z;if(!z)return;$$('#bb-zoom button').forEach(b=>b.classList.toggle('on',b===e.target));svg.style.width=(z*100)+'%';};
+ if(window.innerWidth<700){svg.style.width='240%';$$('#bb-zoom button').forEach(b=>b.classList.toggle('on',b.dataset.z==='2.4'));}
+ svg.addEventListener('pointerdown',e=>{if(panMode)return;const p=svgPt(svg,e);
+  if(ghost){if(FP[ghost.type].off){ghost.x=Math.round(p.x);ghost.y=Math.round(p.y);}else if(!ghost.ok){toast('Can\'t place there: a pin falls off the grid');return;}
+   const c={...ghost,id:'c'+Date.now().toString(36)};delete c.ok;bench.comps.push(c);ghost=null;sel=c.id;presetKey=null;$('#bb-hint').textContent='Placed. Drag to move, drag from a hole to wire.';benchSave();drawBench();return;}
+  const cg=e.target.closest('g.comp'), wg=e.target.closest('g.wire');const nodeEl=e.target.closest('[data-node]');
+  if(nodeEl&&(!cg||nodeEl.classList.contains('pin'))&&!(cg&&FP[bench.comps.find(c=>c.id===cg.dataset.comp).type].board&&nodeEl.classList.contains('pin')&&false)){
+   // start wire from a hole or pin
+   drag={mode:'wire',from:nodeEl.dataset.node,x:p.x,y:p.y};svg.setPointerCapture(e.pointerId);e.preventDefault();return;}
+  if(cg){const c=bench.comps.find(k=>k.id===cg.dataset.comp);sel=c.id;const f=FP[c.type];drag={mode:'move',id:c.id,sx:p.x,sy:p.y,ox:f.off?c.x:hx(c.col),oy:f.off?c.y:hy(c.row),orig:{...c}};svg.setPointerCapture(e.pointerId);drawBench();e.preventDefault();return;}
+  if(wg){sel=wg.dataset.wire;drawBench();return;}
+  const nn=nearestNode(p.x,p.y);if(nn){drag={mode:'wire',from:nn,x:p.x,y:p.y};svg.setPointerCapture(e.pointerId);e.preventDefault();return;}
+  sel=null;drawBench();});
+ svg.addEventListener('pointermove',e=>{if(panMode)return;const p=svgPt(svg,e);
+  if(ghost){const f=FP[ghost.type];if(f.off){ghost.x=Math.round(p.x);ghost.y=Math.round(p.y);}else{const h=nearestHole(p.x,p.y);ghost.col=h.col;ghost.row=h.row;ghost.ok=validPlacement(bench,ghost.type,h.col,h.row);}drawBench();return;}
+  if(drag&&drag.mode==='wire'){drawBench();const a=nodePos(bench,drag.from);const t=nearestNode(p.x,p.y,drag.from);const b=t?nodePos(bench,t):p;const ov=svg.querySelector('g.overlay');
+   el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:wireColor,'stroke-width':3.5,'stroke-dasharray':t?'':'5 4','stroke-linecap':'round'},ov);if(t)el('circle',{cx:b.x,cy:b.y,r:7,fill:'none',stroke:'#ffd27a','stroke-width':2},ov);
+   $('#bb-info').textContent=`Wire: ${nodeLabel(drag.from)} → ${t?nodeLabel(t):'…'}`;return;}
+  if(drag&&drag.mode==='move'){const c=bench.comps.find(k=>k.id===drag.id);const f=FP[c.type];const nx=drag.ox+(p.x-drag.sx),ny=drag.oy+(p.y-drag.sy);
+   if(f.off){c.x=Math.round(nx);c.y=Math.round(ny);}else{const h=nearestHole(nx,ny);if(validPlacement(bench,c.type,h.col,h.row)){c.col=h.col;c.row=h.row;}}drag.moved=true;drawBench();return;}
+  // hover: net highlight
+  const t=nearestNode(p.x,p.y);if(t!==bench._hover){bench._hover=t;const m=highlightNet(svg,bench,t);$('#bb-info').innerHTML=t?`<b>${esc(nodeLabel(t))}</b> → connected: ${m&&m.length?m.map(esc).join(', '):'(no part pins on this net yet)'}`:'Hover a hole to see what it\'s connected to.';}});
+ svg.addEventListener('pointerup',e=>{if(panMode)return;const p=svgPt(svg,e);
+  if(drag&&drag.mode==='wire'){const t=nearestNode(p.x,p.y,drag.from);if(t){bench.wires.push({id:'w'+Date.now().toString(36),a:drag.from,b:t,color:wireColor});presetKey=null;benchSave();toast('Wire added');}drag=null;drawBench();return;}
+  if(drag&&drag.mode==='move'){if(drag.moved){presetKey=null;benchSave();}drag=null;drawBench();}});
+ svg.addEventListener('dblclick',e=>{const wg=e.target.closest('g.wire');if(wg){bench.wires=bench.wires.filter(w=>w.id!==wg.dataset.wire);benchSave();drawBench();}});
+ svg.addEventListener('contextmenu',e=>{const wg=e.target.closest('g.wire'),cg=e.target.closest('g.comp');if(wg||cg){e.preventDefault();sel=wg?wg.dataset.wire:cg.dataset.comp;delSel();}});
+ document.addEventListener('keydown',e=>{if(!$('#tab-bench').classList.contains('on'))return;if(e.key==='Escape'){ghost=null;$('#bb-hint').textContent='';drawBench();}if((e.key==='Delete'||e.key==='Backspace')&&sel&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){delSel();}});
+ $('#bb-del').onclick=delSel;
+ $('#bb-clear').onclick=()=>{if(confirm('Clear the bench?')){bench={comps:[],wires:[]};presetKey=null;sel=null;benchSave();drawBench();}};
+ $('#bb-preset').onchange=e=>{if(e.target.value)loadPreset(e.target.value);};
+ $('#bb-toschem').onclick=()=>{const k=presetKey||$('#bb-preset').value||'st7789';showTab('schem');$('#sc-preset').value=k;renderSchemTab();};
+ $('#bb-save').onclick=()=>{const name=prompt('Layout name:',presetKey?PRESETS[presetKey].name:'My layout');if(!name)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');L[name]={bench,saved:new Date().toISOString()};localStorage.setItem(LS_LAY,JSON.stringify(L));refreshLayouts();toast('Layout saved');};
+ $('#bb-load').onclick=()=>{const n=$('#bb-layouts').value;if(!n)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');if(L[n]){bench=JSON.parse(JSON.stringify(L[n].bench));presetKey=null;benchSave();drawBench();toast('Loaded '+n);}};
+ $('#bb-ldel').onclick=()=>{const n=$('#bb-layouts').value;if(!n)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');delete L[n];localStorage.setItem(LS_LAY,JSON.stringify(L));refreshLayouts();};
+ const cur=JSON.parse(localStorage.getItem(LS_CUR)||'null');if(cur&&cur.bench&&cur.bench.comps){bench=cur.bench;presetKey=cur.presetKey;}else loadPreset('st7789',true);
+ refreshLayouts();drawBench();}
+function delSel(){if(!sel)return;bench.wires=bench.wires.filter(w=>w.id!==sel);const isComp=bench.comps.some(c=>c.id===sel);if(isComp){bench.comps=bench.comps.filter(c=>c.id!==sel);bench.wires=bench.wires.filter(w=>!w.a.startsWith(`p:${sel}:`)&&!w.b.startsWith(`p:${sel}:`));}sel=null;presetKey=null;benchSave();drawBench();}
+function refreshLayouts(){const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');$('#bb-layouts').innerHTML='<option value="">Saved layouts…</option>'+Object.keys(L).map(n=>`<option>${esc(n)}</option>`).join('');}
+function loadPreset(k,quiet){bench=presetState(k);presetKey=k;sel=null;$('#bb-preset').value=k;const pr=PRESETS[k];$('#bb-note').innerHTML=`<span class="pk-${pr.pinsKind}">${pr.pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS'}</span> ${esc(pr.pinsNote)}`;benchSave();if(!quiet)toast('Loaded preset: '+pr.name);drawBench();}
+
+/* ---------- schematics tab ---------- */
+function renderSchemTab(){const k=$('#sc-preset').value;const pr=PRESETS[k];const view=$('input[name=scv]:checked').value;
+ $('#sc-note').innerHTML=`<span class="pk-${pr.pinsKind}">${pr.pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS'}</span> ${esc(pr.pinsNote)}`;
+ const svg=$('#sc-svg');if(view==='schem')renderSchematic(svg,k);else renderBench(svg,presetState(k),{});
+ $('#sc-table').innerHTML=`<table class="pt"><thead><tr><th>From (header pin #)</th><th>To</th><th>Net</th><th>Wire</th><th>Notes</th></tr></thead><tbody>${pr.table.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td><code>${esc(r[2])}</code></td><td>${r[3]&&r[3]!=='—'?`<i class="wc" style="background:${({red:'#d22',black:'#222',blue:'#2b7de9',yellow:'#f2c80f',green:'#2fbf4a',purple:'#9b59b6',orange:'#f08a1c',brown:'#6b3b1d',pink:'#ff6b6b'})[r[3]]||'#888'}"></i>`:''}${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('')}</tbody></table>`;}
+
+/* ---------- shell ---------- */
+function openModal(html){$('#modal .mc').innerHTML=html;$('#modal').classList.add('on');}
+function closeModal(){$('#modal').classList.remove('on');}
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800);}
+function showTab(id){$$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));$$('.tab').forEach(t=>t.classList.toggle('on',t.id==='tab-'+id));history.replaceState(null,'','#'+id);if(id==='bench')drawBench();window.scrollTo(0,0);}
+function renderAll(){renderInventory();renderCombos();renderProjects();updateStats();}
+function updateStats(){$('#st-parts').textContent=allParts().length;$('#st-proj').textContent=PROJECTS.length;$('#st-build').textContent=PROJECTS.filter(p=>projStatus(p).full).length;$('#st-kit').textContent=allParts().filter(p=>p.kit).length;}
+document.addEventListener('DOMContentLoaded',()=>{
+ const cats=[...new Set(PARTS.map(p=>p.cat))];$('#inv-cat').innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option>${c}</option>`).join('');
+ const ifs=['GPIO','PWM','I2C','SPI','I2S','UART','ADC','CSI','Wi-Fi','Power'];$('#inv-if').innerHTML='<option value="">All interfaces</option>'+ifs.map(c=>`<option>${c}</option>`).join('');
+ $('#inv-st').innerHTML='<option value="">Any status</option>'+Object.entries(STATUS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+ const tags=[...new Set(PROJECTS.flatMap(p=>p.tags))];$('#pj-tag').innerHTML='<option value="">All themes</option>'+tags.map(t=>`<option>${t}</option>`).join('');
+ const popts=Object.entries(PRESETS).map(([k,v])=>`<option value="${k}">${esc(v.name)}</option>`).join('');$('#bb-preset').innerHTML='<option value="">Load a preset…</option>'+popts;$('#sc-preset').innerHTML=popts;
+ ['#inv-q','#inv-cat','#inv-if','#inv-st'].forEach(s=>$(s).addEventListener('input',renderInventory));
+ ['#pj-can','#pj-tag','#pj-diff'].forEach(s=>$(s).addEventListener('input',renderProjects));
+ $('#cb-pick').addEventListener('input',e=>renderPick(e.target.value));
+ $('#sc-preset').addEventListener('input',renderSchemTab);$$('input[name=scv]').forEach(r=>r.addEventListener('input',renderSchemTab));
+ $('#inv-grid').addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;const id=card.dataset.id;if(e.target.classList.contains('b-edit'))editPart(id);else if(e.target.classList.contains('b-combo')){showTab('combos');$('#cb-pick').value=id;renderPick(id);}else partDetail(id);});
+ document.addEventListener('click',e=>{const a=e.target.closest('[data-goproj],[data-part],[data-pickgo],[data-pick],[data-cell]');if(!a)return;e.preventDefault();
+  if(a.dataset.goproj){closeModal();showTab('projects');$('#pj-can').checked=false;renderProjects();setTimeout(()=>{const el2=document.getElementById(a.dataset.goproj);if(el2){el2.scrollIntoView({behavior:'smooth',block:'center'});el2.classList.add('flash');setTimeout(()=>el2.classList.remove('flash'),1500);}},50);}
+  else if(a.dataset.part)partDetail(a.dataset.part);
+  else if(a.dataset.pickgo||a.dataset.pick){const id=a.dataset.pickgo||a.dataset.pick;if(P_(id)){$('#cb-pick').value=id;renderPick(id);$('#cb-detail').scrollIntoView({behavior:'smooth',block:'nearest'});}}
+  else if(a.dataset.cell){const [c,p]=a.dataset.cell.split('|');const r=compat(c,p);openModal(`<h2>${esc(P_(p).name)} ↔ ${esc(P_(c).name)}</h2><p class="lvl lv-${r.lvl}">${LVL[r.lvl][0]} ${LVL[r.lvl][1]}</p><ul>${r.notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul><p class="sub">${esc(CONTROLLERS[c].note)}</p>`);}});
+ $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'||e.target.classList.contains('mx-close'))closeModal();});
+ $$('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+ $('#inv-export').onclick=exportJSON;$('#inv-import').onclick=()=>$('#inv-file').click();$('#inv-file').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);$('#inv-add').onclick=addCustom;
+ renderAll();renderRecs();setupBench();renderSchemTab();
+ const h=location.hash.slice(1);showTab(['inventory','combos','projects','bench','schem','recs'].includes(h)?h:'inventory');});
+</script></body></html>
