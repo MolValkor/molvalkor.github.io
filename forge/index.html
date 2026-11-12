@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Forge · Zach's Parts Workshop</title><link rel="canonical" href="https://molvalkor.github.io/forge/"><link rel="icon" href="../favicon.ico" sizes="any"><style>:root{--bg:#0d0b0a;--bg2:#15120f;--panel:#1b1714;--panel2:#221d18;--line:#3a3128;--brass:#c9a24a;--brass2:#ffd27a;--ember:#ff7a2a;--text:#e8e0d2;--mut:#a89f90;--good:#5fbf6a;--warn:#ff8a3d;--bad:#e05a4a;--ok:#c9a24a;--needs:#d65bd6}
+<title>The Forge · Zach's Parts Workshop</title><style>:root{--bg:#0d0b0a;--bg2:#15120f;--panel:#1b1714;--panel2:#221d18;--line:#3a3128;--brass:#c9a24a;--brass2:#ffd27a;--ember:#ff7a2a;--text:#e8e0d2;--mut:#a89f90;--good:#5fbf6a;--warn:#ff8a3d;--bad:#e05a4a;--ok:#c9a24a;--needs:#d65bd6}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#2a1608 0%,transparent 60%),radial-gradient(900px 500px at -10% 10%,#1c1208 0%,transparent 55%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
 a{color:var(--brass2)}code{font-family:ui-monospace,Consolas,monospace;color:var(--brass2)}
@@ -77,8 +77,8 @@ label.chk{display:flex;gap:6px;align-items:center;background:var(--panel2);borde
 #bb-pal{display:grid;grid-template-columns:1fr 1fr;gap:5px}#bb-pal button{font-size:12px;padding:6px 4px}
 #bb-colors{display:flex;flex-wrap:wrap;gap:6px}.sw{width:26px;height:26px;border-radius:50%;padding:0;border:2px solid #000}.sw.on{outline:2px solid var(--brass2);outline-offset:2px}
 .svgw{background:#14110f;border:1px solid var(--line);border-radius:14px;overflow:auto}.svgw.pan #bb{touch-action:auto}.svgw.pan #bb *{cursor:move!important}
-#bb{width:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
-#bb .comp{cursor:grab}#bb .comp.sel>*:first-child{filter:drop-shadow(0 0 4px #ffd27a)}#bb .wire{cursor:pointer}#bb .wire.sel path:last-of-type{stroke-width:5}#bb .wire.lit path:first-child{stroke:#ff8a3d;stroke-width:9}
+#bb,#bb-sc,#sc-svg{width:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+#bb .comp{cursor:grab}#bb .wire{cursor:pointer}
 #bb .pin{cursor:crosshair}#bb .hole{cursor:crosshair}
 .ghost{opacity:.6;pointer-events:none}.ghost.bad{filter:drop-shadow(0 0 3px red) saturate(0)}
 .info{font-size:13px;color:#d6ccbb;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-height:38px;margin-top:8px}
@@ -99,35 +99,91 @@ footer{color:#6b635a;font-size:12px;padding:20px 28px;border-top:1px solid var(-
 .bbtool{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.bbtool select{flex:1;min-width:200px;max-width:380px}.seg button{border:none;border-radius:0;background:transparent;color:var(--mut)}.seg button.on{background:#2c2118;color:var(--brass2)}#bb-pan.on{border-color:var(--ember);color:var(--brass2)}
 @media (max-width:900px){.cbw,.bbw{grid-template-columns:minmax(0,1fr)}.bbmain{order:-1}.cbw>.panel:last-child{order:-1}.mx tbody th{white-space:normal;min-width:110px;font-size:11.5px}.det{grid-template-columns:1fr}#bb-pal{grid-template-columns:repeat(4,1fr)}}
 @media (max-width:600px){.hdr{padding:16px 14px 8px}.brand h1{font-size:20px}.stats{margin-left:0;width:100%}.stat{flex:1;min-width:0;padding:4px 6px}.stat b{font-size:17px}.tabs{padding:10px 14px 0}.tabs button{padding:7px 11px}main{padding:0 14px 40px}input[type=search]{min-width:0;flex:1 1 100%;max-width:none}.stat span{font-size:9px;white-space:nowrap;letter-spacing:.03em}.bbtool select{min-width:0;flex:1 1 100%;max-width:none}.grid{grid-template-columns:1fr 1fr;gap:10px}.card h3{font-size:14px}.uses,.ifs{display:none}.cb{padding:9px}.cact button{font-size:11px;padding:5px 2px}#bb-pal{grid-template-columns:repeat(3,1fr)}dl{grid-template-columns:1fr}.count{margin-left:0;width:100%}}
+
+/* ---- v2: selection, split view, dock, compact chrome ---- */
+#bb.dimming .comp:not(.sel):not(.onnet),#bb.dimming .wire:not(.sel):not(.lit){opacity:.34}
+#bb .comp.sel .selbox{fill:#ffd27a18;stroke:#ffd27a;stroke-width:2.2;filter:drop-shadow(0 0 7px #ffd27a)}
+#bb .comp.onnet .selbox{stroke:#ff8a3d;stroke-width:1.4;fill:none}
+#bb .comp.pressed .btncap{fill:#c07830}
+#bb .wire path.hit{stroke:transparent;stroke-width:14;fill:none}
+#bb .wire.lit path.glow,#bb .wire.sel path.glow{stroke:#ff8a3d;stroke-width:10;fill:none;opacity:.95}
+#bb .wire.sel path.col{stroke-width:5.5;filter:drop-shadow(0 0 4px #ffd27a)}
+#bb .wire.sel circle{stroke:#ffd27a;stroke-width:2;r:4.5}
+#bb .hl rect{pointer-events:none}
+#bb-sc .nlab,#sc-svg .nlab,#bb-sc .sblock,#sc-svg .sblock{cursor:pointer}
+#bb-sc .nlab.lit path,#sc-svg .nlab.lit path,#bb-sc .sblock.lit rect,#sc-svg .sblock.lit rect{stroke:#ffd27a;stroke-width:2.2;filter:drop-shadow(0 0 6px #ffd27a)}
+#bb-sc .nlab.lit text,#sc-svg .nlab.lit text{fill:#ffd27a}
+#sc-table tr{cursor:pointer}#sc-table tr.lit{background:#2c2118;outline:1px solid var(--brass);outline-offset:-1px}
+.bbstage{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.bbstage.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:900px){.bbstage.split{grid-template-columns:minmax(0,1fr)}}
+.split-schem{min-width:0}.split-schem .svgw,#sc-wrap{background:#100d0b;background-image:linear-gradient(#1c1814 1px,transparent 1px),linear-gradient(90deg,#1c1814 1px,transparent 1px);background-size:20px 20px;border-radius:14px;border:1px solid var(--line);overflow:auto}
+#bb-sc,#sc-svg{background:transparent}
+.insp{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid #6b5428;border-radius:10px;padding:8px 12px;margin-top:8px}
+.insp[hidden],.warnban[hidden],.qtyhint[hidden]{display:none!important}
+.insp label{display:flex;gap:8px;align-items:center;color:var(--mut);font-size:13px}
+.insp input{min-width:140px}
+.warnban{background:#3a150e;border:1px solid var(--bad);color:#ffb4a8;border-radius:10px;padding:8px 12px;margin:8px 0}
+.qtyhint{background:#2c2410;border:1px solid #6b5428;color:var(--brass2);border-radius:10px;padding:8px 12px;margin:0 0 12px}
+.bb-dock{display:none;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 8px}
+.sidehead{display:flex;align-items:center;justify-content:space-between;gap:8px}.side-close{display:none}
+#bb-split.on,#bb-split-dock.on,#bb-pan-dock.on{border-color:var(--ember);color:var(--brass2)}
+body.tab-bench .hdr,body.tab-schem .hdr{transition:padding .15s}
+@media (max-width:900px){
+  .bb-dock{display:flex;position:sticky;top:42px;z-index:16;background:linear-gradient(180deg,var(--bg) 70%,#0d0b0acc);padding:6px 0;margin:0 0 8px}
+  .side-close{display:inline-block}
+  .side{display:none}
+  .side.open{display:grid;position:fixed;inset:auto 0 0 0;max-height:70vh;overflow:auto;z-index:30;padding:12px;background:#120e0b;border-top:1px solid #6b5428;border-radius:16px 16px 0 0;box-shadow:0 -12px 40px #000a}
+  .bbw{grid-template-columns:minmax(0,1fr)}
+  body.tab-bench .hdr,body.tab-schem .hdr{padding:8px 14px 4px}
+  body.tab-bench .hdr .brand p,body.tab-schem .hdr .brand p,body.tab-bench .stats,body.tab-schem .stats{display:none}
+  body.tab-bench .sigil,body.tab-schem .sigil{width:32px;height:32px}
+  body.tab-bench .brand h1,body.tab-schem .brand h1{font-size:18px}
+  .tabs{scrollbar-width:thin}
+}
+#bb-undo:disabled,#bb-redo:disabled,#bb-undo-dock:disabled,#bb-redo-dock:disabled{opacity:.45;cursor:default}
+
+#sc-svg .nlab text,#bb-sc .nlab text,#sc-svg .sblock text,#bb-sc .sblock text{pointer-events:auto}
+#sc-svg .nlab,#bb-sc .nlab{pointer-events:auto}
+#bb-svgw{max-height:calc(100vh - 340px)}
+#sc-wrap{max-height:calc(100vh - 280px)}
+@media (max-width:900px){#bb-svgw{max-height:calc(100vh - 280px)}}
 </style></head><body>
-<header class="hdr"><div class="brand"><svg class="sigil" viewBox="0 0 64 64"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3a3"/><stop offset="1" stop-color="#8a6a28"/></linearGradient></defs><circle cx="32" cy="32" r="29" fill="none" stroke="url(#sg)" stroke-width="3"/><g fill="url(#sg)">
+<header class="hdr"><div class="brand"><svg class="sigil" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3a3"/><stop offset="1" stop-color="#8a6a28"/></linearGradient></defs><circle cx="32" cy="32" r="29" fill="none" stroke="url(#sg)" stroke-width="3"/><g fill="url(#sg)">
 <path d="M32 9l3 6h-6zM32 55l3-6h-6zM9 32l6 3v-6zM55 32l-6 3v-6zM16 16l6 2-4 4zM48 48l-6-2 4-4zM48 16l-2 6-4-4zM16 48l2-6 4 4z"/></g><circle cx="32" cy="32" r="14" fill="#1b1410" stroke="url(#sg)" stroke-width="2.5"/><path d="M32 22c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" fill="#ff7a2a"/><path d="M32 29c2 2.5 3 4 3 5.5a3 3 0 0 1-6 0c0-1.5 1-3 3-5.5z" fill="#ffd27a"/></svg>
 <div><h1>The Forge</h1><p>Zach's robotics &amp; electronics parts workshop · Valkor and beyond</p></div>
 <div class="stats"><div class="stat"><b id="st-parts">0</b><span>Parts</span></div><div class="stat"><b id="st-proj">0</b><span>Projects</span></div><div class="stat"><b id="st-build">0</b><span>Buildable now</span></div><div class="stat"><b id="st-kit">0</b><span>Kit: verify</span></div></div></div></header>
-<nav class="tabs"><button data-tab="inventory">Armory<small>Inventory</small></button><button data-tab="combos">Concordance<small>What works with what</small></button><button data-tab="projects">Works<small>Project ideas</small></button><button data-tab="bench">Forge Bench<small>Breadboard</small></button><button data-tab="schem">Blueprints<small>Schematics</small></button><button data-tab="recs">Requisitions<small>Recommendations</small></button></nav>
+<nav class="tabs" role="tablist" aria-label="Forge sections"><button type="button" role="tab" data-tab="inventory" aria-selected="false">Armory<small>Inventory</small></button><button type="button" role="tab" data-tab="combos" aria-selected="false">Concordance<small>What works with what</small></button><button type="button" role="tab" data-tab="projects" aria-selected="false">Works<small>Project ideas</small></button><button type="button" role="tab" data-tab="bench" aria-selected="false">Forge Bench<small>Breadboard</small></button><button type="button" role="tab" data-tab="schem" aria-selected="false">Blueprints<small>Schematics</small></button><button type="button" role="tab" data-tab="recs" aria-selected="false">Requisitions<small>Recommendations</small></button></nav>
 <main>
-<section class="tab" id="tab-inventory"><p class="intro">Everything in the workshop. Click a card for specs, pinouts, gotchas and docs. Edits (qty, status, notes) save in this browser; use <b>Export</b> to back them up or move them to another PC. Cards marked <i>“Typical kit contents: verify”</i> are what an Elegoo Mega kit usually contains; your exact kit variant is unknown.</p>
-<div class="bar"><input type="search" id="inv-q" placeholder="Search parts, specs, uses, notes…"><select id="inv-cat"></select><select id="inv-if"></select><select id="inv-st"></select><button id="inv-add">＋ Add part</button><button id="inv-export">Export JSON</button><button id="inv-import">Import JSON</button><input type="file" id="inv-file" accept="application/json" hidden><span class="count" id="inv-count"></span></div>
+<section class="tab" id="tab-inventory" role="tabpanel"><p class="intro">Everything in the workshop. Click a card for specs, pinouts, gotchas and docs. Edits (qty, status, notes) save in this browser; use <b>Export</b> to back them up or move them to another PC. Cards marked <i>“Typical kit contents: verify”</i> are what an Elegoo Mega kit usually contains; your exact kit variant is unknown.</p>
+<div class="note2 qtyhint" id="inv-qtyhint" hidden></div>
+<div class="bar"><input type="search" id="inv-q" placeholder="Search parts, specs, uses, notes…"><select id="inv-cat" aria-label="Category"></select><select id="inv-if" aria-label="Interface"></select><select id="inv-st" aria-label="Status"></select><button type="button" id="inv-add">＋ Add part</button><button type="button" id="inv-export">Export JSON</button><button type="button" id="inv-import">Import JSON</button><input type="file" id="inv-file" accept="application/json" hidden><span class="count" id="inv-count"></span></div>
 <div class="grid" id="inv-grid"></div></section>
-<section class="tab" id="tab-combos"><p class="intro">Pick any part to see what it connects to and how: bus, voltage concerns, level shifting and power. The matrix shows every module against each of your five controller boards; click a cell for details.</p>
+<section class="tab" id="tab-combos" role="tabpanel"><p class="intro">Pick any part to see what it connects to and how: bus, voltage concerns, level shifting and power. The matrix shows every module against each of your five controller boards; click a cell for details.</p>
 <div class="cbw"><div class="panel"><h3>Compatibility matrix</h3><div class="legend"><span class="lv-good">✔ Direct</span><span class="lv-ok">◆ Via helper part</span><span class="lv-caution">! Caution (power/level)</span><span class="lv-needs">＋ Needs extra part</span><span class="lv-no">✕ Not compatible</span></div><div class="mxw" id="mx"></div></div>
-<div class="panel"><h3>Pick a part</h3><select id="cb-pick" style="width:100%"></select><div id="cb-detail"></div><svg id="cb-graph"></svg></div></div></section>
-<section class="tab" id="tab-projects"><p class="intro">Projects built from parts you already own. Any part you'd need to buy is flagged. Difficulty: ◆ Initiate · ◆◆ Adept · ◆◆◆ Magos. “Buildable now” checks your current quantities from the Armory.</p>
-<div class="bar"><label class="chk"><input type="checkbox" id="pj-can"> What can I build right now?</label><select id="pj-tag"></select><select id="pj-diff"><option value="">Any difficulty</option><option value="1">Initiate</option><option value="2">Adept</option><option value="3">Magos</option></select><span class="count" id="pj-count"></span></div>
+<div class="panel"><h3>Pick a part</h3><select id="cb-pick" style="width:100%" aria-label="Pick a part"></select><div id="cb-detail"></div><svg id="cb-graph"></svg></div></div></section>
+<section class="tab" id="tab-projects" role="tabpanel"><p class="intro">Projects built from parts you already own. Any part you'd need to buy is flagged. Difficulty: ◆ Initiate · ◆◆ Adept · ◆◆◆ Magos. “Buildable now” checks your current quantities from the Armory.</p>
+<div class="bar"><label class="chk"><input type="checkbox" id="pj-can"> What can I build right now?</label><select id="pj-tag" aria-label="Theme"></select><select id="pj-diff" aria-label="Difficulty"><option value="">Any difficulty</option><option value="1">Initiate</option><option value="2">Adept</option><option value="3">Magos</option></select><span class="count" id="pj-count"></span></div>
 <div class="grid" id="pj-grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))"></div></section>
-<section class="tab" id="tab-bench"><div class="bbw"><aside class="side">
-<div class="panel"><h4>Add part</h4><div id="bb-pal"></div></div><div class="panel"><h4>Wire color</h4><div id="bb-colors"></div></div>
-<div class="panel"><h4>Layouts</h4><div style="display:grid;gap:6px"><button id="bb-save" class="pri">Save layout</button><select id="bb-layouts"></select><div style="display:flex;gap:6px"><button id="bb-load" style="flex:1">Load</button><button id="bb-ldel" style="flex:1">Delete</button></div><button id="bb-del">Delete selected</button><button id="bb-clear" class="danger">Clear bench</button></div></div>
-<div class="panel"><h4>How to</h4><ul class="help"><li>Drag from any hole or pin to another to lay a wire.</li><li>Drag a part to move it (it snaps to holes).</li><li>Hover a hole to light up everything it's connected to.</li><li>Select a part or wire, then press Delete (or right-click it). Double-click a wire to remove it.</li><li>Board rails are drawn continuous; check whether yours split in the middle.</li></ul></div></aside>
-<div class="bbmain"><div class="bbtool"><select id="bb-preset"></select><button id="bb-toschem">View as schematic →</button><span class="seg" id="bb-zoom"><button data-z="1" class="on">Fit</button><button data-z="1.6">1.6×</button><button data-z="2.4">2.4×</button></span><button id="bb-pan" title="Toggle between editing and scrolling the board (useful on touch screens)">✋ Pan mode: off</button></div><div class="note2" id="bb-note"></div><div class="svgw"><svg id="bb"></svg></div><div class="info" id="bb-info">Hover a hole to see what it's connected to.</div><div class="note2"><span id="bb-hint"></span> <span id="bb-info2" style="float:right;color:var(--mut)"></span></div></div></div></section>
-<section class="tab" id="tab-schem"><div class="scbar"><select id="sc-preset"></select><span class="seg"><label><input type="radio" name="scv" value="schem" checked>Schematic</label><label><input type="radio" name="scv" value="bb">Breadboard</label></span></div>
-<div class="note2" id="sc-note"></div><svg id="sc-svg"></svg><div class="tblw" id="sc-table"></div>
-<p class="note2" style="color:var(--mut)">Pin numbers are physical header positions: DevKit V1 30-pin counter-clockwise from EN = 1; XIAO D0 = 1 … 5V = 14; module pins follow the silkscreen order. Matching net labels are connected. Power symbols: ▲ supply, ⏚ ground. NC = not connected.</p></section>
-<section class="tab" id="tab-recs"><p class="intro">What to add next and why, ordered by how much it unlocks. Prices aren't listed because they change; the links are example listings, so check the current price.</p><div class="grid" id="rc-grid"></div>
+<section class="tab" id="tab-bench" role="tabpanel"><div class="bbw"><aside class="side" id="bb-side">
+<div class="panel"><div class="sidehead"><h4>Add part</h4><button type="button" class="side-close" id="bb-sideclose" aria-label="Close parts drawer">✕</button></div><div id="bb-pal"></div></div><div class="panel"><h4>Wire color</h4><div id="bb-colors"></div></div>
+<div class="panel"><h4>Layouts</h4><div style="display:grid;gap:6px"><button type="button" id="bb-save" class="pri">Save layout</button><select id="bb-layouts" aria-label="Saved layouts"></select><div style="display:flex;gap:6px"><button type="button" id="bb-load" style="flex:1">Load</button><button type="button" id="bb-ldel" style="flex:1">Delete</button></div><button type="button" id="bb-del">Delete selected</button><button type="button" id="bb-clear" class="danger">Clear bench</button></div></div>
+<div class="panel"><h4>How to</h4><ul class="help"><li>Click a wire or part to select it — the whole net lights up, and the same net highlights in Blueprints.</li><li>Drag from a hole or pin to another to lay a wire. Drag a part to move it (it snaps to holes).</li><li>Hover a hole to preview its net. Click a push-button to press or release it.</li><li>Delete / Backspace, or the Delete button, removes the selection. Ctrl/Cmd+Z undoes, Ctrl/Cmd+Y or Shift+Z redoes.</li><li>Scroll the wheel or pinch to zoom. Two fingers (or Pan mode) scroll the board.</li><li>Board rails are drawn continuous; check whether yours split in the middle.</li></ul></div></aside>
+<div class="bbmain"><div class="bbtool"><select id="bb-preset" aria-label="Bench preset"></select><button type="button" id="bb-toschem">View as schematic →</button><button type="button" id="bb-split" title="Show the breadboard and schematic side by side">Split view: off</button><span class="seg" id="bb-zoom"><button type="button" data-z="1" class="on">Fit</button><button type="button" data-z="1.6">1.6×</button><button type="button" data-z="2.4">2.4×</button></span><button type="button" id="bb-pan" title="Toggle between editing and scrolling the board (useful on touch screens)">✋ Pan mode: off</button><button type="button" id="bb-undo" title="Undo (Ctrl+Z)">Undo</button><button type="button" id="bb-redo" title="Redo (Ctrl+Y)">Redo</button><button type="button" id="bb-png" title="Download a PNG of the board">Export PNG</button></div>
+<div class="bb-dock" id="bb-dock" aria-label="Bench tools"><button type="button" id="bb-addopen" class="pri">＋ Part</button><button type="button" id="bb-del-dock">Delete</button><button type="button" id="bb-undo-dock">Undo</button><button type="button" id="bb-pan-dock">✋ Pan</button><button type="button" id="bb-split-dock">Split</button></div>
+<div class="note2" id="bb-note"></div><div class="note2 warnban" id="bb-warn" hidden></div>
+<div class="bbstage" id="bb-stage"><div class="svgw" id="bb-svgw"><svg id="bb"></svg></div><div class="split-schem" id="bb-splitpane" hidden><div class="svgw scwrap" id="bb-scw"><svg id="bb-sc"></svg></div></div></div>
+<div class="info" id="bb-info">Click or hover a hole, wire or part to see what it's connected to.</div>
+<div class="insp" id="bb-insp" hidden><label>Wire label <input id="bb-label" type="text" maxlength="32" placeholder="e.g. SDA"></label><button type="button" id="bb-press" hidden>Toggle button</button></div>
+<div class="note2"><span id="bb-hint"></span> <span id="bb-info2" style="float:right;color:var(--mut)"></span></div></div></div></section>
+<section class="tab" id="tab-schem" role="tabpanel"><div class="scbar"><select id="sc-preset" aria-label="Schematic preset"></select><span class="seg"><label><input type="radio" name="scv" value="schem" checked>Schematic</label><label><input type="radio" name="scv" value="bb">Breadboard</label></span><span class="seg" id="sc-zoom"><button type="button" data-z="1" class="on">Fit</button><button type="button" data-z="1.6">1.6×</button><button type="button" data-z="2.4">2.4×</button></span><button type="button" id="sc-png">Export PNG</button></div>
+<div class="note2" id="sc-note"></div><div class="svgw scwrap" id="sc-wrap"><svg id="sc-svg"></svg></div><div class="tblw" id="sc-table"></div>
+<p class="note2" style="color:var(--mut)">Pin numbers are physical header positions: DevKit V1 30-pin counter-clockwise from EN = 1; XIAO D0 = 1 … 5V = 14; module pins follow the silkscreen order. Matching net labels are connected. Click a net, block or table row to highlight it here and on the bench. Power symbols: ▲ supply, ⏚ ground. NC = not connected.</p></section>
+<section class="tab" id="tab-recs" role="tabpanel"><p class="intro">What to add next and why, ordered by how much it unlocks. Prices aren't listed because they change; the links are example listings, so check the current price.</p><div class="grid" id="rc-grid"></div>
 <h2 class="sec">Forge best practices</h2><div class="tips" id="rc-tips"></div></section>
 </main>
-<footer>The Forge · built Nov 2026 for Zach · <a href="https://molvalkor.github.io/">MolValkor Forge</a>. Photos are official or reference product photos from Seeed, Waveshare, Elegoo, Espressif/Adafruit listings; “Illustration” tiles are generated. Data lives in your browser (localStorage). Export to back it up.</footer>
-<div id="modal"><div class="mbox"><button class="mx-close" aria-label="Close">✕</button><div class="mc"></div></div></div><div id="toast"></div>
+<footer>The Forge · v2 · built Nov 2026 for Zach. Photos are official or reference product photos from Seeed, Waveshare, Elegoo, Espressif/Adafruit listings, downloaded locally; “Illustration” tiles are generated. Data lives in your browser (localStorage). Export to back it up.</footer>
+<div id="modal"><div class="mbox" role="dialog" aria-modal="true"><button class="mx-close" aria-label="Close">✕</button><div class="mc"></div></div></div><div id="toast"></div>
 <script>/* ===== Forge data: parts, projects, recommendations ===== */
 const AF = id => 'https://www.adafruit.com/product/' + id;
 // imgKind: exact = official photo of this exact product; ref = reference photo of the same part type (yours may look different); illus = generated illustration
@@ -415,7 +471,7 @@ const FP={
   body:{custom:(g,x,y)=>{el('rect',{x:x-12,y:y-110,width:108,height:102,rx:6,fill:'#2b1d5c',stroke:'#160c38'},g);el('rect',{x:x+8,y:y-104,width:68,height:20,rx:3,fill:'#2e8b57'},g);el('rect',{x:x+28,y:y-62,width:28,height:22,fill:'#111'},g);txt(g,x+42,y-24,'MAX98357',9,'#d8ccff');}}},
  led:{label:'LED',pins:[{n:'A+',dc:0,dr:0},{n:'K−',dc:1,dr:0}],body:{custom:(g,x,y,c)=>{el('path',{d:`M${x-2} ${y} L${x-2} ${y-16} M${x+P+2} ${y} L${x+P+2} ${y-14}`,stroke:'#aaa','stroke-width':1.5},g);el('circle',{cx:x+P/2,cy:y-22,r:9,fill:c.color||'#e33',stroke:'#0006'},g);}}},
  resistor:{label:'Resistor',pins:[{n:'1',dc:0,dr:0},{n:'2',dc:4,dr:0}],body:{custom:(g,x,y,c)=>{el('line',{x1:x,y1:y,x2:x+4*P,y2:y,stroke:'#bbb','stroke-width':1.6},g);el('rect',{x:x+P*0.9,y:y-6,width:P*2.2,height:12,rx:5,fill:'#d9c29a',stroke:'#8a7550'},g);['#a52a2a','#000','#8b4513'].forEach((col,i)=>el('rect',{x:x+P*1.2+i*8,y:y-6,width:3,height:12,fill:col},g));txt(g,x+2*P,y-10,c.value||'220Ω',8,'#e8dcc0');}}},
- button:{label:'Push button',pins:[{n:'1a',dc:0,dr:0},{n:'2a',dc:2,dr:0},{n:'1b',dc:0,dr:1},{n:'2b',dc:2,dr:1}],internal:[[0,2],[1,3]],body:{custom:(g,x,y)=>{el('rect',{x:x-5,y:y-4,width:2*P+10,height:3*P+8,rx:3,fill:'#2a2a2a',stroke:'#000'},g);el('circle',{cx:x+P,cy:y+1.5*P,r:9,fill:'#6b4b2a',stroke:'#000'},g);}}},
+ button:{label:'Push button',pins:[{n:'1a',dc:0,dr:0},{n:'2a',dc:2,dr:0},{n:'1b',dc:0,dr:1},{n:'2b',dc:2,dr:1}],internal:[[0,2],[1,3]],body:{custom:(g,x,y,c)=>{el('rect',{x:x-5,y:y-4,width:2*P+10,height:3*P+8,rx:3,fill:'#2a2a2a',stroke:'#000'},g);el('circle',{cx:x+P,cy:y+1.5*P+(c&&c.pressed?2:0),r:c&&c.pressed?7:9,fill:c&&c.pressed?'#c07830':'#6b4b2a',stroke:'#000',class:'btncap'},g);if(c&&c.pressed)txt(g,x+P,y-10,'ON',8,'#ffd27a');}}},
  pot:{label:'Potentiometer',pins:['1','W','3'].map((n,i)=>({n,dc:i,dr:0})),body:{custom:(g,x,y)=>{el('rect',{x:x-6,y:y-30,width:2*P+12,height:24,rx:4,fill:'#1e4fa8'},g);el('circle',{cx:x+P,cy:y-18,r:9,fill:'#ddd',stroke:'#555'},g);}}},
  buzzer:{label:'Buzzer',pins:[{n:'+',dc:0,dr:0},{n:'−',dc:2,dr:0}],body:{custom:(g,x,y)=>{el('circle',{cx:x+P,cy:y-14,r:16,fill:'#111',stroke:'#444'},g);el('circle',{cx:x+P,cy:y-14,r:3,fill:'#333'},g);}}},
  hcsr04:{label:'HC-SR04',pins:['VCC','TRIG','ECHO','GND'].map((n,i)=>({n,dc:i,dr:0})),body:{custom:(g,x,y)=>{el('rect',{x:x-66,y:y-70,width:174,height:62,rx:4,fill:'#1563b8'},g);[x-28,x+70].forEach(cx=>{el('circle',{cx,cy:y-40,r:22,fill:'#c9c9c9',stroke:'#777'},g);el('circle',{cx,cy:y-40,r:14,fill:'#3a3a3a'},g);});}}},
@@ -439,54 +495,68 @@ function pinPos(c,i){const f=FP[c.type],p=f.pins[i];
  const col=c.col+p.dc,row=c.row+p.dr; return {x:hx(col),y:hy(row),hole:holeId(col,row),col,row};}
 function nodePos(state,node){if(node.startsWith('h:')){const [,c,r]=node.split(':').map(Number);return{x:hx(c),y:hy(r)};}
  const [,cid,pi]=node.split(':');const c=state.comps.find(k=>k.id===cid);if(!c)return null;return pinPos(c,+pi);}
-function validPlacement(state,type,col,row,ignoreId){const f=FP[type];for(const p of f.pins){if(p.ox!==undefined)continue;if(!holeExists(col+p.dc,row+p.dr))return false;}return true;}
+function validPlacement(state,type,col,row,ignoreId){const f=FP[type];for(const p of f.pins){if(p.ox!==undefined)continue;if(!holeExists(col+p.dc,row+p.dr))return false;}
+ for(const o of state.comps||[]){if(o.id===ignoreId)continue;const fo=FP[o.type];if(!fo||fo.off)continue;
+  for(const p of f.pins){if(p.ox!==undefined)continue;const c1=col+p.dc,r1=row+p.dr;
+   for(const q of fo.pins){if(q.ox!==undefined)continue;if(o.col+q.dc===c1&&o.row+q.dr===r1)return false;}}}
+ return true;}
 
 /* ---- nets (union-find) ---- */
 function computeNets(state){const par={};const find=x=>{if(par[x]===undefined)par[x]=x;while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;};const uni=(a,b)=>{a=find(a);b=find(b);if(a!==b)par[a]=b;};
  const holeKey=h=>{const [,c,r]=h.split(':').map(Number);return stripOf(c,r);};
  const nodeKey=n=>n.startsWith('h:')?holeKey(n):n;
- for(const c of state.comps){const f=FP[c.type];f.pins.forEach((p,i)=>{const pp=pinPos(c,i);const k=`p:${c.id}:${i}`;find(k);if(pp.hole)uni(k,holeKey(pp.hole));});(f.internal||[]).forEach(([a,b])=>{ if(c.type==='button')return; uni(`p:${c.id}:${a}`,`p:${c.id}:${b}`);});}
+ for(const c of state.comps){const f=FP[c.type];f.pins.forEach((p,i)=>{const pp=pinPos(c,i);const k=`p:${c.id}:${i}`;find(k);if(pp.hole)uni(k,holeKey(pp.hole));});(f.internal||[]).forEach(([a,b])=>{ if(c.type==='button')return; uni(`p:${c.id}:${a}`,`p:${c.id}:${b}`);});
+  if(c.type==='button'&&c.pressed){uni(`p:${c.id}:0`,`p:${c.id}:1`);uni(`p:${c.id}:2`,`p:${c.id}:3`);}}
  for(const w of state.wires)uni(nodeKey(w.a),nodeKey(w.b));
  return {find,nodeKey,root:n=>find(nodeKey(n))};}
 function netMembers(state,nets,root){const pins=[];for(const c of state.comps){FP[c.type].pins.forEach((p,i)=>{if(nets.find(`p:${c.id}:${i}`)===root)pins.push(`${c.tag||FP[c.type].label}.${p.n}`);});}return pins;}
 
 /* ---- render ---- */
+function wireCurve(a,b){const mx=(a.x+b.x)/2,my=(a.y+b.y)/2-Math.min(60,Math.abs(a.x-b.x)*0.15+12);return{mx,my,d:`M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`};}
+function distToWire(x,y,a,b){const {mx,my}=wireCurve(a,b);let bd=1e9;for(let t=0;t<=1;t+=0.04){const u=1-t,px=u*u*a.x+2*u*t*mx+t*t*b.x,py=u*u*a.y+2*u*t*my+t*t*b.y;const d=Math.hypot(px-x,py-y);if(d<bd)bd=d;}return bd;}
 function renderBench(svg,state,opts={}){
  svg.innerHTML='';svg.setAttribute('viewBox',`0 0 ${VBW} ${VBH}`);
  const defs=el('defs',{},svg);const gr=el('linearGradient',{id:'bbg',x1:0,y1:0,x2:0,y2:1},defs);el('stop',{offset:0,'stop-color':'#f4f1ea'},gr);el('stop',{offset:1,'stop-color':'#e2ddd2'},gr);
  el('rect',{x:0,y:0,width:VBW,height:VBH,fill:'#14110f'},svg);
- // grid dots for workspace
  const pat=el('pattern',{id:'dots',width:20,height:20,patternUnits:'userSpaceOnUse'},defs);el('circle',{cx:2,cy:2,r:1,fill:'#2a2522'},pat);el('rect',{x:0,y:0,width:VBW,height:VBH,fill:'url(#dots)'},svg);
  const gB=el('g',{class:'board'},svg);
  el('rect',{x:BX,y:BY,width:BOARD_W,height:BOARD_H,rx:10,fill:'url(#bbg)',stroke:'#b9b2a3'},gB);
  el('rect',{x:BX+20,y:BY+ROWY[6]+12,width:BOARD_W-40,height:18,rx:3,fill:'#d4cec2'},gB);
- // rail stripes
  [[0,'#2b62c9'],[1,'#d23a2a'],[12,'#d23a2a'],[13,'#2b62c9']].forEach(([r,col])=>{const yy=BY+ROWY[r]+(r===0||r===12?-9:9);el('line',{x1:BX+24,y1:yy,x2:BX+BOARD_W-24,y2:yy,stroke:col,'stroke-width':1.5},gB);txt(gB,BX+12,BY+ROWY[r]+4,ROWNAMES[r].slice(-1),11,col);});
  for(let r=2;r<=11;r++){txt(gB,BX+14,BY+ROWY[r]+3.5,ROWNAMES[r],8,'#8b8478');txt(gB,BX+BOARD_W-14,BY+ROWY[r]+3.5,ROWNAMES[r],8,'#8b8478');}
  for(let c=1;c<=COLS;c++){if(c===1||c%5===0){txt(gB,hx(c),BY+ROWY[2]-8,String(c),7,'#8b8478');txt(gB,hx(c),BY+ROWY[11]+15,String(c),7,'#8b8478');}}
  const gH=el('g',{class:'holes'},svg);
  for(let r=0;r<=13;r++)for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;el('rect',{x:hx(c)-3,y:hy(r)-3,width:6,height:6,rx:1,fill:'#3b3631',class:'hole','data-node':holeId(c,r)},gH);}
  const gHL=el('g',{class:'hl','pointer-events':'none'},svg);
+ const nets=computeNets(state);
+ const netRoot=opts.netRoot||null;
+ if(netRoot){for(let r=0;r<=13;r++)for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;if(nets.find(stripOf(c,r))===netRoot)el('rect',{x:hx(c)-5,y:hy(r)-5,width:10,height:10,rx:2,fill:'#ff8a3d55',stroke:'#ff8a3d'},gHL);}}
+ if(netRoot||opts.sel)svg.classList.add('dimming');else svg.classList.remove('dimming');
+ const onNetComp=id=>{if(!netRoot)return false;return FP[state.comps.find(k=>k.id===id).type].pins.some((p,i)=>nets.find(`p:${id}:${i}`)===netRoot);};
  const gC=el('g',{class:'comps'},svg);
- for(const c of state.comps){const f=FP[c.type];const g=el('g',{class:'comp'+(opts.sel===c.id?' sel':''),'data-comp':c.id},gC);
+ for(const c of state.comps){const f=FP[c.type];const onn=onNetComp(c.id);const g=el('g',{class:'comp'+(opts.sel===c.id?' sel':'')+(onn?' onnet':'')+(c.pressed?' pressed':''),'data-comp':c.id},gC);
   const x=f.off?c.x:hx(c.col),y=f.off?c.y:hy(c.row);
   if(f.body.custom)f.body.custom(g,x,y,c);else{const b=f.body;const hh=hy(c.row+b.dr1)-hy(c.row);el('rect',{x:x+b.x0*P,y:y+b.y0*P,width:(b.x1-b.x0)*P,height:hh-2*b.y0*P,rx:5,fill:b.fill,stroke:'#000',class:'body'},g);f.draw&&f.draw(g,c,x,y,hh);}
-  f.pins.forEach((p,i)=>{const pp=pinPos(c,i);el('rect',{x:pp.x-3.5,y:pp.y-3.5,width:7,height:7,rx:1.5,fill:'#c9b26a',stroke:'#5a4a1a',class:'pin','data-node':`p:${c.id}:${i}`},g);
+  f.pins.forEach((p,i)=>{const pp=pinPos(c,i);const pinLit=netRoot&&nets.find(`p:${c.id}:${i}`)===netRoot;const pr=el('rect',{x:pp.x-3.5,y:pp.y-3.5,width:7,height:7,rx:1.5,fill:pinLit?'#ffd27a':'#c9b26a',stroke:pinLit?'#ff8a3d':'#5a4a1a',class:'pin'+(pinLit?' lit':''),'data-node':`p:${c.id}:${i}`},g);
+   const t=el('title',{},pr);t.textContent=`${c.tag||f.label}.${p.n}`;
    if(f.board){const above=p.dr===0;txt(g,pp.x,pp.y+(above?12:-7),p.n,6.5,'#e8e2d0');}
    else txt(g,pp.x,pp.y+(f.off?14:-7)+(f.off&&i%2?8:0),p.n.replace(/ \(.*\)/,''),7,'#f1e7c8');});
   if(c.tag&&!f.board){const span=f.off?Math.max(...f.pins.map(p=>p.ox)):Math.max(...f.pins.map(p=>(p.dc||0)*P));txt(g,x+span/2,f.off?y+34:y+(c.type==='cap'?40:20),c.tag,8.5,'#ffcf73');}
+  if(opts.sel===c.id){try{const b=g.getBBox();el('rect',{x:b.x-6,y:b.y-6,width:b.width+12,height:b.height+12,rx:8,class:'selbox','pointer-events':'none'},g);}catch(e){}}
  }
  const gW=el('g',{class:'wires'},svg);
  for(const w of state.wires){const a=nodePos(state,w.a),b=nodePos(state,w.b);if(!a||!b)continue;
-  const mx=(a.x+b.x)/2,my=(a.y+b.y)/2-Math.min(60,Math.abs(a.x-b.x)*0.15+12);
-  const d=`M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`;
-  const g=el('g',{class:'wire'+(opts.sel===w.id?' sel':''),'data-wire':w.id},gW);
-  el('path',{d,stroke:'#000a','stroke-width':6,fill:'none','stroke-linecap':'round'},g);
-  el('path',{d,stroke:w.color,'stroke-width':3.6,fill:'none','stroke-linecap':'round'},g);
+  const {mx,my,d}=wireCurve(a,b);
+  const lit=!!(netRoot&&nets.root(w.a)===netRoot);
+  const g=el('g',{class:'wire'+(opts.sel===w.id?' sel':'')+(lit?' lit':''),'data-wire':w.id,'data-net':(opts.netNames&&opts.netNames[nets.root(w.a)])||''},gW);
+  el('path',{d,stroke:'transparent','stroke-width':14,fill:'none','stroke-linecap':'round',class:'hit'},g);
+  el('path',{d,stroke:'#000a','stroke-width':6,fill:'none','stroke-linecap':'round',class:'base'},g);
+  el('path',{d,stroke:lit||opts.sel===w.id?'#ff8a3d':'#0000','stroke-width':10,fill:'none','stroke-linecap':'round',class:'glow'},g);
+  el('path',{d,stroke:w.color,'stroke-width':3.6,fill:'none','stroke-linecap':'round',class:'col'},g);
   el('circle',{cx:a.x,cy:a.y,r:3.2,fill:w.color,stroke:'#000'},g);el('circle',{cx:b.x,cy:b.y,r:3.2,fill:w.color,stroke:'#000'},g);
   if(w.label){txt(g,mx,my+6,w.label,8,'#fff');}}
  el('g',{class:'overlay','pointer-events':'none'},svg);
- return {gHL};
+ return {gHL,nets};
 }
 function highlightNet(svg,state,node){const g=svg.querySelector('g.hl');if(!g)return null;g.innerHTML='';if(!node)return null;
  const nets=computeNets(state);const root=nets.root(node);
@@ -538,6 +608,40 @@ function presetState(key){uid=1;const C=[],Wr=[];const D0=8; // DevKit anchor co
   return {comps:C,wires:Wr};}
  return {comps:[],wires:[]};}
 
+function nameNets(state){const nets=computeNets(state);const buckets={};
+ const bump=(key,info)=>{const r=nets.find(key);if(!buckets[r])buckets[r]={pins:[],wires:[]};const b=buckets[r];if(info.pin)b.pins.push(info.pin);if(info.wire)b.wires.push(info.wire);};
+ for(const c of state.comps){FP[c.type].pins.forEach((p,i)=>bump(`p:${c.id}:${i}`,{pin:{comp:c,type:c.type,name:p.n,id:c.id,i}}));}
+ for(const w of state.wires){bump(nets.nodeKey(w.a),{wire:w});bump(nets.nodeKey(w.b),{wire:w});}
+ const used=new Set(), rootToName={};
+ const uniq=n=>{let b=n,i=2;while(used.has(b)){b=n+'_'+(i++); }used.add(b);return b;};
+ const classify=pn=>{
+  const u=pn.map(n=>String(n).toUpperCase());
+  if(u.some(n=>/(^GND$)|BROWN|\bGND\b/.test(n)||n==='−'||n==='K−'))return 'GND';
+  if(u.some(n=>/3V3|3\.3/.test(n)))return '3V3';
+  if(u.some(n=>/\+?5V|VIN|^V\+$|VBUS|\(RED\)/.test(n)))return '+5V';
+  return null;};
+ for(const [r,b] of Object.entries(buckets)){
+  const lab=(b.wires.find(w=>w.label)||{}).label; if(lab){rootToName[r]=uniq(lab.replace(/\s+/g,'_'));continue;}
+  const pn=b.pins.map(p=>p.name); const pw=classify(pn); if(pw){rootToName[r]=uniq(pw);continue;}
+  const norm=n=>String(n).toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const sig=b.pins.find(p=>{const n=norm(p.name);return /^(SDA|SCL|MOSI|MISO|SCK|CLK|CS|DC|RST|BL|DIN|DOUT|BCLK|LRC|WS|TRIG|ECHO|SIG|PAN|TILT)$/.test(n);});
+  if(sig){const n=norm(sig.name);const pref=/st7789|ssd1306/.test(sig.type)?'LCD_':(/max98357/.test(sig.type)?'I2S_':(/sg90/.test(sig.type)?'SERVO_':''));rootToName[r]=uniq(pref+n);continue;}
+  rootToName[r]=uniq(norm(pn[0]||'NET')||'NET');
+ }
+ const nameOf=node=>rootToName[nets.root(node)]||'';
+ const nameToRoot={};for(const [r,n] of Object.entries(rootToName))nameToRoot[n]=r;
+ return {nets,buckets,rootToName,nameToRoot,nameOf};
+}
+function netPowerFlags(pins){const u=pins.map(p=>String(p.name).toUpperCase()).join(' | ');
+ return {gnd:/(^|\|| )GND\b|BROWN|K−/.test(u), v5:/\b5V\b|\bVIN\b|\+5|VBUS/.test(u), v33:/3V3|3\.3/.test(u)};}
+function shortWarnings(state){const {nets,buckets}=nameNets(state);const warns=[];
+ for(const [r,b] of Object.entries(buckets)){const f=netPowerFlags(b.pins);const mem=b.pins.map(p=>`${p.comp.tag||FP[p.type].label}.${p.name}`);
+  if(f.gnd&&f.v5)warns.push('Short: +5V is tied to GND ('+mem.slice(0,6).join(', ')+')');
+  else if(f.gnd&&f.v33)warns.push('Short: 3V3 is tied to GND ('+mem.slice(0,6).join(', ')+')');
+  else if(f.v5&&f.v33)warns.push('Caution: +5V and 3V3 share a net ('+mem.slice(0,6).join(', ')+')');}
+ return warns;}
+function netsEquivalent(a,b){if(!a||!b)return false;const n=s=>String(s).toUpperCase().replace(/[^A-Z0-9]/g,'');const A=n(a),B=n(b);if(!A||!B)return false;if(A===B)return true;if(A.endsWith(B)||B.endsWith(A))return true;return false;}
+
 /* ===== Blueprints: schematic renderer + preset metadata ===== */
 const DKNUM=n=>{const t=DK_TOP.indexOf(n);if(t>=0)return 30-t;return DK_BOT.indexOf(n)+1;};
 const XINUM=n=>({D0:1,D1:2,D2:3,D3:4,D4:5,D5:6,D6:7,D7:8,D8:9,D9:10,D10:11,'3V3':12,GND:13,'5V':14})[n];
@@ -572,34 +676,74 @@ const PRESETS={
   table:[['XIAO 5V (14)','+ rail','+5V','red','USB VBUS from the 45 W charger'],['XIAO GND (13)','− rail','GND','black','common ground'],['D0 / GPIO1 (1)','Pan servo SIG','SERVO_PAN','orange',''],['D1 / GPIO2 (2)','Tilt servo SIG','SERVO_TILT','yellow',''],['D2 / GPIO3 (3)','Amp BCLK','I2S_BCLK','yellow',''],['D3 / GPIO4 (4)','Amp LRC','I2S_LRC','green',''],['D6 / GPIO43 (7)','Amp DIN','I2S_DIN','blue','TX pin; USB-CDC serial still works'],['D4 / GPIO5 (5)','OLED SDA','I2C_SDA','purple','0x3C'],['D5 / GPIO6 (6)','OLED SCL','I2C_SCL','orange',''],['XIAO 3V3 (12)','OLED VCC','3V3','pink',''],['+ rail','Amp VIN, servo red ×2, C1 +','+5V','red','1000 µF close to servos'],['D7–D10','ST7789 CS/SCK/DC/MOSI','—','—','Reserved for the face screen (see WIRING.md)']]}
 };
 const PWR_NETS=['3V3','+5V','+5V_SERVO'];
-function renderSchematic(svg,key){const def=PRESETS[key].sch;svg.innerHTML='';
+
+function renderSchematic(svg,keyOrDef,opts={}){
+ const def0=typeof keyOrDef==='string'? (keyOrDef==='custom'?null:PRESETS[keyOrDef]) : keyOrDef;
+ if(!def0||!def0.sch){svg.innerHTML='';return;}
+ const def=def0.sch, litNet=opts.litNet||'', litComp=opts.litComp||'';
+ svg.innerHTML='';
  const VW=1040;let maxY=0;
  const root=el('g',{},svg);
  const pinGap=24, stub=34;
  const drawLabel=(g,x,y,net,dir)=>{ // dir: -1 left, 1 right
-  if(net==='NC'){el('path',{d:`M${x-5} ${y-5} L${x+5} ${y+5} M${x+5} ${y-5} L${x-5} ${y+5}`,stroke:'#e06c5a','stroke-width':2},g);txt(g,x+dir*16,y+4,'NC',9,'#e06c5a');return;}
-  if(net==='GND'){const a=x+dir*6,b2=x+dir*10,c2=x+dir*14;el('path',{d:`M${x} ${y} H${a} M${a} ${y-9} V${y+9} M${b2} ${y-6} V${y+6} M${c2} ${y-3} V${y+3}`,stroke:'#9fd3ff','stroke-width':1.6,fill:'none'},g);txt(g,x+dir*20,y+3.5,'GND',8.5,'#9fd3ff',dir>0?'start':'end');return;}
-  if(PWR_NETS.includes(net)){const a=x+dir*8;el('path',{d:`M${x} ${y} H${a} M${a} ${y-8} V${y+8} M${a} ${y-8} L${a+dir*6} ${y} L${a} ${y+8}`,stroke:'#ff7a59','stroke-width':1.8,fill:'#ff7a5944'},g);txt(g,x+dir*18,y+3.5,net,9,'#ff9b7a',dir>0?'start':'end');return;}
-  const w=net.length*6.4+14;const x0=dir>0?x:x-w;
+  const wrap=el('g',{class:'nlab'+(litNet&&netsEquivalent(litNet,net)?' lit':''),'data-net':net},g);
+  el('rect',{x:dir>0?x-4:x-70,y:y-12,width:74,height:24,fill:'transparent'},wrap);
+  if(net==='NC'){el('path',{d:`M${x-5} ${y-5} L${x+5} ${y+5} M${x+5} ${y-5} L${x-5} ${y+5}`,stroke:'#e06c5a','stroke-width':2},wrap);txt(wrap,x+dir*16,y+4,'NC',9,'#e06c5a');return;}
+  if(net==='GND'){const a=x+dir*6,b2=x+dir*10,c2=x+dir*14;el('path',{d:`M${x} ${y} H${a} M${a} ${y-9} V${y+9} M${b2} ${y-6} V${y+6} M${c2} ${y-3} V${y+3}`,stroke:'#9fd3ff','stroke-width':1.6,fill:'none'},wrap);txt(wrap,x+dir*20,y+3.5,'GND',8.5,'#9fd3ff',dir>0?'start':'end');return;}
+  if(PWR_NETS.includes(net)||net==='+5V'||net==='3V3'){const a=x+dir*8;el('path',{d:`M${x} ${y} H${a} M${a} ${y-8} V${y+8} M${a} ${y-8} L${a+dir*6} ${y} L${a} ${y+8}`,stroke:'#ff7a59','stroke-width':1.8,fill:'#ff7a5944'},wrap);txt(wrap,x+dir*18,y+3.5,net,9,'#ff9b7a',dir>0?'start':'end');return;}
+  const w=Math.max(40,net.length*6.4+14);const x0=dir>0?x:x-w;
   const d=dir>0?`M${x0} ${y} L${x0+7} ${y-8} H${x0+w} V${y+8} H${x0+7} Z`:`M${x0+w} ${y} L${x0+w-7} ${y-8} H${x0} V${y+8} H${x0+w-7} Z`;
-  el('path',{d,fill:'#2a2216',stroke:'#c9a24a','stroke-width':1.2},g);txt(g,x0+w/2+(dir>0?3:-3),y+3.5,net,9,'#ffd27a');};
- for(const b of def.blocks){const L=b.L||[],R=b.R||[];const n=Math.max(L.length,R.length);const h=n*pinGap+28;
-  const g=el('g',{class:'sblock'},root);
-  el('rect',{x:b.x,y:b.y,width:b.w,height:h,fill:'#1b1712',stroke:'#e8dcc0','stroke-width':1.6},g);
+  el('path',{d,fill:'#2a2216',stroke:'#c9a24a','stroke-width':1.2},wrap);txt(wrap,x0+w/2+(dir>0?3:-3),y+3.5,net,9,'#ffd27a');};
+ for(const b of def.blocks){const L=b.L||[],R=b.R||[];const n=Math.max(L.length,R.length,1);const h=n*pinGap+28;
+  const lit=!!(litComp&&(b.compId===litComp||b.type===litComp||(b.ref&&litComp===b.ref)));
+  const g=el('g',{class:'sblock'+(lit?' lit':''),'data-ref':b.ref||'','data-comp':b.compId||'','data-type':b.type||''},root);
+  el('rect',{x:b.x,y:b.y,width:b.w,height:h,fill:'#1b1712',stroke:lit?'#ffd27a':'#e8dcc0','stroke-width':lit?2.2:1.6},g);
   txt(g,b.x+b.w/2,b.y-18,b.ref,11,'#c9a24a');txt(g,b.x+b.w/2,b.y-5,b.name,10,'#e8dcc0');
   L.forEach(([num,name,net],i)=>{const y=b.y+24+i*pinGap;el('line',{x1:b.x-stub,y1:y,x2:b.x,y2:y,stroke:'#e8dcc0','stroke-width':1.4},g);txt(g,b.x-stub/2,y-4,String(num),8,'#8fd18f');txt(g,b.x+6,y+3.5,name,9,'#e8dcc0','start');drawLabel(g,b.x-stub,y,net,-1);});
   R.forEach(([num,name,net],i)=>{const y=b.y+24+i*pinGap;el('line',{x1:b.x+b.w,y1:y,x2:b.x+b.w+stub,y2:y,stroke:'#e8dcc0','stroke-width':1.4},g);txt(g,b.x+b.w+stub/2,y-4,String(num),8,'#8fd18f');txt(g,b.x+b.w-6,y+3.5,name,9,'#e8dcc0','end');drawLabel(g,b.x+b.w+stub,y,net,1);});
   maxY=Math.max(maxY,b.y+h+40);}
- for(const p of def.parts||[]){const g=el('g',{},root);const {x,y}=p;
+ for(const p of def.parts||[]){const g=el('g',{class:'spart'+(litComp&&p.compId===litComp?' lit':''),'data-comp':p.compId||'','data-net-a':p.a||'','data-net-b':p.b||''},root);const {x,y}=p;
   if(p.type==='cap'){el('path',{d:`M${x} ${y-40} V${y-6} M${x-16} ${y-6} H${x+16} M${x} ${y+6} V${y+40}`,stroke:'#e8dcc0','stroke-width':1.6,fill:'none'},g);el('path',{d:`M${x-16} ${y+10} Q${x} ${y+2} ${x+16} ${y+10}`,stroke:'#e8dcc0','stroke-width':1.6,fill:'none'},g);txt(g,x-12,y-12,'+',11,'#ff9b7a');txt(g,x+26,y-2,p.ref,10,'#c9a24a','start');txt(g,x+26,y+12,p.val,9,'#e8dcc0','start');
    drawVert(g,x,y-40,p.a,-1);drawVert(g,x,y+40,p.b,1);}
   if(p.type==='spk'){el('rect',{x:x-8,y:y-14,width:12,height:28,fill:'none',stroke:'#e8dcc0','stroke-width':1.6},g);el('path',{d:`M${x+4} ${y-14} L${x+20} ${y-28} V${y+28} L${x+4} ${y+14}`,fill:'none',stroke:'#e8dcc0','stroke-width':1.6},g);
    el('path',{d:`M${x-8} ${y-8} H${x-30} M${x-8} ${y+8} H${x-30}`,stroke:'#e8dcc0','stroke-width':1.4},g);txt(g,x-20,y-11,'1',8,'#8fd18f');txt(g,x-20,y+20,'2',8,'#8fd18f');drawLabel(g,x-30,y-8,p.a,-1);drawLabel(g,x-30,y+8,p.b,-1);txt(g,x+30,y-2,p.ref,10,'#c9a24a','start');txt(g,x+30,y+12,p.val,9,'#e8dcc0','start');}
   maxY=Math.max(maxY,y+90);}
- function drawVert(g,x,y,net,dir){if(net==='GND'){el('path',{d:`M${x-9} ${y} H${x+9} M${x-6} ${y+4} H${x+6} M${x-3} ${y+8} H${x+3}`,stroke:'#9fd3ff','stroke-width':1.6},g);txt(g,x,y+20,'GND',8,'#9fd3ff');}else{el('path',{d:`M${x-8} ${y} H${x+8}`,stroke:'#ff7a59','stroke-width':1.8},g);txt(g,x,y-6,net,9,'#ff9b7a');}}
- // title block
- const tb=el('g',{},root);el('rect',{x:VW-270,y:maxY,width:250,height:46,fill:'none',stroke:'#5a4a2a'},tb);txt(tb,VW-260,maxY+18,PRESETS[key].name.slice(0,40),9,'#e8dcc0','start');txt(tb,VW-260,maxY+34,(PRESETS[key].pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS')+' · Forge Blueprints',8,PRESETS[key].pinsKind==='actual'?'#8fd18f':'#ffcf73','start');
- svg.setAttribute('viewBox',`0 0 ${VW} ${maxY+60}`);}
+ function drawVert(g,x,y,net,dir){const wrap=el('g',{class:'nlab'+(litNet&&netsEquivalent(litNet,net)?' lit':''),'data-net':net||''},g);if(net==='GND'){el('path',{d:`M${x-9} ${y} H${x+9} M${x-6} ${y+4} H${x+6} M${x-3} ${y+8} H${x+3}`,stroke:'#9fd3ff','stroke-width':1.6},wrap);txt(wrap,x,y+20,'GND',8,'#9fd3ff');}else{el('path',{d:`M${x-8} ${y} H${x+8}`,stroke:'#ff7a59','stroke-width':1.8},wrap);txt(wrap,x,y+(dir>0?20:-6),net,9,'#ff9b7a');}}
+ const tb=el('g',{},root);el('rect',{x:VW-270,y:maxY,width:250,height:46,fill:'none',stroke:'#5a4a2a'},tb);txt(tb,VW-260,maxY+18,(def0.name||'Schematic').slice(0,40),9,'#e8dcc0','start');txt(tb,VW-260,maxY+34,(def0.pinsKind==='actual'?'YOUR ACTUAL PINS':def0.pinsKind==='custom'?'FROM YOUR BENCH':'EXAMPLE PINS')+' · Forge Blueprints',8,def0.pinsKind==='actual'?'#8fd18f':'#ffcf73','start');
+ svg.setAttribute('viewBox',`0 0 ${VW} ${maxY+60}`);
+}
+
+function schematicFromBench(state){
+ const named=nameNets(state);
+ const refOf=(c,i)=>{const base={devkit:'U',xiao:'U',ssd1306:'DS',st7789:'DS',max98357:'U',sg90:'M',hcsr04:'U',dht11:'U',pot:'R',resistor:'R',led:'D',button:'S',buzzer:'LS',speaker:'LS',cap:'C',supply5:'J'}[c.type]||'U';return base+(i+1);};
+ const board=[], mods=[], partsC=[];
+ state.comps.forEach((c,i)=>{c._ref=c.tag||refOf(c,i); const f=FP[c.type];
+  if(c.type==='cap'||c.type==='speaker')partsC.push(c);
+  else if(f.board)board.push(c);
+  else mods.push(c);});
+ const blocks=[], schParts=[], table=[];
+ const pinRow=(c,p,i)=>{const net=named.nameOf(`p:${c.id}:${i}`)||'NC';return [i+1,p.n,net];};
+ let yL=50,yR=30,yP=40;
+ board.forEach(c=>{const f=FP[c.type];const pins=f.pins.map((p,i)=>pinRow(c,p,i));const h=Math.max(pins.length,1)*24+28;
+  blocks.push({ref:c._ref,name:f.label,x:110,y:yL,w:160,R:pins,compId:c.id,type:c.type}); yL+=h+50;});
+ mods.forEach(c=>{const f=FP[c.type];const pins=f.pins.map((p,i)=>pinRow(c,p,i));const h=Math.max(pins.length,1)*24+28;
+  blocks.push({ref:c._ref,name:f.label,x:560,y:yR,w:140,L:pins,compId:c.id,type:c.type}); yR+=h+50;});
+ partsC.forEach(c=>{const f=FP[c.type];const nets=f.pins.map((p,i)=>named.nameOf(`p:${c.id}:${i}`)||'NC');
+  if(c.type==='cap'){schParts.push({type:'cap',ref:c._ref,val:c.tag||'1000µF',x:880,y:yP,a:nets[0]||'+5V',b:nets[1]||'GND',compId:c.id}); yP+=140;}
+  else {schParts.push({type:'spk',ref:c._ref,val:c.tag||'4Ω 3W',x:880,y:yP,a:nets[0]||'SPK+',b:nets[1]||'SPK−',compId:c.id}); yP+=140;}});
+ // table from nets with 2+ pins
+ const WCOLOR={red:'#d22',black:'#222',blue:'#2b7de9',yellow:'#f2c80f',green:'#2fbf4a',purple:'#9b59b6',orange:'#f08a1c',brown:'#6b3b1d',pink:'#ff6b6b',white:'#eee'};
+ const colorName=c=>({ '#d22':'red','#222':'black','#2b7de9':'blue','#f2c80f':'yellow','#2fbf4a':'green','#9b59b6':'purple','#f08a1c':'orange','#6b3b1d':'brown','#ff6b6b':'pink','#eeeeee':'white','#fff':'white'})[c]||c;
+ for(const [r,b] of Object.entries(named.buckets)){
+  if(b.pins.length<2)continue;
+  const net=named.rootToName[r]; const w=b.wires[0];
+  const a=b.pins[0], z=b.pins[b.pins.length-1]||b.pins[1];
+  const from=`${a.comp.tag||FP[a.type].label} ${a.name}`;
+  const to=`${z.comp.tag||FP[z.type].label} ${z.name}`+(b.pins.length>2?` +${b.pins.length-2}`:'');
+  table.push([from,to,net,w?colorName(w.color):'—',b.pins.map(p=>p.name).join(', ')]);
+ }
+ return {name:'Current bench (generated)',pinsKind:'custom',pinsNote:'Generated from the layout currently on the Forge Bench. Net names are guessed from pin names and wire labels.',sch:{blocks,parts:schParts},table};
+}
 
 /* ===== Forge app ===== */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -636,14 +780,22 @@ const qtyOf=p=>{const o=INV[p.id];return o&&o.qty!==undefined&&o.qty!==''?o.qty:
 const statusOf=p=>(INV[p.id]&&INV[p.id].status)||p.status;
 const notesOf=p=>(INV[p.id]&&INV[p.id].notes)||'';
 
+const PROJ_PRESET={'p-valkor-voice':'valkor','p-valkor-gaze':'valkor','p-valkor-sight':'valkor','p-valkor-glow':'valkor','p-tracker':'pantilt','p-talkbot':'max98357','p-weather':'ssd1306','p-joy-turret':'pantilt','p-pi-gimbal':'pantilt'};
+const PART_PRESET={st7789:'st7789',ssd1306:'ssd1306',max98357:'max98357',speaker:'max98357',sg90:'pantilt',pantilt:'pantilt',xiao:'valkor',devkit:'st7789'};
+function partPreset(id){return PART_PRESET[id]||null;}
+
+
 function renderInventory(){
  const q=$('#inv-q').value.toLowerCase(), cat=$('#inv-cat').value, ifc=$('#inv-if').value, st=$('#inv-st').value;
  const list=allParts().filter(p=>{const hay=[p.name,p.nick,p.cat,p.uses,(p.specs||[]).join(' '),(p.iface||[]).join(' '),notesOf(p)].join(' ').toLowerCase();
   return(!q||hay.includes(q))&&(!cat||p.cat===cat)&&(!ifc||(p.iface||[]).some(i=>i.startsWith(ifc)))&&(!st||statusOf(p)===st);});
+ const missingQ=allParts().filter(p=>qtyOf(p)===null||qtyOf(p)===undefined);
+ const hint=$('#inv-qtyhint');
+ if(hint){if(missingQ.length){hint.hidden=false;hint.innerHTML=`${missingQ.length} part${missingQ.length>1?'s still have':' still has'} quantity marked <b>?</b>. Edit those cards so “buildable now” stays accurate.`;}else hint.hidden=true;}
  $('#inv-count').textContent=`${list.length} of ${allParts().length} parts`;
  $('#inv-grid').innerHTML=list.map(p=>{const qty=qtyOf(p),s=statusOf(p);
   return `<article class="card" data-id="${p.id}">
-   <div class="ph"><img src="${partImg(p)}" alt="${esc(p.name)}"><span class="imgk ${p.imgKind}">${p.imgKind==='exact'?'Official photo':p.imgKind==='ref'?'Reference photo':'Illustration'}</span>${p.kit?'<span class="kitb">Typical kit contents: verify</span>':''}</div>
+   <div class="ph"><img src="${partImg(p)}" alt="${esc(p.name)}" loading="lazy" decoding="async"><span class="imgk ${p.imgKind}">${p.imgKind==='exact'?'Official photo':p.imgKind==='ref'?'Reference photo':'Illustration'}</span>${p.kit?'<span class="kitb">Typical kit contents: verify</span>':''}</div>
    <div class="cb"><div class="row1"><span class="cat">${esc(p.cat)}</span><span class="st st-${s}">${STATUS[s]||s}</span></div>
    <h3>${esc(p.name)}${p.nick?` <em>“${esc(p.nick)}”</em>`:''}</h3>
    <div class="meta"><span title="Quantity">qty <b>${qty===null||qty===undefined?'?':esc(qty)}</b></span><span>⚡ ${esc(p.volt)}</span></div>
@@ -652,8 +804,10 @@ function renderInventory(){
    <div class="cact"><button class="b-det">Details</button><button class="b-edit">Edit</button><button class="b-combo">Combos</button></div></div></article>`;}).join('')||'<p class="empty">No parts match.</p>';
 }
 function partDetail(id){const p=P_(id);const projs=PROJECTS.filter(x=>x.parts.some(([pid])=>pid===id));
- openModal(`<div class="det"><div class="dimg"><img src="${partImg(p)}" alt=""><small>${p.imgKind==='illus'?'Illustration (no official photo fetched)':esc(p.imgSrc||'')}</small></div><div>
+ const benchBtns=(p.bb?`<button type="button" class="pri" data-addbb="${p.bb}">Place on the bench</button>`:'')+(partPreset(p.id)?`<button type="button" data-gopreset="${partPreset(p.id)}">Open ${esc(PRESETS[partPreset(p.id)].name)} on the bench</button>`:'');
+ openModal(`<div class="det"><div class="dimg"><img src="${partImg(p)}" alt="${esc(p.name)}" loading="lazy" decoding="async"><small>${p.imgKind==='illus'?'Illustration (no official photo fetched)':esc(p.imgSrc||'')}</small></div><div>
  <h2>${esc(p.name)}</h2><p class="sub">${esc(p.cat)} · ${STATUS[statusOf(p)]||statusOf(p)} · qty ${qtyOf(p)??'?'}${p.kit?' · <b class="warn">typical kit contents, verify</b>':''}</p>
+ ${benchBtns?`<p class="fa">${benchBtns}</p>`:''}
  <dl><dt>Power / logic</dt><dd>${esc(p.volt)}${p.logic&&p.logic!=='—'?` · logic ${esc(p.logic)}${/^\d/.test(p.logic)?'V':''}`:''}</dd><dt>Interfaces</dt><dd>${(p.iface||[]).map(esc).join(', ')||'—'}</dd>
  <dt>Key specs</dt><dd><ul>${(p.specs||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul></dd><dt>Pinout</dt><dd>${esc(p.pinout)}</dd>
  <dt>Gotchas</dt><dd><ul class="got">${(p.gotchas||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul></dd><dt>Used for</dt><dd>${esc(p.uses)}</dd>
@@ -700,7 +854,7 @@ function renderPick(id){const p=P_(id);const out=[];
  if(CONTROLLERS[id]){Object.keys(NEEDS).forEach(pid=>{const r=compat(id,pid);if(r.lvl!=='no')out.push({pid,lvl:r.lvl,how:r.notes.join(' ')});});out.push({pid:'_',lvl:'ok',how:CONTROLLERS[id].note});}
  else if(NEEDS[id]){Object.keys(CONTROLLERS).forEach(c=>{const r=compat(c,id);out.push({pid:c,lvl:r.lvl,how:r.notes.join(' ')});});}
  PAIRS.forEach(([a,b,how,l])=>{if(a===id)out.push({pid:b,lvl:l,how});else if(b===id)out.push({pid:a,lvl:l,how});});
- $('#cb-detail').innerHTML=`<div class="pk-head"><img src="${partImg(p)}" alt=""><div><h3>${esc(p.name)}</h3><p>${esc(p.volt)} · ${(p.iface||[]).join(', ')||'—'}</p></div></div>
+ $('#cb-detail').innerHTML=`<div class="pk-head"><img src="${partImg(p)}" alt="${esc(p.name)}" loading="lazy" decoding="async"><div><h3>${esc(p.name)}</h3><p>${esc(p.volt)} · ${(p.iface||[]).join(', ')||'—'}</p></div></div>
  <ul class="pk">${out.map(o=>o.pid==='_'?`<li class="lv-ok"><b>Note</b><span>${esc(o.how)}</span></li>`:`<li class="lv-${o.lvl}"><b><i>${LVL[o.lvl][0]}</i> <a href="#" data-pickgo="${o.pid}">${esc(P_(o.pid)?.name||o.pid)}</a></b><span>${esc(o.how)}</span></li>`).join('')||'<li>No known combos yet. Add notes on the card.</li>'}</ul>`;
  drawGraph(id,out.filter(o=>o.pid!=='_'));}
 function drawGraph(id,out){const svg=$('#cb-graph');svg.innerHTML='';const W=520,H=420,cx=W/2,cy=H/2;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
@@ -718,110 +872,245 @@ function renderProjects(){const only=$('#pj-can').checked, tag=$('#pj-tag').valu
  $('#pj-count').textContent=`${list.length} of ${PROJECTS.length} projects · ${PROJECTS.filter(p=>projStatus(p).full).length} fully buildable now`;
  $('#pj-grid').innerHTML=list.map(pr=>{const s=projStatus(pr);return `<article class="proj" id="${pr.id}"><header><span class="diff d${pr.diff}">${'◆'.repeat(pr.diff)}${'◇'.repeat(3-pr.diff)} ${DIFF[pr.diff]}</span>${s.full?'<span class="ok">✔ Buildable now</span>':s.missing.length?'<span class="bad">Short on parts</span>':'<span class="need">Needs 1+ purchase</span>'}${s.borrow?'<span class="borrow">Borrows Valkor parts</span>':''}</header>
   <h3>${esc(pr.name)}</h3><div class="tags">${pr.tags.map(t=>`<span>${t}</span>`).join('')}</div>
-  <h4>Parts you own</h4><ul class="pl">${pr.parts.map(([pid,n])=>{const p=P_(pid);return `<li class="${s.missing.includes(pid)?'miss':''}"><a href="#" data-part="${pid}"><img src="${partImg(p)}" alt="">${esc(p.name)}</a><b>×${n}</b></li>`;}).join('')}</ul>
+  <h4>Parts you own</h4><ul class="pl">${pr.parts.map(([pid,n])=>{const p=P_(pid);return `<li class="${s.missing.includes(pid)?'miss':''}"><a href="#" data-part="${pid}"><img src="${partImg(p)}" alt="${esc(p.name)}" loading="lazy" decoding="async">${esc(p.name)}</a><b>×${n}</b></li>`;}).join('')}</ul>
   ${pr.extra.length?`<h4 class="ex">Extra parts</h4><ul class="exl">${pr.extra.map(x=>`<li><b>${esc(x.n)}</b>${x.opt?' <i>(optional / likely owned)</i>':''}: ${esc(x.why)}</li>`).join('')}</ul>`:''}
+  ${PROJ_PRESET[pr.id]?`<p class="fa"><button type="button" class="pri" data-gopreset="${PROJ_PRESET[pr.id]}">Open on the bench</button></p>`:''}
   <h4>You'll learn</h4><p>${pr.learn.map(esc).join(' · ')}</p><h4>Build outline</h4><ol>${pr.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></article>`;}).join('')||'<p class="empty">Nothing matches. Turn off the filter or update quantities in the Armory.</p>';}
 
 /* ---------- recommendations ---------- */
-function renderRecs(){$('#rc-grid').innerHTML=RECS.map(r=>`<article class="rec"><div class="ph"><img src="${r.img?imgURL(r.img):illus(r.illus)}" alt=""><span class="imgk ${r.img?'ref':'illus'}">${r.img?'Reference photo':'Illustration'}</span></div><div class="cb"><span class="prio p-${r.prio.replace(/\s/g,'')}">${r.prio}</span><h3>${esc(r.name)}</h3><p>${esc(r.why)}</p>
+function renderRecs(){$('#rc-grid').innerHTML=RECS.map(r=>`<article class="rec"><div class="ph"><img src="${r.img?imgURL(r.img):illus(r.illus)}" alt="${esc(r.name)}" loading="lazy" decoding="async"><span class="imgk ${r.img?'ref':'illus'}">${r.img?'Reference photo':'Illustration'}</span></div><div class="cb"><span class="prio p-${r.prio.replace(/\s/g,'')}">${r.prio}</span><h3>${esc(r.name)}</h3><p>${esc(r.why)}</p>
  <p class="unl"><b>Unlocks:</b> ${r.unlocks[0]==='*'?'every project (debug and quality)':r.unlocks.map(u=>`<a href="#" data-goproj="${u}">${esc(PROJECTS.find(p=>p.id===u)?.name||u)}</a>`).join(', ')}</p>
  <p class="price">Price: check current price${r.link?` · <a href="${r.link}" target="_blank" rel="noopener">example listing</a>`:''}${r.alt?` · <a href="${r.alt}" target="_blank" rel="noopener">alternative</a>`:''}</p></div></article>`).join('');
  $('#rc-tips').innerHTML=TIPS.map(([h,t])=>`<div class="tip"><h4>${esc(h)}</h4><p>${esc(t)}</p></div>`).join('');}
 
 /* ---------- breadboard bench ---------- */
-let bench={comps:[],wires:[]}, sel=null, wireColor='#d22', drag=null, ghost=null, presetKey=null;
-const PALETTE=[['devkit','ESP32 DevKit'],['xiao','XIAO S3'],['ssd1306','SSD1306 OLED'],['max98357','MAX98357'],['led','LED'],['resistor','Resistor'],['button','Button'],['pot','Potentiometer'],['buzzer','Buzzer'],['hcsr04','HC-SR04'],['dht11','DHT11'],['cap','1000µF cap'],['st7789','ST7789 LCD'],['sg90','SG90 servo'],['speaker','Speaker'],['supply5','5V supply']];
-const WCOLORS=[['#d22','red'],['#222','black'],['#2b7de9','blue'],['#2fbf4a','green'],['#f2c80f','yellow'],['#f08a1c','orange'],['#9b59b6','purple'],['#eeeeee','white'],['#6b3b1d','brown']];
+let bench={comps:[],wires:[]}, sel=null, selNet=null, selNetName='', wireColor='#d22', drag=null, ghost=null, presetKey=null;
+let panMode=false, splitOn=false, bbZoom=1, scZoom=1, hoverNode=null;
+let hist=[], histI=-1, histLock=false;
+const ptrs=new Map();
+function buildPalette(){return Object.keys(FP).map(t=>{const p=allParts().find(x=>x.bb===t);return [t,p?p.name:FP[t].label];});}
 function benchSave(){localStorage.setItem(LS_CUR,JSON.stringify({bench,presetKey}));}
-function drawBench(){const svg=$('#bb');renderBench(svg,bench,{sel});if(ghost){const g=el('g',{class:'ghost'+(ghost.ok?'':' bad')},svg);const f=FP[ghost.type];const fake={...ghost,id:'ghost'};
-  const tmp={comps:[fake],wires:[]};const s2=document.createElementNS(NS,'svg');renderBench(s2,tmp,{});const cg=s2.querySelector('g.comps');if(cg)g.appendChild(cg);}
- $('#bb-info2').textContent=`${bench.comps.length} parts · ${bench.wires.length} wires`;}
+function snapBench(){return JSON.stringify({bench,presetKey});}
+function pushHist(){if(histLock)return;hist=hist.slice(0,histI+1);hist.push(snapBench());if(hist.length>70)hist.shift();histI=hist.length-1;updateHistBtns();}
+function applySnap(s){const o=JSON.parse(s);bench=o.bench;presetKey=o.presetKey||null;sel=null;selNet=null;selNetName='';histLock=true;benchSave();if(presetKey&&PRESETS[presetKey]){$('#bb-preset').value=presetKey;setPresetNote(presetKey);}else{$('#bb-preset').value='';setPresetNote(null);}drawBench();histLock=false;}
+function undo(){if(histI<=0)return;histI--;applySnap(hist[histI]);toast('Undo');}
+function redo(){if(histI>=hist.length-1)return;histI++;applySnap(hist[histI]);toast('Redo');}
+function updateHistBtns(){const u=histI<=0,r=histI>=hist.length-1;['#bb-undo','#bb-undo-dock'].forEach(s=>{const b=$(s);if(b)b.disabled=u;});['#bb-redo'].forEach(s=>{const b=$(s);if(b)b.disabled=r;});}
+function confirmReplace(msg){if(!bench.comps.length)return true;return confirm(msg||'Replace the current bench? Save a layout first if you want to keep this wiring.');}
+function setPresetNote(k){const el=$('#bb-note');if(!el)return;if(k&&PRESETS[k]){const pr=PRESETS[k];el.innerHTML=`<span class="pk-${pr.pinsKind}">${pr.pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS'}</span> ${esc(pr.pinsNote)}`;}
+ else if(bench.comps.length)el.innerHTML=`<span class="pk-example">CUSTOM LAYOUT</span> This bench no longer matches a catalog preset. “View as schematic” will generate one from what you have wired.`;
+ else el.innerHTML='';}
+function currentNetRoot(){if(selNet)return selNet;if(sel){const w=bench.wires.find(x=>x.id===sel);if(w)return computeNets(bench).root(w.a);}return null;}
+function syncSelNetName(){const r=currentNetRoot();if(!r){if(!sel)selNetName='';return;}const named=nameNets(bench);selNetName=named.rootToName[r]||selNetName;}
+function drawBench(){const svg=$('#bb');const named=nameNets(bench);const netRoot=currentNetRoot();
+ renderBench(svg,bench,{sel,netRoot,netNames:named.rootToName});
+ if(ghost){const g=el('g',{class:'ghost'+(ghost.ok?'':' bad')},svg);const fake={...ghost,id:'ghost'};const s2=document.createElementNS(NS,'svg');renderBench(s2,{comps:[fake],wires:[]},{});const cg=s2.querySelector('g.comps');if(cg)g.appendChild(cg);}
+ $('#bb-info2').textContent=`${bench.comps.length} parts · ${bench.wires.length} wires`;
+ updateInspector();updateWarn();updateHistBtns();if(splitOn)drawSplitSchem();}
+function updateWarn(){const el=$('#bb-warn');if(!el)return;const w=shortWarnings(bench);if(w.length){el.hidden=false;el.textContent=w.join(' · ');}else{el.hidden=true;el.textContent='';}}
+function updateInspector(){const insp=$('#bb-insp'),lab=$('#bb-label'),press=$('#bb-press'),info=$('#bb-info');
+ const w=sel&&bench.wires.find(x=>x.id===sel), c=sel&&bench.comps.find(x=>x.id===sel);
+ if(w){const named=nameNets(bench);const root=named.nets.root(w.a);const mem=netMembers(bench,named.nets,root);info.innerHTML=`<b>Selected wire</b> ${esc(nodeLabel(w.a))} → ${esc(nodeLabel(w.b))} · net <code>${esc(named.rootToName[root]||'?')}</code>${mem.length?` · ${mem.map(esc).join(', ')}`:''}`;insp.hidden=false;if(lab)lab.value=w.label||'';if(press)press.hidden=true;}
+ else if(c){const f=FP[c.type];info.innerHTML=`<b>Selected:</b> ${esc(c.tag||f.label)}${c.type==='button'?(c.pressed?' · <em>pressed (closed)</em>':' · released (open — click to press)'):''}`;if(press){press.hidden=c.type!=='button';press.textContent=c.pressed?'Release button':'Press button';}if(insp)insp.hidden=c.type!=='button';}
+ else if(selNet||selNetName){const named=nameNets(bench);const root=selNet;const mem=root?netMembers(bench,named.nets,root):[];info.innerHTML=`<b>Selected net</b> <code>${esc(selNetName||(root&&named.rootToName[root])||'?')}</code>${mem.length?` · ${mem.map(esc).join(', ')}`:''}`;if(insp)insp.hidden=true;}
+ else if(hoverNode){const named=nameNets(bench);const root=named.nets.root(hoverNode);const mem=netMembers(bench,named.nets,root);info.innerHTML=`<b>${esc(nodeLabel(hoverNode))}</b> → connected: ${mem.length?mem.map(esc).join(', '):'(no part pins on this net yet)'} · net <code>${esc(named.rootToName[root]||'?')}</code>`;if(insp)insp.hidden=true;}
+ else {info.textContent='Click or hover a hole, wire or part to see what it\'s connected to.';if(insp)insp.hidden=true;}}
 function svgPt(svg,e){const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse());}
-function nearestNode(x,y,exclude){let best=null,bd=11;for(let r=0;r<=13;r++){const dy=Math.abs(hy(r)-y);if(dy>bd)continue;for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;const d=Math.hypot(hx(c)-x,hy(r)-y);if(d<bd){bd=d;best=holeId(c,r);}}}
+function nearestNode(x,y,exclude,rad){let best=null,bd=rad??11;for(let r=0;r<=13;r++){const dy=Math.abs(hy(r)-y);if(dy>bd)continue;for(let c=1;c<=COLS;c++){if(!holeExists(c,r))continue;const d=Math.hypot(hx(c)-x,hy(r)-y);if(d<bd){bd=d;best=holeId(c,r);}}}
  for(const c of bench.comps){FP[c.type].pins.forEach((p,i)=>{const pp=pinPos(c,i);if(pp.hole)return;const d=Math.hypot(pp.x-x,pp.y-y);if(d<bd){bd=d;best=`p:${c.id}:${i}`;}});}
  return best===exclude?null:best;}
+function nodeDist(x,y,node){const p=nodePos(bench,node);return p?Math.hypot(p.x-x,p.y-y):1e9;}
+function wireAt(x,y,thresh){let best=null,bd=thresh??8;for(const w of bench.wires){const a=nodePos(bench,w.a),b=nodePos(bench,w.b);if(!a||!b)continue;const d=distToWire(x,y,a,b);if(d<bd){bd=d;best=w.id;}}return best;}
 function nearestHole(x,y){let best=null,bd=1e9;for(let r=0;r<=13;r++)for(let c=1;c<=COLS;c++){const d=Math.hypot(hx(c)-x,hy(r)-y);if(d<bd){bd=d;best={col:c,row:r};}}return best;}
 function nodeLabel(n){if(n.startsWith('h:')){const [,c,r]=n.split(':').map(Number);return holeLabel(c,r);}const [,cid,pi]=n.split(':');const c=bench.comps.find(k=>k.id===cid);return c?`${c.tag||FP[c.type].label}.${FP[c.type].pins[+pi].n}`:n;}
+function setBbZoom(z,origin){z=Math.min(4,Math.max(.6,+z||1));const svg=$('#bb'),wrap=$('#bb-svgw');if(!svg||!wrap){bbZoom=z;return;}const prev=svg.getBoundingClientRect();bbZoom=z;svg.style.width=(z*100)+'%';$$('#bb-zoom button').forEach(b=>b.classList.toggle('on',Math.abs((+b.dataset.z)-z)<.08));if(origin&&prev.width){const rec=svg.getBoundingClientRect();const rx=(origin.x-prev.left)/prev.width,ry=(origin.y-prev.top)/prev.height;wrap.scrollLeft+=(origin.x-(rec.left+rx*rec.width));wrap.scrollTop+=(origin.y-(rec.top+ry*rec.height));}}
+function setScZoom(z,wrapSel,svgSel){z=Math.min(4,Math.max(.6,+z||1));scZoom=z;const svg=$(svgSel||'#sc-svg');if(svg)svg.style.width=(z*100)+'%';$$('#sc-zoom button').forEach(b=>b.classList.toggle('on',Math.abs((+b.dataset.z)-z)<.08));}
+function setPanMode(on){panMode=!!on;$('.svgw')&&$$('.svgw').forEach(w=>w.classList.toggle('pan',panMode));const lab=panMode?'✋ Pan mode: on (editing paused)':'✋ Pan mode: off';['#bb-pan','#bb-pan-dock'].forEach(s=>{const b=$(s);if(!b)return;b.classList.toggle('on',panMode);if(s==='#bb-pan')b.textContent=lab;else b.textContent=panMode?'✋ Pan on':'✋ Pan';});}
+function setSplit(on){splitOn=!!on;const stage=$('#bb-stage'),pane=$('#bb-splitpane');if(stage)stage.classList.toggle('split',splitOn);if(pane)pane.hidden=!splitOn;['#bb-split','#bb-split-dock'].forEach(s=>{const b=$(s);if(!b)return;b.classList.toggle('on',splitOn);if(s==='#bb-split')b.textContent=splitOn?'Split view: on':'Split view: off';});if(splitOn)drawSplitSchem();}
+function currentSchDef(){const selEl=$('#sc-preset');const k=selEl?selEl.value:'custom';if(k&&k!=='custom'&&PRESETS[k])return {key:k,def:PRESETS[k]};return {key:'custom',def:schematicFromBench(bench)};}
+function fillSchPresets(preferred){const popts=Object.entries(PRESETS).map(([k,v])=>`<option value="${k}">${esc(v.name)}</option>`).join('');const el=$('#sc-preset');if(!el)return;const keep=preferred||el.value;el.innerHTML=popts+'<option value="custom">Current bench (generated)</option>';if([...el.options].some(o=>o.value===keep))el.value=keep;}
+function renderSchTable(def){const host=$('#sc-table');if(!host||!def){if(host)host.innerHTML='';return;}
+ const cmap={red:'#d22',black:'#222',blue:'#2b7de9',yellow:'#f2c80f',green:'#2fbf4a',purple:'#9b59b6',orange:'#f08a1c',brown:'#6b3b1d',pink:'#ff6b6b',white:'#eee'};
+ host.innerHTML=`<table class="pt"><thead><tr><th>From (header pin #)</th><th>To</th><th>Net</th><th>Wire</th><th>Notes</th></tr></thead><tbody>${(def.table||[]).map(r=>`<tr data-net="${esc(r[2])}" class="${selNetName&&netsEquivalent(selNetName,r[2])?'lit':''}"><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td><code>${esc(r[2])}</code></td><td>${r[3]&&r[3]!=='—'?`<i class="wc" style="background:${cmap[r[3]]||r[3]||'#888'}"></i>`:''}${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('')}</tbody></table>`;}
+function applySchSelection(svg){/* classes already applied at render */}
+function selectNetByName(name){if(!name||name==='NC')return;sel=null;selNetName=name;const named=nameNets(bench);let root=named.nameToRoot[name];if(!root){root=Object.keys(named.rootToName).find(r=>netsEquivalent(named.rootToName[r],name));}selNet=root||null;syncSelNetName();drawBench();if($('#tab-schem').classList.contains('on'))renderSchemTab();else if(splitOn)drawSplitSchem();}
+function selectCompFromSch(id,type){let c=id&&bench.comps.find(x=>x.id===id);if(!c&&type)c=bench.comps.find(x=>x.type===type);if(!c)return;sel=c.id;selNet=null;selNetName='';drawBench();if($('#tab-schem').classList.contains('on'))renderSchemTab();else if(splitOn)drawSplitSchem();}
+function bindSchClicks(svg){if(!svg||svg._forgeBound){if(svg&&svg._forgeBound)return;}svg._forgeBound=true;
+ svg.addEventListener('click',e=>{const netEl=e.target.closest('[data-net]'),blk=e.target.closest('.sblock, .spart');
+  if(netEl&&netEl.dataset.net){selectNetByName(netEl.dataset.net);e.stopPropagation();return;}
+  if(blk){selectCompFromSch(blk.dataset.comp,blk.dataset.type);e.stopPropagation();}});}
+function drawSplitSchem(){const svg=$('#bb-sc');if(!svg)return;const {def}=(()=>{if(presetKey&&PRESETS[presetKey])return {def:PRESETS[presetKey]};return {def:schematicFromBench(bench)};})();
+ renderSchematic(svg,def,{litNet:selNetName,litComp:sel&&(bench.comps.find(c=>c.id===sel)||{}).id});bindSchClicks(svg);}
+function schLitComp(){const c=sel&&bench.comps.find(x=>x.id===sel);return c?c.id:'';}
+function renderSchemTab(){fillSchPresets();const {key,def}=currentSchDef();if(!def)return;
+ $('#sc-note').innerHTML=`<span class="pk-${def.pinsKind}">${def.pinsKind==='actual'?'YOUR ACTUAL PINS':def.pinsKind==='custom'?'FROM YOUR BENCH':'EXAMPLE PINS'}</span> ${esc(def.pinsNote||'')}`;
+ const svg=$('#sc-svg');const view=(($('input[name=scv]:checked')||{}).value)||'schem';
+ const netRoot=currentNetRoot();
+ if(view==='schem'){renderSchematic(svg,def,{litNet:selNetName,litComp:schLitComp()});bindSchClicks(svg);}
+ else {const st=(key==='custom')?bench:presetState(key);renderBench(svg,st,{sel,netRoot});}
+ renderSchTable(def);
+ const tbl=$('#sc-table');if(tbl&&!tbl._forgeBound){tbl._forgeBound=true;tbl.addEventListener('click',e=>{const tr=e.target.closest('tr[data-net]');if(tr)selectNetByName(tr.dataset.net);});}}
+function exportSvgPng(svg,filename){if(!svg)return;const vb=(svg.getAttribute('viewBox')||'0 0 800 600').trim().split(/[\s,]+/).map(Number);const w=vb[2]||800,h=vb[3]||600,scale=2;
+ const clone=svg.cloneNode(true);clone.setAttribute('width',w);clone.setAttribute('height',h);clone.style.width=w+'px';
+ const xml='<?xml version="1.0" encoding="UTF-8"?>'+new XMLSerializer().serializeToString(clone);
+ const url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml;charset=utf-8'}));const img=new Image();
+ img.onload=()=>{const c=document.createElement('canvas');c.width=Math.round(w*scale);c.height=Math.round(h*scale);const ctx=c.getContext('2d');ctx.fillStyle='#14110f';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);URL.revokeObjectURL(url);},'image/png');};
+ img.onerror=()=>{toast('Could not export this image');URL.revokeObjectURL(url);};img.src=url;}
+
 function setupBench(){const svg=$('#bb');
- $('#bb-pal').innerHTML=PALETTE.map(([t,n])=>`<button data-add="${t}" title="Click, then click on the board to place">${n}</button>`).join('');
- $('#bb-colors').innerHTML=WCOLORS.map(([c,n])=>`<button class="sw ${c===wireColor?'on':''}" data-color="${c}" title="${n}" style="background:${c}"></button>`).join('');
- $('#bb-pal').onclick=e=>{const t=e.target.dataset.add;if(!t)return;const f=FP[t];ghost=f.off?{type:t,x:400,y:120,tag:f.label}:{type:t,col:30,row:f.board?3:2,tag:f.label,ok:true};$('#bb-hint').textContent=`Placing ${f.label}: click to drop · Esc to cancel`;drawBench();};
- $('#bb-colors').onclick=e=>{const c=e.target.dataset.color;if(!c)return;wireColor=c;$$('#bb-colors .sw').forEach(b=>b.classList.toggle('on',b.dataset.color===c));if(sel&&sel.startsWith('w')){const w=bench.wires.find(w=>w.id===sel);if(w){w.color=c;benchSave();drawBench();}}};
- let panMode=false;
- $('#bb-pan').onclick=()=>{panMode=!panMode;$('.svgw').classList.toggle('pan',panMode);$('#bb-pan').classList.toggle('on',panMode);$('#bb-pan').textContent=panMode?'✋ Pan mode: on (editing paused)':'✋ Pan mode: off';};
- $('#bb-zoom').onclick=e=>{const z=e.target.dataset.z;if(!z)return;$$('#bb-zoom button').forEach(b=>b.classList.toggle('on',b===e.target));svg.style.width=(z*100)+'%';};
- if(window.innerWidth<700){svg.style.width='240%';$$('#bb-zoom button').forEach(b=>b.classList.toggle('on',b.dataset.z==='2.4'));}
- svg.addEventListener('pointerdown',e=>{if(panMode)return;const p=svgPt(svg,e);
-  if(ghost){if(FP[ghost.type].off){ghost.x=Math.round(p.x);ghost.y=Math.round(p.y);}else if(!ghost.ok){toast('Can\'t place there: a pin falls off the grid');return;}
-   const c={...ghost,id:'c'+Date.now().toString(36)};delete c.ok;bench.comps.push(c);ghost=null;sel=c.id;presetKey=null;$('#bb-hint').textContent='Placed. Drag to move, drag from a hole to wire.';benchSave();drawBench();return;}
-  const cg=e.target.closest('g.comp'), wg=e.target.closest('g.wire');const nodeEl=e.target.closest('[data-node]');
-  if(nodeEl&&(!cg||nodeEl.classList.contains('pin'))&&!(cg&&FP[bench.comps.find(c=>c.id===cg.dataset.comp).type].board&&nodeEl.classList.contains('pin')&&false)){
-   // start wire from a hole or pin
-   drag={mode:'wire',from:nodeEl.dataset.node,x:p.x,y:p.y};svg.setPointerCapture(e.pointerId);e.preventDefault();return;}
-  if(cg){const c=bench.comps.find(k=>k.id===cg.dataset.comp);sel=c.id;const f=FP[c.type];drag={mode:'move',id:c.id,sx:p.x,sy:p.y,ox:f.off?c.x:hx(c.col),oy:f.off?c.y:hy(c.row),orig:{...c}};svg.setPointerCapture(e.pointerId);drawBench();e.preventDefault();return;}
-  if(wg){sel=wg.dataset.wire;drawBench();return;}
-  const nn=nearestNode(p.x,p.y);if(nn){drag={mode:'wire',from:nn,x:p.x,y:p.y};svg.setPointerCapture(e.pointerId);e.preventDefault();return;}
-  sel=null;drawBench();});
- svg.addEventListener('pointermove',e=>{if(panMode)return;const p=svgPt(svg,e);
+ $('#bb-pal').innerHTML=buildPalette().map(([t,n])=>`<button type="button" data-add="${t}" title="Click, then click on the board to place">${esc(n)}</button>`).join('');
+ $('#bb-colors').innerHTML=WCOLORS.map(([c,n])=>`<button type="button" class="sw ${c===wireColor?'on':''}" data-color="${c}" title="${n}" style="background:${c}"></button>`).join('');
+ const startPlace=t=>{const f=FP[t];if(!f)return;ghost=f.off?{type:t,x:400,y:120,tag:f.label}:{type:t,col:30,row:f.board?3:2,tag:f.label,ok:true};$('#bb-hint').textContent=`Placing ${f.label}: click to drop · Esc to cancel`;drawBench();closeSide();};
+ $('#bb-pal').onclick=e=>{const t=e.target.dataset.add;if(t)startPlace(t);};
+ $('#bb-colors').onclick=e=>{const c=e.target.dataset.color;if(!c)return;wireColor=c;$$('#bb-colors .sw').forEach(b=>b.classList.toggle('on',b.dataset.color===c));if(sel&&bench.wires.some(w=>w.id===sel)){pushHist();const w=bench.wires.find(w=>w.id===sel);w.color=c;benchSave();drawBench();}};
+ $('#bb-pan').onclick=()=>setPanMode(!panMode);
+ $('#bb-pan-dock')&&($('#bb-pan-dock').onclick=()=>setPanMode(!panMode));
+ $('#bb-zoom').onclick=e=>{const z=e.target.dataset.z;if(!z)return;setBbZoom(+z);};
+ $('#bb-split').onclick=()=>setSplit(!splitOn);
+ $('#bb-split-dock')&&($('#bb-split-dock').onclick=()=>setSplit(!splitOn));
+ $('#bb-undo').onclick=undo;$('#bb-redo').onclick=redo;$('#bb-undo-dock')&&($('#bb-undo-dock').onclick=undo);
+ $('#bb-png').onclick=()=>exportSvgPng($('#bb'),'forge-bench.png');
+ $('#bb-addopen')&&($('#bb-addopen').onclick=()=>$('#bb-side').classList.add('open'));
+ $('#bb-sideclose')&&($('#bb-sideclose').onclick=closeSide);
+ function closeSide(){const s=$('#bb-side');if(s)s.classList.remove('open');}
+ if(window.innerWidth<700)setBbZoom(2.4);
+
+ const wrap=$('#bb-svgw');
+ if(wrap){wrap.addEventListener('wheel',e=>{if(panMode&&!e.ctrlKey)return;e.preventDefault();setBbZoom(bbZoom*(e.deltaY<0?1.12:1/1.12),{x:e.clientX,y:e.clientY});},{passive:false});}
+ const scw=$('#sc-wrap');
+ if(scw){scw.addEventListener('wheel',e=>{if(e.ctrlKey||!panMode){e.preventDefault();setScZoom(scZoom*(e.deltaY<0?1.12:1/1.12));}},{passive:false});}
+ $('#sc-zoom')&&($('#sc-zoom').onclick=e=>{const z=e.target.dataset.z;if(z)setScZoom(+z);});
+ $('#sc-png')&&($('#sc-png').onclick=()=>exportSvgPng($('#sc-svg'),'forge-schematic.png'));
+
+ let pinch=null;
+ svg.addEventListener('pointerdown',e=>{
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2){drag=null;const arr=[...ptrs.values()];pinch={dist:Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y)||1,mid:{x:(arr[0].x+arr[1].x)/2,y:(arr[0].y+arr[1].y)/2},sl:wrap?wrap.scrollLeft:0,st:wrap?wrap.scrollTop:0,z:bbZoom};e.preventDefault();return;}
+  if(panMode||pinch)return;
+  const p=svgPt(svg,e);
+  if(ghost){if(FP[ghost.type].off){ghost.x=Math.round(p.x);ghost.y=Math.round(p.y);}else if(!ghost.ok){toast('Can\'t place there: a pin falls off the grid or overlaps another part');return;}
+   pushHist();const c={...ghost,id:'c'+Date.now().toString(36)};delete c.ok;bench.comps.push(c);ghost=null;sel=c.id;selNet=null;selNetName='';presetKey=null;setPresetNote(null);$('#bb-hint').textContent='Placed. Drag to move, drag from a hole to wire.';benchSave();drawBench();return;}
+  const cg=e.target.closest('g.comp'), wg=e.target.closest('g.wire');
+  const onPad=e.target.closest('.pin, .hole');
+  const nodeNear=nearestNode(p.x,p.y,null,11);
+  const onCenter=nodeNear&&nodeDist(p.x,p.y,nodeNear)<=5;
+  const nearWire=wireAt(p.x,p.y,9);
+  // Prefer selecting a wire when the click is on a wire stroke and not dead-center on a pad
+  if(nearWire&&!onCenter){sel=nearWire;selNet=null;syncSelNetName();drawBench();e.preventDefault();return;}
+  if(onPad||(nodeNear&&onCenter&&!cg)){drag={mode:'wire',from:onPad?onPad.dataset.node:nodeNear,x:p.x,y:p.y,sx:p.x,sy:p.y};svg.setPointerCapture(e.pointerId);e.preventDefault();return;}
+  if(cg){const c=bench.comps.find(k=>k.id===cg.dataset.comp);sel=c.id;selNet=null;selNetName='';const f=FP[c.type];drag={mode:'move',id:c.id,sx:p.x,sy:p.y,ox:f.off?c.x:hx(c.col),oy:f.off?c.y:hy(c.row),orig:{...c},maybePress:c.type==='button'};svg.setPointerCapture(e.pointerId);drawBench();e.preventDefault();return;}
+  if(wg){sel=wg.dataset.wire;selNet=null;syncSelNetName();drawBench();return;}
+  if(nodeNear){drag={mode:'wire',from:nodeNear,x:p.x,y:p.y,sx:p.x,sy:p.y};svg.setPointerCapture(e.pointerId);e.preventDefault();return;}
+  sel=null;selNet=null;selNetName='';drawBench();
+ });
+ svg.addEventListener('pointermove',e=>{
+  if(ptrs.has(e.pointerId))ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pinch&&ptrs.size>=2){const arr=[...ptrs.values()];const dist=Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y)||1;const mid={x:(arr[0].x+arr[1].x)/2,y:(arr[0].y+arr[1].y)/2};setBbZoom(pinch.z*(dist/pinch.dist),mid);if(wrap){wrap.scrollLeft=pinch.sl-(mid.x-pinch.mid.x);wrap.scrollTop=pinch.st-(mid.y-pinch.mid.y);}return;}
+  if(panMode||pinch)return;const p=svgPt(svg,e);
   if(ghost){const f=FP[ghost.type];if(f.off){ghost.x=Math.round(p.x);ghost.y=Math.round(p.y);}else{const h=nearestHole(p.x,p.y);ghost.col=h.col;ghost.row=h.row;ghost.ok=validPlacement(bench,ghost.type,h.col,h.row);}drawBench();return;}
   if(drag&&drag.mode==='wire'){drawBench();const a=nodePos(bench,drag.from);const t=nearestNode(p.x,p.y,drag.from);const b=t?nodePos(bench,t):p;const ov=svg.querySelector('g.overlay');
    el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:wireColor,'stroke-width':3.5,'stroke-dasharray':t?'':'5 4','stroke-linecap':'round'},ov);if(t)el('circle',{cx:b.x,cy:b.y,r:7,fill:'none',stroke:'#ffd27a','stroke-width':2},ov);
    $('#bb-info').textContent=`Wire: ${nodeLabel(drag.from)} → ${t?nodeLabel(t):'…'}`;return;}
-  if(drag&&drag.mode==='move'){const c=bench.comps.find(k=>k.id===drag.id);const f=FP[c.type];const nx=drag.ox+(p.x-drag.sx),ny=drag.oy+(p.y-drag.sy);
-   if(f.off){c.x=Math.round(nx);c.y=Math.round(ny);}else{const h=nearestHole(nx,ny);if(validPlacement(bench,c.type,h.col,h.row)){c.col=h.col;c.row=h.row;}}drag.moved=true;drawBench();return;}
-  // hover: net highlight
-  const t=nearestNode(p.x,p.y);if(t!==bench._hover){bench._hover=t;const m=highlightNet(svg,bench,t);$('#bb-info').innerHTML=t?`<b>${esc(nodeLabel(t))}</b> → connected: ${m&&m.length?m.map(esc).join(', '):'(no part pins on this net yet)'}`:'Hover a hole to see what it\'s connected to.';}});
- svg.addEventListener('pointerup',e=>{if(panMode)return;const p=svgPt(svg,e);
-  if(drag&&drag.mode==='wire'){const t=nearestNode(p.x,p.y,drag.from);if(t){bench.wires.push({id:'w'+Date.now().toString(36),a:drag.from,b:t,color:wireColor});presetKey=null;benchSave();toast('Wire added');}drag=null;drawBench();return;}
-  if(drag&&drag.mode==='move'){if(drag.moved){presetKey=null;benchSave();}drag=null;drawBench();}});
- svg.addEventListener('dblclick',e=>{const wg=e.target.closest('g.wire');if(wg){bench.wires=bench.wires.filter(w=>w.id!==wg.dataset.wire);benchSave();drawBench();}});
- svg.addEventListener('contextmenu',e=>{const wg=e.target.closest('g.wire'),cg=e.target.closest('g.comp');if(wg||cg){e.preventDefault();sel=wg?wg.dataset.wire:cg.dataset.comp;delSel();}});
- document.addEventListener('keydown',e=>{if(!$('#tab-bench').classList.contains('on'))return;if(e.key==='Escape'){ghost=null;$('#bb-hint').textContent='';drawBench();}if((e.key==='Delete'||e.key==='Backspace')&&sel&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){delSel();}});
- $('#bb-del').onclick=delSel;
- $('#bb-clear').onclick=()=>{if(confirm('Clear the bench?')){bench={comps:[],wires:[]};presetKey=null;sel=null;benchSave();drawBench();}};
- $('#bb-preset').onchange=e=>{if(e.target.value)loadPreset(e.target.value);};
- $('#bb-toschem').onclick=()=>{const k=presetKey||$('#bb-preset').value||'st7789';showTab('schem');$('#sc-preset').value=k;renderSchemTab();};
- $('#bb-save').onclick=()=>{const name=prompt('Layout name:',presetKey?PRESETS[presetKey].name:'My layout');if(!name)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');L[name]={bench,saved:new Date().toISOString()};localStorage.setItem(LS_LAY,JSON.stringify(L));refreshLayouts();toast('Layout saved');};
- $('#bb-load').onclick=()=>{const n=$('#bb-layouts').value;if(!n)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');if(L[n]){bench=JSON.parse(JSON.stringify(L[n].bench));presetKey=null;benchSave();drawBench();toast('Loaded '+n);}};
- $('#bb-ldel').onclick=()=>{const n=$('#bb-layouts').value;if(!n)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');delete L[n];localStorage.setItem(LS_LAY,JSON.stringify(L));refreshLayouts();};
- const cur=JSON.parse(localStorage.getItem(LS_CUR)||'null');if(cur&&cur.bench&&cur.bench.comps){bench=cur.bench;presetKey=cur.presetKey;}else loadPreset('st7789',true);
- refreshLayouts();drawBench();}
-function delSel(){if(!sel)return;bench.wires=bench.wires.filter(w=>w.id!==sel);const isComp=bench.comps.some(c=>c.id===sel);if(isComp){bench.comps=bench.comps.filter(c=>c.id!==sel);bench.wires=bench.wires.filter(w=>!w.a.startsWith(`p:${sel}:`)&&!w.b.startsWith(`p:${sel}:`));}sel=null;presetKey=null;benchSave();drawBench();}
-function refreshLayouts(){const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');$('#bb-layouts').innerHTML='<option value="">Saved layouts…</option>'+Object.keys(L).map(n=>`<option>${esc(n)}</option>`).join('');}
-function loadPreset(k,quiet){bench=presetState(k);presetKey=k;sel=null;$('#bb-preset').value=k;const pr=PRESETS[k];$('#bb-note').innerHTML=`<span class="pk-${pr.pinsKind}">${pr.pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS'}</span> ${esc(pr.pinsNote)}`;benchSave();if(!quiet)toast('Loaded preset: '+pr.name);drawBench();}
+  if(drag&&drag.mode==='move'){const c=bench.comps.find(k=>k.id===drag.id);if(!c)return;const f=FP[c.type];const nx=drag.ox+(p.x-drag.sx),ny=drag.oy+(p.y-drag.sy);
+   if(Math.hypot(p.x-drag.sx,p.y-drag.sy)>3)drag.moved=true;
+   if(f.off){c.x=Math.round(nx);c.y=Math.round(ny);}else{const h=nearestHole(nx,ny);if(validPlacement(bench,c.type,h.col,h.row,c.id)){c.col=h.col;c.row=h.row;}}drawBench();return;}
+  const t=nearestNode(p.x,p.y);if(t!==hoverNode){hoverNode=t;updateInspector();if(!sel&&!selNet){const named=nameNets(bench);renderBench(svg,bench,{sel,netRoot:t?named.nets.root(t):null,netNames:named.rootToName});if(ghost){/* skip */} $('#bb-info2').textContent=`${bench.comps.length} parts · ${bench.wires.length} wires`;updateInspector();}}
+ });
+ svg.addEventListener('pointerup',e=>{
+  ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;
+  if(panMode)return;const p=svgPt(svg,e);
+  if(drag&&drag.mode==='wire'){const moved=Math.hypot(p.x-(drag.sx||drag.x),p.y-(drag.sy||drag.y))>6;const t=nearestNode(p.x,p.y,drag.from);
+   if(t&&moved){pushHist();bench.wires.push({id:'w'+Date.now().toString(36),a:drag.from,b:t,color:wireColor});presetKey=null;setPresetNote(null);sel=bench.wires[bench.wires.length-1].id;selNet=null;syncSelNetName();benchSave();toast('Wire added');}
+   else if(!moved){const w=wireAt(p.x,p.y,9);if(w){sel=w;selNet=null;syncSelNetName();}else if(drag.from){sel=null;selNet=computeNets(bench).root(drag.from);syncSelNetName();}}
+   drag=null;drawBench();return;}
+  if(drag&&drag.mode==='move'){const c=bench.comps.find(k=>k.id===drag.id);
+   if(c&&drag.maybePress&&!drag.moved){pushHist();c.pressed=!c.pressed;toast(c.pressed?'Button pressed (closed)':'Button released (open)');benchSave();}
+   else if(drag.moved){pushHist();presetKey=null;setPresetNote(null);benchSave();}
+   drag=null;drawBench();return;}
+ });
+ svg.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;});
+ svg.addEventListener('pointerleave',e=>{if(e.buttons)return;hoverNode=null;if(!sel&&!selNet)drawBench();else updateInspector();});
+ svg.addEventListener('dblclick',e=>{const wg=e.target.closest('g.wire');if(wg){pushHist();bench.wires=bench.wires.filter(w=>w.id!==wg.dataset.wire);if(sel===wg.dataset.wire){sel=null;selNet=null;selNetName='';}benchSave();drawBench();}});
+ svg.addEventListener('contextmenu',e=>{const wg=e.target.closest('g.wire'),cg=e.target.closest('g.comp');if(wg||cg){e.preventDefault();sel=wg?wg.dataset.wire:cg.dataset.comp;selNet=null;syncSelNetName();pushHist();delSel(true);toast('Deleted — Undo if that was a mistake');}});
 
-/* ---------- schematics tab ---------- */
-function renderSchemTab(){const k=$('#sc-preset').value;const pr=PRESETS[k];const view=$('input[name=scv]:checked').value;
- $('#sc-note').innerHTML=`<span class="pk-${pr.pinsKind}">${pr.pinsKind==='actual'?'YOUR ACTUAL PINS':'EXAMPLE PINS'}</span> ${esc(pr.pinsNote)}`;
- const svg=$('#sc-svg');if(view==='schem')renderSchematic(svg,k);else renderBench(svg,presetState(k),{});
- $('#sc-table').innerHTML=`<table class="pt"><thead><tr><th>From (header pin #)</th><th>To</th><th>Net</th><th>Wire</th><th>Notes</th></tr></thead><tbody>${pr.table.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td><code>${esc(r[2])}</code></td><td>${r[3]&&r[3]!=='—'?`<i class="wc" style="background:${({red:'#d22',black:'#222',blue:'#2b7de9',yellow:'#f2c80f',green:'#2fbf4a',purple:'#9b59b6',orange:'#f08a1c',brown:'#6b3b1d',pink:'#ff6b6b'})[r[3]]||'#888'}"></i>`:''}${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('')}</tbody></table>`;}
+ $('#bb-del').onclick=()=>delSel();
+ $('#bb-del-dock')&&($('#bb-del-dock').onclick=()=>delSel());
+ $('#bb-clear').onclick=()=>{if(!confirm('Clear the bench?'))return;pushHist();bench={comps:[],wires:[]};presetKey=null;sel=null;selNet=null;selNetName='';setPresetNote(null);benchSave();drawBench();};
+ $('#bb-preset').onchange=e=>{if(!e.target.value)return;if(!confirmReplace()){$('#bb-preset').value=presetKey||'';return;}loadPreset(e.target.value);};
+ $('#bb-toschem').onclick=()=>{showTab('schem');fillSchPresets(presetKey||'custom');$('#sc-preset').value=presetKey&&PRESETS[presetKey]?presetKey:'custom';renderSchemTab();};
+ $('#bb-save').onclick=()=>{const name=prompt('Layout name:',presetKey&&PRESETS[presetKey]?PRESETS[presetKey].name:'My layout');if(!name)return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');L[name]={bench,saved:new Date().toISOString()};localStorage.setItem(LS_LAY,JSON.stringify(L));refreshLayouts();toast('Layout saved');};
+ $('#bb-load').onclick=()=>{const n=$('#bb-layouts').value;if(!n)return;if(!confirmReplace('Load “'+n+'” and replace the current bench?'))return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');if(L[n]){pushHist();bench=JSON.parse(JSON.stringify(L[n].bench));presetKey=null;sel=null;selNet=null;selNetName='';setPresetNote(null);benchSave();drawBench();toast('Loaded '+n);}};
+ $('#bb-ldel').onclick=()=>{const n=$('#bb-layouts').value;if(!n)return;if(!confirm('Delete saved layout “'+n+'”?'))return;const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');delete L[n];localStorage.setItem(LS_LAY,JSON.stringify(L));refreshLayouts();toast('Layout deleted');};
+ $('#bb-label')&&($('#bb-label').onchange=e=>{const w=sel&&bench.wires.find(x=>x.id===sel);if(!w)return;pushHist();w.label=e.target.value.trim();benchSave();drawBench();});
+ $('#bb-press')&&($('#bb-press').onclick=()=>{const c=sel&&bench.comps.find(x=>x.id===sel);if(!c||c.type!=='button')return;pushHist();c.pressed=!c.pressed;benchSave();drawBench();});
+
+ document.addEventListener('keydown',e=>{
+  if($('#modal').classList.contains('on')){if(e.key==='Escape'){e.preventDefault();closeModal();}return;}
+  const inField=/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName);
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();if(e.shiftKey)redo();else undo();return;}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();redo();return;}
+  if(!$('#tab-bench').classList.contains('on'))return;
+  if(e.key==='Escape'){ghost=null;$('#bb-hint').textContent='';sel=null;selNet=null;selNetName='';drawBench();}
+  if((e.key==='Delete'||e.key==='Backspace')&&sel&&!inField){e.preventDefault();delSel();}
+ });
+
+ const cur=JSON.parse(localStorage.getItem(LS_CUR)||'null');
+ if(cur&&cur.bench&&Array.isArray(cur.bench.comps)&&cur.bench.comps.length){bench=cur.bench;if(!Array.isArray(bench.wires))bench.wires=[];presetKey=cur.presetKey||null;if(presetKey&&PRESETS[presetKey]){$('#bb-preset').value=presetKey;setPresetNote(presetKey);}else{$('#bb-preset').value='';setPresetNote(null);}}
+ else loadPreset('st7789',true);
+ refreshLayouts();pushHist();drawBench();}
+function delSel(alreadySnapped){if(!sel)return;if(!alreadySnapped)pushHist();bench.wires=bench.wires.filter(w=>w.id!==sel);const isComp=bench.comps.some(c=>c.id===sel);if(isComp){bench.comps=bench.comps.filter(c=>c.id!==sel);bench.wires=bench.wires.filter(w=>!w.a.startsWith(`p:${sel}:`)&&!w.b.startsWith(`p:${sel}:`));}sel=null;selNet=null;selNetName='';presetKey=null;setPresetNote(null);benchSave();drawBench();}
+function refreshLayouts(){const L=JSON.parse(localStorage.getItem(LS_LAY)||'{}');$('#bb-layouts').innerHTML='<option value="">Saved layouts…</option>'+Object.keys(L).map(n=>`<option>${esc(n)}</option>`).join('');}
+function loadPreset(k,quiet){if(!PRESETS[k])return;bench=presetState(k);presetKey=k;sel=null;selNet=null;selNetName='';hoverNode=null;$('#bb-preset').value=k;setPresetNote(k);benchSave();if(!quiet){pushHist();toast('Loaded preset: '+PRESETS[k].name);}drawBench();}
+function placeOnBench(type){if(!FP[type]){toast('No breadboard footprint for that part yet');return;}showTab('bench');startPlaceSafe(type);}
+function startPlaceSafe(type){const f=FP[type];ghost=f.off?{type:type,x:400,y:120,tag:f.label}:{type:type,col:30,row:f.board?3:2,tag:f.label,ok:true};$('#bb-hint').textContent=`Placing ${f.label}: click to drop · Esc to cancel`;drawBench();}
+function openPresetOnBench(k){if(!PRESETS[k])return;if(!confirmReplace('Open this preset on the bench and replace the current layout?'))return;showTab('bench');loadPreset(k);}
+
+const WCOLORS=[['#d22','red'],['#222','black'],['#2b7de9','blue'],['#2fbf4a','green'],['#f2c80f','yellow'],['#f08a1c','orange'],['#9b59b6','purple'],['#eeeeee','white'],['#6b3b1d','brown']];
 
 /* ---------- shell ---------- */
-function openModal(html){$('#modal .mc').innerHTML=html;$('#modal').classList.add('on');}
+function openModal(html){$('#modal .mc').innerHTML=html;$('#modal').classList.add('on');const b=$('#modal .mx-close');if(b)b.focus();}
 function closeModal(){$('#modal').classList.remove('on');}
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800);}
-function showTab(id){$$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===id));$$('.tab').forEach(t=>t.classList.toggle('on',t.id==='tab-'+id));history.replaceState(null,'','#'+id);if(id==='bench')drawBench();window.scrollTo(0,0);}
+const TABS=['inventory','combos','projects','bench','schem','recs'];
+function showTab(id,opts={}){if(!TABS.includes(id))id='inventory';
+ $$('.tabs button').forEach(b=>{const on=b.dataset.tab===id;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');});
+ $$('.tab').forEach(t=>t.classList.toggle('on',t.id==='tab-'+id));
+ TABS.forEach(t=>document.body.classList.remove('tab-'+t));document.body.classList.add('tab-'+id);
+ if(!opts.noHash){const cur=location.hash.slice(1).split('/');const keep=cur[0]===id&&cur[1]?id+'/'+cur[1]:id;if(location.hash.slice(1)!==keep)history.replaceState(null,'','#'+keep);}
+ if(id==='bench')drawBench();if(id==='schem')renderSchemTab();if(!opts.noScroll)window.scrollTo(0,0);}
+function applyHash(){const raw=location.hash.slice(1);const [tab,id]=raw.split('/');const t=TABS.includes(tab)?tab:'inventory';showTab(t,{noHash:true,noScroll:false});
+ if(!id)return;if(t==='inventory'&&P_(id))partDetail(id);
+ if(t==='projects'){const el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1500);}}
+ if(t==='bench'&&PRESETS[id])loadPreset(id,true);
+ if(t==='schem'){fillSchPresets(id);if(id&&(PRESETS[id]||id==='custom')){$('#sc-preset').value=id;renderSchemTab();}}}
 function renderAll(){renderInventory();renderCombos();renderProjects();updateStats();}
 function updateStats(){$('#st-parts').textContent=allParts().length;$('#st-proj').textContent=PROJECTS.length;$('#st-build').textContent=PROJECTS.filter(p=>projStatus(p).full).length;$('#st-kit').textContent=allParts().filter(p=>p.kit).length;}
+
 document.addEventListener('DOMContentLoaded',()=>{
  const cats=[...new Set(PARTS.map(p=>p.cat))];$('#inv-cat').innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option>${c}</option>`).join('');
  const ifs=['GPIO','PWM','I2C','SPI','I2S','UART','ADC','CSI','Wi-Fi','Power'];$('#inv-if').innerHTML='<option value="">All interfaces</option>'+ifs.map(c=>`<option>${c}</option>`).join('');
  $('#inv-st').innerHTML='<option value="">Any status</option>'+Object.entries(STATUS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
  const tags=[...new Set(PROJECTS.flatMap(p=>p.tags))];$('#pj-tag').innerHTML='<option value="">All themes</option>'+tags.map(t=>`<option>${t}</option>`).join('');
- const popts=Object.entries(PRESETS).map(([k,v])=>`<option value="${k}">${esc(v.name)}</option>`).join('');$('#bb-preset').innerHTML='<option value="">Load a preset…</option>'+popts;$('#sc-preset').innerHTML=popts;
+ const popts=Object.entries(PRESETS).map(([k,v])=>`<option value="${k}">${esc(v.name)}</option>`).join('');$('#bb-preset').innerHTML='<option value="">Load a preset…</option>'+popts;fillSchPresets();
  ['#inv-q','#inv-cat','#inv-if','#inv-st'].forEach(s=>$(s).addEventListener('input',renderInventory));
  ['#pj-can','#pj-tag','#pj-diff'].forEach(s=>$(s).addEventListener('input',renderProjects));
  $('#cb-pick').addEventListener('input',e=>renderPick(e.target.value));
  $('#sc-preset').addEventListener('input',renderSchemTab);$$('input[name=scv]').forEach(r=>r.addEventListener('input',renderSchemTab));
  $('#inv-grid').addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;const id=card.dataset.id;if(e.target.classList.contains('b-edit'))editPart(id);else if(e.target.classList.contains('b-combo')){showTab('combos');$('#cb-pick').value=id;renderPick(id);}else partDetail(id);});
- document.addEventListener('click',e=>{const a=e.target.closest('[data-goproj],[data-part],[data-pickgo],[data-pick],[data-cell]');if(!a)return;e.preventDefault();
-  if(a.dataset.goproj){closeModal();showTab('projects');$('#pj-can').checked=false;renderProjects();setTimeout(()=>{const el2=document.getElementById(a.dataset.goproj);if(el2){el2.scrollIntoView({behavior:'smooth',block:'center'});el2.classList.add('flash');setTimeout(()=>el2.classList.remove('flash'),1500);}},50);}
-  else if(a.dataset.part)partDetail(a.dataset.part);
+ document.addEventListener('click',e=>{
+  const gp=e.target.closest('[data-goproj],[data-part],[data-pickgo],[data-pick],[data-cell],[data-gopreset],[data-addbb]');if(!gp)return;
+  if(gp.dataset.gopreset){e.preventDefault();closeModal();openPresetOnBench(gp.dataset.gopreset);return;}
+  if(gp.dataset.addbb){e.preventDefault();closeModal();placeOnBench(gp.dataset.addbb);return;}
+  const a=gp;e.preventDefault();
+  if(a.dataset.goproj){closeModal();showTab('projects');$('#pj-can').checked=false;renderProjects();history.replaceState(null,'','#projects/'+a.dataset.goproj);setTimeout(()=>{const el2=document.getElementById(a.dataset.goproj);if(el2){el2.scrollIntoView({behavior:'smooth',block:'center'});el2.classList.add('flash');setTimeout(()=>el2.classList.remove('flash'),1500);}},50);}
+  else if(a.dataset.part){partDetail(a.dataset.part);history.replaceState(null,'','#inventory/'+a.dataset.part);}
   else if(a.dataset.pickgo||a.dataset.pick){const id=a.dataset.pickgo||a.dataset.pick;if(P_(id)){$('#cb-pick').value=id;renderPick(id);$('#cb-detail').scrollIntoView({behavior:'smooth',block:'nearest'});}}
   else if(a.dataset.cell){const [c,p]=a.dataset.cell.split('|');const r=compat(c,p);openModal(`<h2>${esc(P_(p).name)} ↔ ${esc(P_(c).name)}</h2><p class="lvl lv-${r.lvl}">${LVL[r.lvl][0]} ${LVL[r.lvl][1]}</p><ul>${r.notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul><p class="sub">${esc(CONTROLLERS[c].note)}</p>`);}});
  $('#modal').addEventListener('click',e=>{if(e.target.id==='modal'||e.target.classList.contains('mx-close'))closeModal();});
- $$('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+ $$('.tabs button').forEach(b=>b.onclick=()=>{history.replaceState(null,'','#'+b.dataset.tab);showTab(b.dataset.tab);});
+ window.addEventListener('hashchange',applyHash);
  $('#inv-export').onclick=exportJSON;$('#inv-import').onclick=()=>$('#inv-file').click();$('#inv-file').onchange=e=>e.target.files[0]&&importJSON(e.target.files[0]);$('#inv-add').onclick=addCustom;
- renderAll();renderRecs();setupBench();renderSchemTab();
- const h=location.hash.slice(1);showTab(['inventory','combos','projects','bench','schem','recs'].includes(h)?h:'inventory');});
+ renderAll();renderRecs();setupBench();fillSchPresets();renderSchemTab();
+ applyHash();
+});
 </script></body></html>
