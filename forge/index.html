@@ -195,10 +195,10 @@ const PARTS = [
   gotchas:['3.3V logic only. Never feed 5V into a GPIO.','The 5V pin is USB VBUS passthrough: fine for 2 SG90s with a 1000 µF cap, but brownouts happen under load. A separate 5V supply is safer.','SD card uses D8–D10. Don\'t use SD while the ST7789 is on those pins.','Headers are a beginner soldering risk. Practice first or use a pre-soldered unit.'],
   uses:'Valkor body: face display, servos, glow, audio.', doc:'https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/', img:'xiao-esp32s3-sense.jpg', imgKind:'exact', imgSrc:'Seeed Studio product page', bb:'xiao'},
  {id:'devkit', name:'ESP32 DevKit V1 (ESP-WROOM-32)', nick:'Bench board', cat:'Controller', qty:null, status:'in-use', volt:'5V USB / VIN, 3.3V logic', logic:'3.3', iface:['GPIO','PWM','I2C','SPI','I2S','UART','ADC','DAC','Wi-Fi','BLE'],
-  specs:['ESP32 dual-core 240 MHz, 520 KB SRAM, 4 MB flash','30-pin DOIT layout, CP2102/CH340 USB-serial','Arduino: board "ESP32 Dev Module", core 3.3.12, COM3 on your PC','2 × 8-bit DAC (GPIO25/26), 18 ADC channels'],
+  specs:['ESP32 dual-core 240 MHz, 520 KB SRAM, 4 MB flash','30-pin DOIT layout, CP2102/CH340 USB-serial, micro-USB port (verify on your exact board)','Arduino: board "ESP32 Dev Module", core 3.3.12, COM3 on your PC','2 × 8-bit DAC (GPIO25/26), 18 ADC channels'],
   pinout:'Working ST7789 test: SCK=D18, MOSI=D23, CS=D5, DC=RX2 (GPIO16), RST=TX2 (GPIO17), BL not driven. Default I2C: SDA=21, SCL=22. GPIO34–39 are input-only. Avoid GPIO6–11 (flash).',
   gotchas:['3.3V logic. HC-SR04 echo and other 5V outputs need a divider or level shifter.','Strapping pins GPIO0, 2, 5, 12, 15 affect boot. GPIO12 HIGH at boot can break flashing.','ADC2 pins (e.g. 25–27, 12–15) stop working as ADC when Wi-Fi is on.','VIN while USB-powered is ~4.7V after the diode. Don\'t run motors from it.'],
-  uses:'Breadboard testing: screen and face tests now, learning projects next.', doc:'https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html', img:'esp32-devkit.jpg', imgKind:'ref', imgSrc:'Espressif dev board (Adafruit listing). Similar to your DOIT V1, not identical', bb:'devkit'},
+  uses:'Breadboard testing: screen and face tests now, learning projects next. The micro-USB data cables in the Armory fit this board (verify).', doc:'https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html', img:'esp32-devkit.jpg', imgKind:'ref', imgSrc:'Espressif dev board (Adafruit listing). Similar to your DOIT V1, not identical', bb:'devkit'},
  {id:'hatch', name:'Waveshare ESP32-S3 Touch AMOLED 2.06"', nick:'Hatch', cat:'Controller', qty:1, status:'spare', volt:'5V USB-C / LiPo, 3.3V logic', logic:'3.3', iface:['Touch','QSPI display','I2C','I2S codec','IMU','RTC','Wi-Fi','BLE'],
   specs:['ESP32-S3R8, 8 MB PSRAM, 32 MB flash','2.06" 410×502 AMOLED (QSPI) + capacitive touch','QMI8658 6-axis IMU, PCF85063 RTC, ES8311 audio codec, AXP2101 power management','Watch form factor with LiPo support and a microSD slot'],
   pinout:'Mostly internal. Very few broken-out GPIO, so check the Waveshare pinout before wiring anything external.',
@@ -230,8 +230,8 @@ const PARTS = [
   gotchas:['Keep SPI at about 10 MHz on long jumpers (your sketch does).','invertDisplay(true) is needed for correct colors.','Don\'t drive BL until the transistor-driven input is confirmed (see your screen-test README).'],
   uses:'Valkor\'s animated face (working: screen + face tests passed on the DevKit).', doc:'https://www.waveshare.com/wiki/1.47inch_LCD_Module', img:'st7789-147.jpg', imgKind:'exact', imgSrc:'Waveshare product page', bb:'st7789'},
  {id:'ssd1306', name:'SSD1306 0.96" OLED (128×64, I2C)', nick:'', cat:'Display', qty:null, status:'spare', volt:'3.3–5V', logic:'3.3', iface:['I2C'],
-  specs:['128×64 monochrome','Address 0x3C (some 0x3D)','About 20 mA typical'],
-  pinout:'GND, VCC, SCL, SDA (check the silkscreen: some swap GND/VCC).', gotchas:['Pin order varies between sellers. Read the silkscreen.','Burn-in on static images: dim or move content.'],
+  specs:['128×64 monochrome','Address 0x3C (some 0x3D)','About 20 mA typical','2 more 0.96"-style header boards arrived Nov 13 (verify model: most likely more SSD1306 I2C OLEDs). Earlier quantity was uncounted, so this is not a full total.'],
+  pinout:'GND, VCC, SCL, SDA (check the silkscreen: some swap GND/VCC).', gotchas:['Pin order varies between sellers. Read the silkscreen.','Burn-in on static images: dim or move content.','Verify the Nov 13 boards are SSD1306 before treating them as identical to the existing one.'],
   uses:'Practice displays, status readouts, small dashboards.', doc:'https://learn.adafruit.com/monochrome-oled-breakouts', img:'ssd1306.jpg', imgKind:'ref', imgSrc:'Adafruit 0.96" OLED. Yours is likely a generic blue/black board', bb:'ssd1306'},
  {id:'lcd1602', name:'LCD1602 character display', nick:'', cat:'Display', qty:1, status:'kit', kit:true, volt:'5V', logic:'5', iface:['GPIO (4-bit parallel)'],
   specs:['16×2 characters, HD44780','6 GPIO in 4-bit mode + contrast pot'],
@@ -315,13 +315,44 @@ const PARTS = [
  // ---------- Power ----------
  {id:'charger45', name:'45 W USB-C charger', nick:'', cat:'Power', qty:1, status:'in-use', volt:'5V/9V/15V/20V PD', logic:'—', iface:['Power'], specs:['Gives 5V by default to simple USB-C sinks; higher voltages only after PD negotiation'], pinout:'—', gotchas:['A USB-C breakout without PD gets 5V (up to ~3A on most chargers).'], uses:'Powers Valkor and your servo rail.', doc:'https://www.usb.org/usb-charger-pd', img:null, illus:'charger', imgKind:'illus'},
  {id:'mb102', name:'Breadboard power module (MB102)', nick:'', cat:'Power', qty:1, status:'kit', kit:true, volt:'In 6.5–12V barrel/USB; out 3.3V/5V', logic:'—', iface:['Power'], specs:['Jumper-select 3.3V/5V per rail, ~700 mA max'], pinout:'Plugs into one end of the breadboard rails.', gotchas:['Not enough for several servos under load.','Check polarity alignment with the rails.'], uses:'Quick breadboard power.', doc:'https://www.elegoo.com/products/elegoo-mega-2560-the-most-complete-starter-kit', img:null, illus:'mb102', imgKind:'illus'},
+ {id:'barreljack', name:'DC barrel jack adapters (5.5×2.1 mm pigtails)', nick:'', cat:'Power', qty:null, status:'spare', volt:'Depends on the wall adapter (5V intended for servos)', logic:'—', iface:['Power'],
+  specs:['Male and female 5.5×2.1 mm pigtails with green screw terminals (verify exact size)','Pack also looked like it includes a right-angle barrel coupler (verify)','Arrived Nov 13'],
+  pinout:'Screw terminals are usually + and − next to the barrel. Confirm with a meter before connecting a board.',
+  gotchas:['These are only the connectors. You still need a regulated 5V 2–3A wall adapter.','Verify barrel size (5.5×2.1 mm is typical, not guaranteed from the thumbnail) and center-positive vs center-negative polarity. A mismatch can kill a board.','Share GND with the controller. Add 1000 µF on the 5V rail near the servos.'],
+  uses:'Clean external 5V servo supply once a regulated 5V wall adapter is on hand.', doc:'', img:null, illus:'barreljack', imgKind:'illus'},
  // ---------- Prototyping ----------
  {id:'breadboard', name:'Breadboards (830 + half)', nick:'', cat:'Prototyping', qty:null, status:'in-use', volt:'—', logic:'—', iface:[], specs:['830 tie points, rails on both sides'], pinout:'Columns of 5 connected; rails run lengthwise (some split in the middle!).', gotchas:['Check whether your rails are split in the middle with a continuity test.'], uses:'Every prototype.', doc:AF(239), img:'breadboard.jpg', imgKind:'ref', imgSrc:'Adafruit 830 breadboard'},
  {id:'jumpers', name:'Jumper wires (M-M, M-F, F-F)', nick:'', cat:'Prototyping', qty:null, status:'in-use', volt:'—', logic:'—', iface:[], specs:['Dupont 2.54 mm'], pinout:'—', gotchas:['Cheap jumpers can be open-circuit. Test the suspicious ones.'], uses:'Every prototype.', doc:AF(758), img:'jumpers.jpg', imgKind:'ref', imgSrc:'Adafruit jumper wires'},
+ // ---------- Cables ----------
+ {id:'usbcable', name:'USB-C cables (braided, 3-pack)', nick:'', cat:'Cables', qty:3, status:'spare', volt:'—', logic:'—', iface:['USB'],
+  specs:['Braided USB-C cables, 3-pack (exact length and rating unknown; verify)','Arrived Nov 13'],
+  pinout:'—',
+  gotchas:['Verify they carry data, not charge-only, before using them to flash a board.','Thin or long cables can drop voltage on a Pi 4 (needs a solid 5V 3A supply).'],
+  uses:'XIAO, Hatch, Pi 4, and the 45 W USB-C charger.', doc:'', img:null, illus:'usbcable', imgKind:'illus'},
+ {id:'microusb', name:'Micro-USB cables, 6 ft data (2-pack)', nick:'', cat:'Cables', qty:2, status:'spare', volt:'—', logic:'—', iface:['USB'],
+  specs:['6 ft micro-USB cables, sold as data cables, 2-pack (verify)','Arrived Oct 30'],
+  pinout:'—',
+  gotchas:['Confirm they are data-capable if a board is not detected.','The ESP32 DevKit / Waveshare bench board uses micro-USB (verify on your exact board). The XIAO, Hatch and Pi 4 are USB-C.'],
+  uses:'Flashing and serial on the ESP32 DevKit used for the screen and face tests.', doc:'', img:null, illus:'microusb', imgKind:'illus'},
+ {id:'servoext', name:'Servo extension cables (JR 3-pin)', nick:'', cat:'Cables', qty:10, status:'spare', volt:'—', logic:'—', iface:['PWM'],
+  specs:['Male–female 3-pin leads, brown/red/orange JR-style (same order as SG90: GND / +5V / signal)','About 10+ in the pack (verify count and length)','Arrived Nov 13'],
+  pinout:'Brown = GND, red = +5V, orange = signal. Match the servo colors; do not assume every seller uses the same order.',
+  gotchas:['Plug it in backwards and the servo can be damaged. Check color and keying first.','Extensions add resistance; keep the 5V/GND path short and thick when you can, and keep the 1000 µF cap near the servo.'],
+  uses:'Lengthen SG90 and pan-tilt leads so they reach the controller or a remote 5V rail.', doc:'', img:null, illus:'servoext', imgKind:'illus'},
  // ---------- Mechanical / tools ----------
  {id:'fasteners', name:'M2–M5 screws, nuts, standoffs', nick:'', cat:'Mechanical', qty:null, status:'spare', volt:'—', logic:'—', iface:[], specs:['Assorted metric hardware'], pinout:'—', gotchas:['Design 3D-printed holes 0.2–0.3 mm oversize for clearance.'], uses:'Mounting boards, servos, the Valkor body.', doc:AF(3299), img:null, illus:'fasteners', imgKind:'illus'},
  {id:'heatset', name:'M3 heat-set inserts', nick:'', cat:'Mechanical', qty:null, status:'spare', volt:'—', logic:'—', iface:[], specs:['Brass, pressed in with the soldering iron'], pinout:'—', gotchas:['Use a dedicated tip at about 220–250 °C for PLA. Press straight and slowly.','Arrival was pending in late Oct. Confirm you have them.'], uses:'Valkor body final assembly.', doc:AF(4255), img:'heatset.jpg', imgKind:'ref', imgSrc:'Adafruit M3 heat-set inserts'},
  {id:'iron', name:'Soldering iron', nick:'', cat:'Tool', qty:1, status:'tool', volt:'—', logic:'—', iface:[], specs:['Used for the MAX98357 headers'], pinout:'—', gotchas:['Tin the tip; ~330 °C for leaded and ~360 °C for lead-free; ventilate.'], uses:'Headers, wires, heat-set inserts.', doc:'https://learn.adafruit.com/adafruit-guide-excellent-soldering', img:'solder.jpg', imgKind:'ref', imgSrc:'Adafruit soldering iron (not your exact model)'},
+ {id:'gluegun', name:'Hot glue gun kit (with sticks)', nick:'', cat:'Tool', qty:1, status:'tool', volt:'Mains (verify voltage and whether it is dual-temp)', logic:'—', iface:[],
+  specs:['Orange glue gun with glue sticks (Gorilla-style sticks in the pack; verify brand and diameter)','Arrived Nov 13'],
+  pinout:'—',
+  gotchas:['Hot glue and the metal nozzle can burn skin and melt PLA. Keep it off boards, headers, and moving servo horns.','Use it for fixtures, strain relief, and temporary mounts, not as a structural joint or an electrical insulator on live pins.','Unplug it when you are done; verify the exact model for any auto-shutoff.'],
+  uses:'Tacking wire bundles, holding a part while a mount is printed, non-structural workshop fixes.', doc:'', img:null, illus:'gluegun', imgKind:'illus'},
+ {id:'irthermo', name:'Infrared thermometer gun (with K-type probe)', nick:'', cat:'Tool', qty:1, status:'tool', volt:'Battery (verify type)', logic:'—', iface:[],
+  specs:['Orange non-contact IR thermometer with a K-type thermocouple probe (verify the exact model and ranges)','Arrived Nov 4'],
+  pinout:'—',
+  gotchas:['IR readings depend on emissivity and distance. Shiny regulators and solder tips can read low until you verify with the probe or a known surface.','The probe measures contact temperature; do not short it across a live circuit.','This is a workshop tool, not a medical thermometer.'],
+  uses:'Checking regulator, servo, and solder-tip temperatures before they get hot enough to cause trouble.', doc:'', img:null, illus:'irthermo', imgKind:'illus'},
  {id:'printer3d', name:'3D printer', nick:'', cat:'Tool', qty:1, status:'tool', volt:'—', logic:'—', iface:[], specs:['Printing the Valkor crystal body (two-part, hollow)'], pinout:'—', gotchas:['Leave about 0.3 mm tolerance for press fits and screw bosses for inserts.'], uses:'Enclosures, mounts, rover chassis.', doc:'https://www.tinkercad.com/', img:null, illus:'printer', imgKind:'illus'},
  {id:'software', name:'PC toolchain', nick:'', cat:'Software', qty:1, status:'in-use', volt:'—', logic:'—', iface:['USB serial'], specs:['Arduino IDE + ESP32 core 3.3.12','Python, esptool, pyserial','Adafruit ST7789 1.12 / GFX 1.13 / BusIO 1.17.4'], pinout:'—', gotchas:['Keep library versions pinned once a sketch works.'], uses:'Flashing and talking to every board.', doc:'https://docs.espressif.com/projects/arduino-esp32/en/latest/', img:null, illus:'software', imgKind:'illus'},
  {id:'dronestack', name:'Drone/rover stack', nick:'', cat:'Kit', qty:null, status:'spare', volt:'?', logic:'?', iface:[], specs:['Listed in your Oct 14 hardware notes. Contents not recorded'], pinout:'—', gotchas:['Edit this card with what\'s in it (frame, motors, ESCs, flight controller, battery).'], uses:'Future rover/drone builds.', doc:'', img:null, illus:'drone', imgKind:'illus'}
@@ -373,14 +404,24 @@ const PAIRS = [
  ['speaker','buzzer','Speaker via amp for voice; buzzer for cheap beeps. Choose per need.','ok'],
  ['heatset','printer3d','Print bosses about 4.0–4.2 mm for M3 inserts, then press in with the iron.','good'],
  ['heatset','iron','The iron (with a spare tip) installs the inserts.','good'],
- ['fasteners','printer3d','M2 for the XIAO/OLED, M2.5 for the Pi, M3 for the body with inserts.','good']
+ ['fasteners','printer3d','M2 for the XIAO/OLED, M2.5 for the Pi, M3 for the body with inserts.','good'],
+ ['servoext','sg90','JR-style 3-pin extensions (brown/red/orange) lengthen the spare SG90 leads. Verify polarity before plugging in.','good'],
+ ['servoext','pantilt','Same extensions reach from the pan-tilt servos to the controller or a remote 5V rail.','good'],
+ ['barreljack','sg90','The 5.5×2.1 mm barrel pigtails (verify size) let a regulated 5V wall adapter feed a servo rail. The adapter itself is still needed. Common ground and 1000 µF still apply.','ok'],
+ ['barreljack','pantilt','Same: barrel pigtails plus a regulated 5V 2–3A wall adapter (still to buy) make a clean external supply for the pan-tilt.','ok'],
+ ['barreljack','cap1000','Put the 1000 µF cap on the pigtail 5V/GND after the barrel jack, close to the servos.','good'],
+ ['microusb','devkit','The DevKit uses a micro-USB port (verify on your board). These 6 ft data cables are the right connector for flashing and serial.','good'],
+ ['usbcable','xiao','Braided USB-C cables (verify they carry data) for the XIAO.','good'],
+ ['usbcable','hatch','USB-C for the Hatch.','good'],
+ ['usbcable','charger45','Cable from the 45 W charger to a USB-C board.','ok'],
+ ['irthermo','iron','Check the iron tip with the IR gun or its K-type probe (verify emissivity and the probe type).','good']
 ];
 
 /* ===== Projects ===== */
 const PROJECTS = [
  {id:'p-valkor-voice', name:'Valkor: Whisper level (voice out)', diff:2, tags:['Valkor'], parts:[['xiao',1],['max98357',1],['speaker',1],['breadboard',1],['jumpers',1]], extra:[],
   learn:['I2S audio timing','Streaming PCM from the PC over serial or Wi-Fi','Grounding to kill hum'], steps:['Wire the MAX98357 per Valkor WIRING.md (BCLK D2, LRC D3, DIN D6, VIN 5V).','Play a test tone with ESP32 I2S (16 kHz, 16-bit mono).','Stream Piper TTS audio from the studio and sync mouth movement to its loudness.']},
- {id:'p-valkor-gaze', name:'Valkor: Gaze level (pan-tilt neck)', diff:2, tags:['Valkor'], parts:[['xiao',1],['pantilt',1],['cap1000',1],['breadboard',1],['jumpers',1]], extra:[{n:'USB-C 5V breakout or 5V 3A buck', why:'clean separate servo rail; the XIAO 5V pin works but browns out under stall'}],
+ {id:'p-valkor-gaze', name:'Valkor: Gaze level (pan-tilt neck)', diff:2, tags:['Valkor'], parts:[['xiao',1],['pantilt',1],['cap1000',1],['breadboard',1],['jumpers',1]], extra:[{n:'Regulated 5V 2–3A wall adapter (5.5×2.1 mm, verify polarity)', why:'barrel-jack pigtails are now in the Armory; this adapter (or a USB-C 5V breakout / buck) is still needed for a clean servo rail. The XIAO 5V pin works but browns out under stall'}],
   learn:['Servo PWM','Power budgeting and common ground','Smooth easing motion'], steps:['Servo 5V/GND to a separate 5V supply, ground tied to the XIAO GND, 1000 µF across.','Signals on D0 (pan) / D1 (tilt).','Implement eased moves for the [move:] tags with soft travel limits.']},
  {id:'p-valkor-sight', name:'Valkor: Sight level (face tracking)', diff:3, tags:['Valkor','Vision'], parts:[['xiao',1],['pantilt',1],['cap1000',1],['jumpers',1]], extra:[{n:'5V 3A supply for servos', why:'tracking moves servos constantly'}],
   learn:['Camera capture on ESP32-S3','Offloading detection to the PC','PID / proportional control loops'], steps:['Stream low-res JPEG frames from the XIAO camera to the studio.','Run face detection on the PC (OpenCV / MediaPipe).','Send pan/tilt corrections back; tune P gain to avoid oscillation.']},
@@ -418,7 +459,7 @@ const PROJECTS = [
 
 /* ===== Recommendations ===== */
 const RECS = [
- {id:'r-buck', name:'Regulated 5V 3A buck / UBEC (or USB-C 5V breakout)', img:'ubec.jpg', prio:'Buy first', why:'Servos and motors must not share your board\'s regulator. A dedicated 5V rail (common ground, 1000 µF) ends brownouts and jitter. A USB-C breakout off your 45 W charger is the simplest path for the desk; a buck is for battery builds.', unlocks:['p-valkor-gaze','p-valkor-sight','p-tracker','p-pi-gimbal','p-joy-turret','p-rfid-lock','p-rover'], link:AF(1385), alt:AF(4090)},
+ {id:'r-buck', name:'Regulated 5V 2–3A supply (wall adapter, buck / UBEC, or USB-C 5V breakout)', img:'ubec.jpg', prio:'Buy first', why:'Servos and motors must not share your board\'s regulator. Barrel jack pigtails and a coupler (5.5×2.1 mm, verify size) arrived Nov 13, so a regulated 5V 2–3A wall adapter (same barrel size, verify center-positive polarity) is now the shortest path to a clean external servo rail. This is not done until that supply is in hand. A USB-C breakout off your 45 W charger or a buck/UBEC still works, especially for battery builds. Common ground and 1000 µF still apply.', unlocks:['p-valkor-gaze','p-valkor-sight','p-tracker','p-pi-gimbal','p-joy-turret','p-rfid-lock','p-rover'], link:AF(1385), alt:AF(4090)},
  {id:'r-pca', name:'PCA9685 16-channel servo driver', img:'pca9685.jpg', prio:'High', why:'Hardware PWM for up to 16 servos over 2 I2C pins. It frees XIAO pins and makes Pi servo control jitter-free.', unlocks:['p-pi-gimbal','p-tracker','p-valkor-gaze'], link:AF(815)},
  {id:'r-multimeter', name:'Digital multimeter (if you don\'t own one)', img:'multimeter.jpg', prio:'High', why:'Continuity-check your solder joints and jumpers, verify the 5V rail under load, and find split breadboard rails. The single most useful debug tool.', unlocks:['*'], link:AF(2034)},
  {id:'r-level', name:'Logic level shifter (BSS138 4-ch)', img:'levelshift.jpg', prio:'Medium', why:'Safely connect 5V parts (HC-SR04 echo, Mega) to 3.3V boards (ESP32, Pi), and the RC522 to the Mega.', unlocks:['p-rover','p-rfid-lock'], link:AF(757)},
@@ -438,7 +479,8 @@ const TIPS = [
  ['Test parts alone','Like the screen test: prove each module alone on the DevKit before it touches the XIAO.'],
  ['Strapping pins','On the classic ESP32 avoid GPIO0/2/5/12/15 for inputs that might be held at boot; never use GPIO6–11.'],
  ['Short, twisted power leads','Long thin jumpers drop voltage. Use short, thicker wires for 5V/GND to servos and the amp.'],
- ['Pin your library versions','Your working stack: ESP32 core 3.3.12, Adafruit ST7789 1.12, GFX 1.13, BusIO 1.17.4. Note it in each sketch header.']
+ ['Pin your library versions','Your working stack: ESP32 core 3.3.12, Adafruit ST7789 1.12, GFX 1.13, BusIO 1.17.4. Note it in each sketch header.'],
+ ['Check temperatures','Use the IR thermometer (and its K-type probe, if fitted) to check regulator, servo, and solder-tip temperatures. Verify emissivity and the probe type before trusting a reading. Shiny metal can read low.']
 ];
 
 /* ===== Forge Bench: breadboard simulator ===== */
@@ -765,7 +807,13 @@ function illus(kind,label){const icons={
  crimp:'<path d="M50 120 L95 70 L105 80 L60 130z" fill="#c33"/><path d="M150 120 L105 70 L95 80 L140 130z" fill="#c33"/><rect x="88" y="40" width="24" height="40" rx="3" fill="#888"/><g fill="#222">'+[0,1,2,3].map(i=>`<rect x="${130+i*10}" y="30" width="7" height="22"/>`).join('')+'</g>',
  chassis:'<rect x="55" y="55" width="90" height="50" rx="6" fill="#c9a24a" opacity=".85"/><rect x="35" y="48" width="20" height="64" rx="6" fill="#222"/><rect x="145" y="48" width="20" height="64" rx="6" fill="#222"/><rect x="70" y="62" width="30" height="16" fill="#ffd23f"/><rect x="100" y="62" width="30" height="16" fill="#ffd23f"/><circle cx="100" cy="118" r="7" fill="#999"/>',
  analyzer:'<rect x="55" y="45" width="90" height="56" rx="6" fill="#222" stroke="#555"/><text x="100" y="78" font-size="10" fill="#7fd1a3" text-anchor="middle">LOGIC 8CH</text>'+[0,1,2,3,4,5,6,7].map(i=>`<line x1="${66+i*10}" y1="101" x2="${60+i*12}" y2="140" stroke="${['#000','#8b4513','#d22','#f80','#ff0','#2c2','#26f','#a3f'][i]}" stroke-width="3"/>`).join(''),
- wire:'<path d="M30 110 C70 30 120 150 170 60" stroke="#d22" stroke-width="6" fill="none"/><path d="M30 120 C80 50 120 160 170 75" stroke="#222" stroke-width="6" fill="none"/><rect x="120" y="100" width="40" height="14" rx="4" fill="#333"/>'};
+ wire:'<path d="M30 110 C70 30 120 150 170 60" stroke="#d22" stroke-width="6" fill="none"/><path d="M30 120 C80 50 120 160 170 75" stroke="#222" stroke-width="6" fill="none"/><rect x="120" y="100" width="40" height="14" rx="4" fill="#333"/>',
+gluegun:'<path d="M38 68 h72 l10 10 v28 h-22 l-8 20 h-16 l8-20 H38z" fill="#ff7a2a"/><rect x="110" y="74" width="52" height="14" rx="3" fill="#e8dcc0"/><rect x="156" y="76" width="12" height="10" fill="#888"/><circle cx="70" cy="90" r="6" fill="#2b2b2b"/>',
+barreljack:'<rect x="28" y="56" width="72" height="48" rx="4" fill="#1a8a4a"/><circle cx="46" cy="72" r="5" fill="#ccc"/><circle cx="46" cy="90" r="5" fill="#ccc"/><rect x="100" y="70" width="48" height="20" rx="10" fill="#222"/><circle cx="152" cy="80" r="10" fill="#111" stroke="#c9a24a" stroke-width="2"/><circle cx="152" cy="80" r="3" fill="#c9a24a"/>',
+usbcable:'<path d="M40 80 C70 40 130 120 160 80" stroke="#8a7a5a" stroke-width="7" fill="none"/><rect x="22" y="70" width="24" height="20" rx="3" fill="#ddd" stroke="#888"/><rect x="154" y="70" width="24" height="20" rx="3" fill="#ddd" stroke="#888"/><text x="100" y="128" font-size="9" fill="#aaa" text-anchor="middle">USB-C</text>',
+servoext:'<path d="M28 68 h52" stroke="#6b3a1a" stroke-width="4"/><path d="M28 82 h52" stroke="#c33" stroke-width="4"/><path d="M28 96 h52" stroke="#f80" stroke-width="4"/><path d="M120 68 h52" stroke="#6b3a1a" stroke-width="4"/><path d="M120 82 h52" stroke="#c33" stroke-width="4"/><path d="M120 96 h52" stroke="#f80" stroke-width="4"/><rect x="80" y="60" width="40" height="46" rx="3" fill="#222"/><rect x="18" y="60" width="12" height="46" rx="2" fill="#333"/><rect x="170" y="60" width="12" height="46" rx="2" fill="#333"/>',
+irthermo:'<path d="M48 68 h70 l22-18 h16 v68 h-16 l-22-16 h-28 v20 H48z" fill="#ff7a2a"/><circle cx="158" cy="74" r="10" fill="#222"/><circle cx="158" cy="74" r="5" fill="#3fa9f5"/><rect x="56" y="78" width="36" height="18" rx="2" fill="#1a1a1a"/><path d="M38 132 L70 100" stroke="#888" stroke-width="3"/><circle cx="36" cy="134" r="4" fill="#c9a24a"/>',
+microusb:'<path d="M40 80 C80 50 120 110 160 80" stroke="#444" stroke-width="6" fill="none"/><rect x="18" y="70" width="28" height="18" rx="2" fill="#ddd" stroke="#888"/><rect x="26" y="76" width="14" height="6" fill="#222"/><rect x="154" y="70" width="24" height="18" rx="3" fill="#ddd" stroke="#888"/><text x="100" y="128" font-size="9" fill="#aaa" text-anchor="middle">micro-USB</text>'};
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160"><defs><radialGradient id="g" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#2a231c"/><stop offset="1" stop-color="#120f0c"/></radialGradient></defs><rect width="200" height="160" fill="url(#g)"/>${icons[kind]||''}<rect x="0" y="142" width="200" height="18" fill="#000a"/><text x="100" y="155" font-size="9" fill="#c9a24a" text-anchor="middle" font-family="sans-serif" letter-spacing="1">ILLUSTRATION</text></svg>`;
  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
 const partImg=p=>p.img?imgURL(p.img):illus(p.illus,p.name);
