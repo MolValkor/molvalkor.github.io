@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://molvalkor.github.io/sitemap.xml
+Disallow: /fyf-prototype/
