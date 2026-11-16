@@ -337,7 +337,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral);box-shadow:0 0
 .wn-small{font-size:13.5px!important;color:var(--muted)}
 .wn-btn{margin-top:8px;text-decoration:none}
 .wn-url{display:none;font-size:12px;color:var(--muted)}
-@media print{.wn-url{display:block}.wn-card{break-inside:avoid}}
+@media print{.wn-url{display:block}.wn-card{break-inside:avoid}.toast{display:none!important}}
 </style></head>
 <body>
 <div class="proto-flag">PROTOTYPE vNext · real birth chart calculated on your device · live Echo chat (Claude) when connected · some copy (persona, Magnetize/Repel, About page) is still sample content</div>
@@ -1580,8 +1580,8 @@ const PTH = [
 
 // Prompt 5: "What's next" cards on the final Bundle page and at the end of every download.
 const YVV_URL = "https://yourvisualvibe.com";
-// The Magnetic Marketing Method link isn't known yet. Card 2 stays hidden until this is set to the real URL.
-const MMM_URL = window.FYF_MMM_URL || "";
+// The Magnetic Marketing Method link (from Becca via Zach, Nov 16). Empty = card 2 hidden.
+const MMM_URL = window.FYF_MMM_URL || "https://themetamusician.com/magnetic-marketing-method";
 </script>
 <script>// ===== Prompt 2: "Tell it all at once" sorting + 60-second dictation =====
 // Deterministic, on-device. Sorts a ramble into the 4 timeline parts (in order), finds visible + measurable
@@ -2170,8 +2170,8 @@ R["s5-bundle"]=()=>{const ks=keptCodes();const d=S.d;return `
  ${whatsNext()}
  <p class="foot">Prototype · sample data · nothing is saved to a server</p>`};
 function whatsNext(){const cards=[{id:"yvv",t:"Give your visual brand an upgrade with Your Visual Vibe",x:"Your colors, fonts, photo style and brand voice, built from your chart and your brand archetypes. A full branding hub for how your brand looks.",small:"Already grabbed it at checkout? It's waiting for you.",b:"Open Your Visual Vibe",u:YVV_URL},
-  {id:"mmm",t:"Want to learn how to turn this into your weekly content?",x:"The Magnetic Marketing Method is the place for you.",b:"Learn more",u:MMM_URL}].filter(c=>/^https:\/\//.test(c.u||""));
- return `<section class="whatsnext" aria-labelledby="wnH"><h2 id="wnH">What's next</h2><div class="wn-grid">${cards.map(c=>`<div class="wn-card" data-wn="${c.id}"><h3>${h(c.t)}</h3><p>${h(c.x)}</p>${c.small?`<p class="wn-small">${h(c.small)}</p>`:""}<a class="btn wn-btn" href="${h(c.u)}" target="_blank" rel="noopener">${h(c.b)}</a><span class="wn-url">${h(c.u.replace(/^https:\/\//,""))}</span></div>`).join("")}</div></section>`}
+  {id:"mmm",t:"You've found your frequency. Now let's make your marketing magnetic.",x:["You now know what makes your brand different, what you stand for, and how to communicate why someone should hire you.","But knowing what to say and knowing how to turn that message into content that actually brings in clients are two different skills.","The Magnetic Marketing Method is my 4-week program that teaches you how to turn your unique brand messaging into strategic social media content that builds trust, attracts your ideal clients, and turns followers into paying customers."],b:"Learn more",u:MMM_URL}].filter(c=>/^https:\/\//.test(c.u||""));
+ return `<section class="whatsnext" aria-labelledby="wnH"><h2 id="wnH">What's next</h2><div class="wn-grid">${cards.map(c=>`<div class="wn-card" data-wn="${c.id}"><h3>${h(c.t)}</h3>${[].concat(c.x).map(x=>`<p>${h(x)}</p>`).join("")}${c.small?`<p class="wn-small">${h(c.small)}</p>`:""}<a class="btn wn-btn" href="${h(c.u)}" target="_blank" rel="noopener">${h(c.b)}</a><span class="wn-url">${h(c.u.replace(/^https:\/\//,""))}</span></div>`).join("")}</div></section>`}
 // plain-text Bundle (Copy all text + .txt download): the page minus buttons, with each link written out
 function bundleText(){const cl=$("#app").cloneNode(true);cl.querySelectorAll(".noprint,.foot").forEach(e=>e.remove());cl.querySelectorAll(".wn-url").forEach(e=>e.remove());
  cl.querySelectorAll("a.wn-btn").forEach(a=>{a.textContent=`${a.textContent}: ${a.getAttribute("href")}`});
