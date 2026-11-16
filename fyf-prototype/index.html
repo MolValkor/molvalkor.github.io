@@ -283,9 +283,64 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral);box-shadow:0 0
 @keyframes tp{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
 .drawer .log .bub p{white-space:normal}
 @media (max-width:760px){.chartwrap{grid-template-columns:1fr}.chartwrap .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.wheelbox{max-width:380px;margin:0 auto;width:100%;box-sizing:border-box}}
+
+/* Prompt 1: placement picker (same card pattern as Your Visual Vibe) */
+.pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.pcard{position:relative;text-align:left;padding:15px 15px 13px;border-radius:16px;border:1.5px solid #b9a893;background:#fff;cursor:pointer;transition:transform .12s,border-color .12s,box-shadow .12s;outline-offset:2px}
+.pcard:hover{border-color:var(--espresso);transform:translateY(-1px)}
+.pcard:focus-visible{outline:3px solid var(--coral)}
+.pcard.on{border:2px solid var(--coral);box-shadow:0 0 0 3px var(--coral-soft);background:#fff7f4}
+.pc-top{display:flex;justify-content:space-between;align-items:center}
+.pc-glyph{font-size:22px;line-height:1;color:var(--coral);font-family:var(--head);font-weight:800}
+.pc-check{width:26px;height:26px;border-radius:50%;border:1.5px solid #cfc5b9;display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent;font-weight:800}
+.pcard.on .pc-check{background:var(--coral);border-color:var(--coral);color:#fff}
+.pc-name{font-family:var(--head);font-size:17px;font-weight:800;color:var(--espresso);margin-top:6px;line-height:1.2}
+.pc-role{font-size:11.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-top:2px}
+.pc-words{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 6px}
+.pc-words span{font-size:12.5px;background:var(--gold-soft);color:var(--espresso);border-radius:999px;padding:2px 9px}
+.pc-int{font-size:13.5px;color:#4d4033;line-height:1.45}
+.pcard.na{cursor:not-allowed;background:#f7f4ef;border-style:dashed}
+.pcard.na:hover{transform:none;border-color:#b9a893}
+.pcard.na .pc-check{display:none}
+.refreshbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#fff6e6;border:1px solid #f0dcb4;border-radius:14px;padding:10px 14px;margin:8px 0 14px;font-size:14.5px;color:#5a4214}
+.specific{background:var(--gold-soft);border-radius:10px;padding:9px 12px}
+.bp-lbl{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;opacity:.8}
+@media (max-width:760px){.pcards{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.pcards{grid-template-columns:1fr}}
+
+/* Prompt 2: story modes + dictation */
+.modeswitch{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;margin:-2px 0 12px;font-size:14px}
+.microw{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:8px 0 2px}
+.micnote{font-size:13px;color:var(--muted);flex:1 1 220px}
+.micleft{font-family:var(--head);font-weight:800;font-size:14px;color:var(--coral);min-width:0}
+.btn.mic.rec{background:var(--coral);color:#fff;border-color:var(--coral)}
+.sorted{display:grid;gap:12px}
+.sorted .part textarea{width:100%;min-height:96px}
+.movie{font-size:14px;color:var(--espresso);margin:8px 0 0}
+.fuq{margin:4px 0 0;padding-left:20px}
+
+/* Prompt 3 */
+.startnote{background:var(--gold-soft);border-radius:12px;padding:9px 13px;font-size:14.5px;color:var(--espresso);margin:0 0 10px}
+.alts [data-ask]{font-style:italic}
+
+/* Prompt 4 */
+.offername{margin:-2px 0 6px;padding:10px 14px;background:#fff;border:1.5px dashed var(--coral);border-radius:12px}
+.offername label{font-size:14px;font-weight:700;color:var(--espresso)}
+
+/* Prompt 5: What's next (calm, no pop-ups) */
+.whatsnext{margin-top:22px}
+.whatsnext h2{margin-bottom:10px}
+.wn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.wn-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.wn-card h3{margin:0;font-size:18px}
+.wn-card p{margin:0;font-size:15px}
+.wn-small{font-size:13.5px!important;color:var(--muted)}
+.wn-btn{margin-top:8px;text-decoration:none}
+.wn-url{display:none;font-size:12px;color:var(--muted)}
+@media print{.wn-url{display:block}.wn-card{break-inside:avoid}}
 </style></head>
 <body>
-<div class="proto-flag">PROTOTYPE vNext · real birth chart calculated on your device · live Echo chat (Claude) when connected · story and copy are still sample content</div>
+<div class="proto-flag">PROTOTYPE vNext · real birth chart calculated on your device · live Echo chat (Claude) when connected · some copy (persona, Magnetize/Repel, About page) is still sample content</div>
 <header class="topbar"><div class="topbar-in"><div class="logo">Find Your Frequency<small>with Echo · your Brand Broadcast Guide</small></div>
 <nav class="steps" id="steps" aria-label="Your four stages: go back to any stage you've reached"></nav></div></header>
 <main id="app"></main>
@@ -1264,16 +1319,81 @@ const FYFCHART = (() => {
     const lib = PL(p.key), s = signBy(p.sign);
     return `${lib.lead_in} ${s.trio} (${lib.name} in ${s.name}).`;
   }
-  function essence(ch) {
-    const P = ch.P, sg = k => signBy(P[k].sign), hn = k => P[k].house ? ` in the ${houseBy(P[k].house).name} house` : "";
-    const out = [`Your ${P.sun.sign} Sun${hn("sun")} is your natural genius: ${sg("sun").trio}.`];
-    if (!P.rising.locked) out.push(`Your ${P.rising.sign} Rising is the first impression you make: ${sg("rising").trio}.`);
-    out.push(`Your ${P.moon.sign} Moon${hn("moon")} is your deeper motivation: ${sg("moon").trio}.`);
-    out.push(`And your North Node in ${P.north_node.sign} keeps pulling your work toward being ${sg("north_node").trio}.`);
-    return out.join(" ");
+  /* ---------- Prompt 1: picks-first ordering, non-repeating Brand Essence ---------- */
+  // Three wordings per house so two placements in the same house never share a phrase (Becca: "the house is what makes each one different").
+  const HOUSE_PH = {
+    1: ["your face and personal presence", "how you show up in person", "being seen as yourself, front and center"],
+    2: ["what you value and how you price it", "money, worth and the senses", "building something steady that pays"],
+    3: ["how you talk, teach and write", "conversations, learning and your local network", "everyday words: posts, lessons and notes"],
+    4: ["the safe space you create", "home, roots and belonging", "the private, nurturing side of your work"],
+    5: ["your creative spark and willingness to be seen", "play, joy and self-expression", "creating for the fun of it"],
+    6: ["your daily systems, rituals and service", "routines, health and steady practice", "the hands-on work you do day to day"],
+    7: ["one-on-one work and your clients", "partnerships and collaborations", "the people you meet face to face"],
+    8: ["deep, honest transformation", "the topics most people avoid, money included", "shared resources, trust and real change"],
+    9: ["bold ideas and big-picture teaching", "your philosophy, retreats and travel", "beliefs worth publishing and sharing"],
+    10: ["your public reputation", "what you're known for", "leadership, achievement and being visible"],
+    11: ["community and group programs", "your online audience and the future", "friends, causes and big shared visions"],
+    12: ["spiritual practice and intuitive work", "rest, solitude and what happens behind the scenes", "the unseen side of healing"]
+  };
+  const ROLE_NOUN = { sun: "Genius", moon: "Heart", rising: "Presence", mercury: "Voice", venus: "Magnetism", mars: "Drive", descendant: "Pull", midheaven: "Legacy", north_node: "Edge" };
+  const cap = w => w.charAt(0).toUpperCase() + w.slice(1);
+  const usable = ch => ORDER.map(o => o.key).filter(k => !ch.P[k].locked);
+  // picked placements first (in the order they appear in the chart), then the rest
+  function ordered(ch, picks) { const u = usable(ch), pk = (picks || []).filter(k => u.includes(k)); return pk.concat(u.filter(k => !pk.includes(k))); }
+  // share each sign's 4 vibe words (shadow word excluded) between the placements in that sign, without repeats
+  function allot(ch, keys) {
+    const cnt = {}; keys.forEach(k => cnt[ch.P[k].sign] = (cnt[ch.P[k].sign] || 0) + 1);
+    const used = new Set(), out = {};   // a word is never used twice, even across signs (Cancer and Scorpio both have "private")
+    keys.forEach(k => { const sg = ch.P[k].sign, per = cnt[sg] <= 2 ? 2 : 1;
+      out[k] = signBy(sg).vibe_words.slice(0, -1).filter(w => !used.has(w)).slice(0, per); out[k].forEach(w => used.add(w)); });
+    return out;
   }
-  function keywords(ch) {
-    const src = ["sun", "rising", "moon", "mercury", "venus", "mars", "midheaven"].filter(k => !ch.P[k].locked);
+  const andJoin = w => w.length <= 1 ? (w[0] || "") : w.slice(0, -1).join(", ") + " and " + w[w.length - 1];
+  function housePhrases(ch, keys) { const seen = {}, out = {}; keys.forEach(k => { const hn = ch.P[k].house; if (!hn) return; const n = seen[hn] = (seen[hn] || 0); if (n < 3) out[k] = HOUSE_PH[hn][n]; seen[hn]++; }); return out; }
+  const FILL = ["pure {S}", "{S} through and through", "{S} at the core", "unmistakably {S}"];
+  function essenceParts(ch, picks) {
+    const keys = ordered(ch, picks), W = allot(ch, keys), H = housePhrases(ch, keys); let fill = 0;
+    return keys.map(k => { const p = ch.P[k], S = p.sign, inH = p.house ? ` in the ${ord(p.house)} house` : "", hp = H[k];
+      const w = W[k].length ? andJoin(W[k]) : FILL[fill++ % FILL.length].replace("{S}", S);
+      const T = {
+        sun: `Your ${S} Sun${inH} is your natural genius: ${w}${hp ? `, and it shines brightest in ${hp}` : ""}.`,
+        moon: `Your ${S} Moon${inH} is your deeper motivation: at heart you're ${w}${hp ? `, drawn most to ${hp}` : ""}.`,
+        rising: `Your ${S} Rising is the first impression you make: ${w}, and people feel it before you say a word.`,
+        mercury: `Your ${S} Mercury${inH} is your voice: ${w}${hp ? `, and it comes through most in ${hp}` : ""}.`,
+        venus: `Your ${S} Venus${inH} is how you draw people in: ${w}${hp ? `, especially through ${hp}` : ""}.`,
+        mars: `Your ${S} Mars${inH} is how you lead and act: ${w}${hp ? `, put to work in ${hp}` : ""}.`,
+        descendant: `Your ${S} Descendant shows who you're magnetic to: people who are ${w}.`,
+        midheaven: `Your ${S} Midheaven is your legacy: you want to be known for being ${w}.`,
+        north_node: `Your North Node in ${S}${inH} is your growth edge, pulling your work toward being ${w}${hp ? `, through ${hp}` : ""}.`
+      };
+      return { key: k, text: T[k], words: W[k], house: hp || null }; });
+  }
+  function essence(ch, picks) { return essenceParts(ch, picks).map(x => x.text).join(" "); }
+  // chart-built superpowers (used for everyone except the sample persona, whose superpowers are hand-written)
+  function powers(ch, picks) {
+    const keys = ordered(ch, picks).filter(k => ROLE_NOUN[k]), W = allot(ch, keys), H = housePhrases(ch, keys);
+    return keys.slice(0, 5).map(k => { const p = ch.P[k], lib = PL(k), w = W[k][0] || signBy(p.sign).vibe_words[0];
+      return { key: k, t: `${cap(w)} ${ROLE_NOUN[k]}`, d: `From your ${lib.name} in ${p.sign}${p.house ? `, ${ord(p.house)} house` : ""} (${lib.brand_label.toLowerCase()})${H[k] ? `. You bring it to ${H[k]}.` : "."}` }; });
+  }
+  // "In your chart" label: placement + house, never the generic vibe sentence
+  function plLabel(ch, key) { const p = ch.P[key]; if (!p || p.locked) return ""; return `${p.name} in ${p.sign}${p.house ? `, ${ord(p.house)} house` : ""}`; }
+  /* ---------- "What this means for you, specifically" (Becca's data file, added later) ---------- */
+  // Looked up by "sun|aries|9" (placement|sign|house) and "rising|leo" (Rising, Descendant, Midheaven by sign).
+  // Hidden completely until src/vendor/specifically.json exists (build.py embeds it as #fyf-specific).
+  const SPEC = (() => { try { const el = document.getElementById("fyf-specific"); let d = window.FYF_SPECIFIC || (el ? JSON.parse(el.textContent) : null);
+      if (!d) return null; if (d.entries) d = d.entries;
+      const m = {}; (Array.isArray(d) ? d.map(e => [e.key, e.text]) : Object.entries(d)).forEach(([k, v]) => { if (k && typeof v === "string" && v.trim()) m[String(k).toLowerCase().replace(/\s+/g, "")] = v.trim(); });
+      return Object.keys(m).length ? m : null; } catch (e) { return null; } })();
+  const SPEC_ALIAS = { north_node: ["north_node", "northnode", "node", "nn"] };
+  function specific(p) {
+    if (!SPEC || !p || p.locked) return null; const sg = p.sign.toLowerCase();
+    if (["rising", "descendant", "midheaven"].includes(p.key)) return SPEC[`${p.key}|${sg}`] || null;
+    if (!p.house) return null;
+    for (const a of (SPEC_ALIAS[p.key] || [p.key])) { const v = SPEC[`${a}|${sg}|${p.house}`]; if (v) return v; }
+    return null;
+  }
+  function keywords(ch, picks) {
+    const src = ordered(ch, picks).filter(k => ["sun", "rising", "moon", "mercury", "venus", "mars", "midheaven"].includes(k));
     const pick = [], pool = [], from = {};
     src.forEach(k => { const w = signBy(ch.P[k].sign).vibe_words.slice(0, -1); const f = w.find(x => !pick.includes(x)); if (f && pick.length < 5) { pick.push(f); from[f] = ch.P[k]; } });
     pick.forEach(w => pool.push(w));
@@ -1326,7 +1446,7 @@ const FYFCHART = (() => {
       s += `<text x="${f(dx)}" y="${f(dy)}" class="wd" text-anchor="middle" dominant-baseline="central">${Math.floor(x.p.deg)}°</text>`; });
     return s + `</svg>`;
   }
-  return { VC, ORDER, CITY, compute, reading, line, essence, keywords, forChat, wheel, dm, ord, signBy, PL };
+  return { VC, ORDER, CITY, compute, reading, line, essence, essenceParts, powers, plLabel, specific, hasSpecific: () => !!SPEC, ordered, keywords, forChat, wheel, dm, ord, signBy, PL, HOUSE_PH };
 })();
 </script>
 <script>// Sample data for the prototype. Persona adapted from the fictional "Lumen & Loam Studio"
@@ -1334,10 +1454,11 @@ const FYFCHART = (() => {
 const SAMPLE = {
   name: "Rae", biz: "Lumen & Loam Studio",
   what: "I run sound-bath evenings and small songwriting circles for burned-out public-school teachers, plus a six-week online group called Find Your Voice Again. I used to teach 4th-grade music.",
-  bdate: "1986-04-07", btime: "14:30", city: ["Asheville", "North Carolina"]
+  bdate: "1986-04-07", btime: "14:30", city: ["Asheville", "North Carolina"],
+  picks: ["sun", "mercury", "venus"]   // sample answer for "Which placements feel most like you?"
 };
 const BLUEPRINT = {
-  archetype: "The Bonfire Host",
+  persona: "The Bonfire Host",   // Brand Persona (renamed from "Brand Archetype" so it stays separate from YVV's 12 brand archetypes)
   iam: "I am the warm, direct voice that pulls tired people into the circle and reminds them they're allowed to rest.",
   magnetize: [
     {t:"The Quiet-Again Teacher", d:"Used to sing in the car and doesn't anymore. Wants permission, not another program."},
@@ -1392,8 +1513,7 @@ const STATIONS = [
    lessons:["Rest is a skill, not a reward.","Your voice isn't broken, it's tired.","Small rooms change more people than big stages.","Needing rest was information, not failure."]}
 ];
 const PRIVATE_CHIPS = ["The school's name","The year (2019)","Leaving the classroom part-time","Losing my voice for two weeks","My former colleagues"];
-// pl = the placement each Code is shown alongside ("In your chart"); pl2 = fallback when there is no birth time.
-const CODE_PL = [["moon"],["mercury"],["descendant","north_node"],["moon"],["mars"],["rising","sun"],["venus"],["mars"],["mercury"],["sun"]];
+// The hand-written 10 below are ONLY for "Fill in sample details" (Rae) with her sample story. Everyone else gets FYFCODES.generate().
 const CODES = [
   {s:"Rest is a skill, not a reward.", c:"Rest is something you earn once everything's done.", f:"You practiced rest ten minutes a day, even badly.", proof:"Sunday nights went from grading until ten to tea, piano and bed.", alts:["Rest isn't earned. It's practiced.","You don't earn rest. You learn it."],
    hooks:[["Challenge an Assumption","Rest isn't what you get when the grading is done. The grading is never done."],["Name a Pattern","If you grade until ten on Sunday and still lie awake running Monday's schedule, the problem isn't your work ethic."],["Make the Point","Rest is a skill. I practiced it ten minutes at a time, even badly."]]},
@@ -1416,11 +1536,12 @@ const CODES = [
   {s:"The grading is never done, so stop waiting to rest.", c:"Rest comes after the work is finished.", f:"Your Sunday nights grading until ten.", proof:"Now Sunday nights end with tea and piano, and the grading still gets done.", alts:["Rest before it's finished."],
    hooks:[["Challenge an Assumption","The grading will never be done. Rest anyway."],["Name a Pattern","If \"after this stack\" is your rest plan, you're not resting."],["Make the Point","I stopped waiting for the stack to end. Sunday is tea and piano now."]]}
 ];
+// Prompt 4: the same five options for everyone (never generated from the sample)
 const QUICK = [
-  {q:"What's the main thing you want people to book right now?", why:"Echo asks this only because it's needed for your bio and one-liner.", opts:[
-    {t:"Monthly songwriting circle", d:"$35, small group, in person"},{t:"Sound-bath evening", d:"A one-night reset"},{t:"Find Your Voice Again", d:"Six-week online group"},{t:"Something else", d:"I'll tell Echo"}]},
+  {q:"Where do you want to send people right now?", why:"Echo asks this only because it's needed for your bio and one-liner.", opts:[
+    {t:"Book a 1:1 session", d:"A session, reading or call with you"},{t:"Join my next group event or workshop", d:"A class, circle, retreat or workshop"},{t:"Join my email list or grab my freebie", d:"Your list, a guide or a free gift"},{t:"Something else", d:"Tell Echo in a few words"},{t:"Nothing yet. I'm building my presence.", d:"No offer to point to yet, and that's fine"}]},
   {q:"When someone lands on your Instagram, what should they do next?", why:"This becomes the call to action.", opts:[
-    {t:"Join the next circle", d:"Link to the circle sign-up"},{t:"Book a sound bath", d:"Link to the booking page"},{t:"Join the waitlist", d:"For Find Your Voice Again"},{t:"Something else", d:"I'll tell Echo"}]}
+    {t:"Tap the link in my bio", d:"Send them to your link"},{t:"Send me a DM", d:"Start a conversation"},{t:"Follow along", d:"Stay for more posts"},{t:"Something else", d:"I'll tell Echo"}]}
 ];
 const DELIV = [
   {id:"bio", ic:"📱", t:"Instagram Bio", sub:"3 options, 150 characters max"},
@@ -1429,10 +1550,11 @@ const DELIV = [
   {id:"hooks", ic:"🎵", t:"Brand Code Hook Bank", sub:"3 hooks for each Code"},
   {id:"pth", ic:"🔁", t:"Personal Transformation Hook Bank", sub:"3 hooks from your story"}
 ];
+// Bio bodies (sample copy); the last line, the call to action, is built from the Stage 4 answer (app.js ctaLine).
 const BIOS = [
-  {t:"Option 1 · Clear + Direct", x:"Sound baths + songwriting circles for burned-out teachers.\nRest first, then your voice.\nJoin the next circle ↓"},
-  {t:"Option 2 · Personality + Perspective", x:"Your voice isn't broken, it's tired.\nSmall circles for teachers who stopped singing.\nNobody has to perform.\nNext circle ↓"},
-  {t:"Option 3 · Credibility + Transformation", x:"Former 4th-grade music teacher.\nI lost my voice to burnout, then found it again.\nNow I help teachers do the same ↓"}
+  {t:"Option 1 · Clear + Direct", x:"Sound baths + songwriting circles for burned-out teachers.\nRest first, then your voice."},
+  {t:"Option 2 · Personality + Perspective", x:"Your voice isn't broken, it's tired.\nSmall circles for teachers who stopped singing.\nNobody has to perform."},
+  {t:"Option 3 · Credibility + Transformation", x:"Former 4th-grade music teacher.\nI lost my voice to burnout, then found it again."}
 ];
 const ONES = [
   "I help burned-out teachers get their voice back with sound baths and songwriting circles, because your voice isn't broken, it's tired.",
@@ -1454,14 +1576,282 @@ const PTH = [
   ["Lesson Learned","After the 2019 concert season I lost my voice for two weeks. Nobody was harmed by me resting."]
 ];
 
-CODES.forEach((c,i)=>{c.pl=CODE_PL[i][0];c.pl2=CODE_PL[i][1]});
+// "In your chart" for these sample Codes now comes from FYFCODES.sampleFit (only when a placement genuinely fits).
+
+// Prompt 5: "What's next" cards on the final Bundle page and at the end of every download.
+const YVV_URL = "https://yourvisualvibe.com";
+// The Magnetic Marketing Method link isn't known yet. Card 2 stays hidden until this is set to the real URL.
+const MMM_URL = window.FYF_MMM_URL || "";
+</script>
+<script>// ===== Prompt 2: "Tell it all at once" sorting + 60-second dictation =====
+// Deterministic, on-device. Sorts a ramble into the 4 timeline parts (in order), finds visible + measurable
+// details, and writes ONE follow-up (max 3 short questions) only for parts that are missing or too vague to picture.
+const FYFSTORY = (() => {
+  const PARTS = ["before", "turn", "helped", "after"];
+  const CUES = {
+    before: [/\bused to\b/, /\bback then\b/, /\bbefore\b/, /\bwas (so |just |always )?(burn|tired|stuck|exhaust|overwhelm|miserable|lost|done|anxious|unhappy)/, /\bstruggl/, /\bstuck\b/, /\bburn(ed|t)? ?out\b/, /\bexhaust/, /\bcouldn'?t\b/, /\bdidn'?t\b/, /\bhated\b/, /\bdread/, /\bkept\b/, /\bfor (years|\w+ years)\b/, /\bevery (day|night|sunday|monday)\b.*\b(till|until)\b/, /\bi was\b/, /\bwasn'?t working\b/],
+    turn: [/\buntil\b/, /\bone (day|night|morning|afternoon)\b/, /\brealiz/, /\bdecided\b/, /\bmoment\b/, /\bwake-?up call\b/, /\bbreaking point\b/, /\bthat'?s when\b/, /\bturning point\b/, /\bfinally\b/, /\bsnapped\b/, /\blost my\b/, /\bthen (one|a)\b/, /\b(19|20)\d\d\b/, /\bdiagnos/, /\bquit\b/, /\bgot fired\b|\blaid off\b/],
+    helped: [/\bhelped\b/, /\bstarted\b/, /\bbegan\b/, /\btried\b/, /\bpractic/, /\bhabit\b/, /\bcoach/, /\btherap/, /\bjoined\b/, /\bevery day\b/, /\ba day\b/, /\bwent part[- ]time\b/, /\bpart[- ]time\b/, /\blearned to\b/, /\bsigned up\b/, /\bread\b/, /\bgave myself\b/, /\bsmall steps?\b/, /\bbit by bit\b/, /\bwe'?d\b/],
+    after: [/\bnow\b/, /\btoday\b/, /\bthese days\b/, /\banymore\b/, /\bagain\b/, /\bi learned\b/, /\bwhat i learned\b/, /\bi know\b/, /\blesson\b/, /\bi realize now\b/, /\bmy clients\b/, /\bi run\b/, /\bi teach\b/, /\bi help\b/]
+  };
+  const NUMW = "one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|hundred|dozen|half";
+  const CONCRETE = new RegExp(`\\d|\\b(${NUMW})\\b|\\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|morning|night|weekend|year|month|week|hours?|minutes?|o'?clock)s?\\b|\\$|["“]|\\b(kitchen|car|desk|office|phone|bed|table|piano|class(room)?|clients?|room|chairs?|inbox|laptop|couch|shower|commute|studio|tea|coffee)\\b`, "i");
+  const words = t => (t.trim().match(/\S+/g) || []).length;
+  const concrete = t => CONCRETE.test(t || "");
+  const vague = t => !t || words(t) < 8 || !concrete(t);
+  // split into sentence-ish segments (rambles often have few periods, so also split on "and then", "so then", "but now")
+  function segments(text) {
+    return String(text || "").split(/\n\s*\n/).flatMap(par => par.replace(/\s+/g, " ").split(/(?<=[.!?])\s+|(?:,|\s)\s*(?=\b(?:and then|but then|so then|but now|and now|these days|nowadays)\b)/i))
+      .map(x => x.trim()).filter(x => x && /[a-z]/i.test(x));
+  }
+  function score(seg, part) { const s = seg.toLowerCase(); return CUES[part].reduce((n, re) => n + (re.test(s) ? 1 : 0), 0); }
+  // monotone assignment (a story moves forward in time): DP over segments, part index never decreases
+  function sort(text) {
+    const out = { before: "", turn: "", helped: "", after: "" };
+    // the sample ramble: each paragraph is exactly one station's sample text
+    const pars = String(text || "").split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
+    if (typeof STATIONS !== "undefined" && pars.length && pars.every(p => STATIONS.some(s => s.ramble === p))) {
+      pars.forEach(p => { const s = STATIONS.find(x => x.ramble === p); out[s.id] = (out[s.id] ? out[s.id] + " " : "") + p; }); return out; }
+    const seg = segments(text), n = seg.length; if (!n) return out;
+    const NEG = -1e9, dp = Array.from({ length: n }, () => [NEG, NEG, NEG, NEG]), bk = Array.from({ length: n }, () => [0, 0, 0, 0]);
+    const val = (i, p) => score(seg[i], PARTS[p]) * 2 - 0.35 * Math.abs(p - (n === 1 ? 0 : 3 * i / (n - 1)));
+    for (let p = 0; p < 4; p++) dp[0][p] = val(0, p);
+    for (let i = 1; i < n; i++) for (let p = 0; p < 4; p++) { let best = NEG, arg = 0; for (let q = 0; q <= p; q++) if (dp[i - 1][q] > best) { best = dp[i - 1][q]; arg = q; } dp[i][p] = best + val(i, p); bk[i][p] = arg; }
+    let p = dp[n - 1].indexOf(Math.max(...dp[n - 1])); const asg = Array(n);
+    for (let i = n - 1; i >= 0; i--) { asg[i] = p; p = bk[i][p]; }
+    seg.forEach((x, i) => { const k = PARTS[asg[i]]; out[k] = out[k] ? out[k] + " " + x : x; });
+    return out;
+  }
+  // visible + measurable details: short clauses that contain something you could see or count
+  function evidence(text) {
+    const out = [];
+    String(text || "").split(/[.;!?\n]+|,\s*|\s+(?:and|but|so)\s+/i).map(x => x.trim()).filter(x => x && concrete(x)).forEach(x => {
+      const w = x.replace(/^(like|um|so|and|but|ok|okay|honestly|just)\s+/i, "").split(/\s+/); const c = w.length > 7 ? w.slice(0, 7).join(" ") + "…" : w.join(" ");
+      if (!out.includes(c) && out.length < 4) out.push(c); });
+    return out;
+  }
+  const Q = {
+    before: "Before: what did a hard, ordinary day look like? Give me one thing I could see or count.",
+    turn: "What was the moment you knew something had to change?",
+    helped: "What's one thing you actually did that helped?",
+    after: "What's different now, and what do you know now that you didn't before?"
+  };
+  // at most 3 questions, only for missing or vague parts; null = everything's there, skip the follow-up
+  function followUp(parts) {
+    const need = PARTS.filter(k => vague(parts[k])); if (!need.length) return null;
+    const order = ["after", "turn", "before", "helped"]; const pick = order.filter(k => need.includes(k)).slice(0, 3).sort((a, b) => PARTS.indexOf(a) - PARTS.indexOf(b));
+    return { parts: pick, questions: pick.map(k => Q[k]) };
+  }
+  const tidy = t => String(t || "").trim().replace(/\s+/g, " ").replace(/\bi\b/g, "I").replace(/\bi'(m|ve|d|ll)\b/g, "I'$1").replace(/(^|[.!?]\s+)([a-z])/g, (m, a, b) => a + b.toUpperCase()).replace(/([^.!?])$/, "$1.");
+  return { PARTS, sort, evidence, followUp, concrete, vague, tidy, segments };
+})();
+
+// ---- 60-second dictation: countdown, append-only, graceful stop
+const FYFDICT = (() => {
+  let rec = null, timer = null, target = null, endAt = 0, base = "", finals = "";
+  const SECS = () => window.FYF_DICT_SECS || 60;
+  const NOTE = "Each recording is up to 60 seconds. Tap the mic again to keep going.";
+  const SR = () => window.FYF_FAKE_SR || window.SpeechRecognition || window.webkitSpeechRecognition;
+  function html(id) { return `<div class="microw"><button type="button" class="btn small mic" data-mic="${id}">🎙 Talk instead</button><span class="micnote">${NOTE}</span><span class="micleft" data-micleft="${id}" aria-live="polite"></span></div>`; }
+  const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")} left`;
+  const el = (sel) => document.querySelector(sel);
+  function setUI(on, msg) {
+    const b = el(`[data-mic="${target}"]`), l = el(`[data-micleft="${target}"]`);
+    if (b) { b.classList.toggle("rec", on); b.textContent = on ? "■ Stop" : "🎙 Talk instead"; b.setAttribute("aria-pressed", on); }
+    if (l) l.textContent = msg || "";
+  }
+  function write(interim) { const ta = el("#" + target); if (!ta) return; const add = (finals + (interim ? " " + interim : "")).trim();
+    const sep = base && !/\s$/.test(base) ? " " : ""; ta.value = add ? base + sep + add : base; ta.dispatchEvent(new Event("input", { bubbles: true })); }
+  function stop(msg) { clearInterval(timer); timer = null; const r = rec; rec = null; if (r) { try { r.onend = null; r.stop(); } catch (e) { } } write(""); setUI(false, msg); }
+  function start(id, onUnsupported) {
+    if (rec) { const was = target; stop(""); if (was === id) return; }
+    const C = SR(); if (!C) { onUnsupported && onUnsupported(); return; }
+    const ta = el("#" + id); if (!ta) return; target = id; base = ta.value; finals = "";
+    rec = new C(); rec.lang = "en-US"; rec.continuous = true; rec.interimResults = true;
+    rec.onresult = e => { let interim = ""; for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) finals = (finals + " " + r[0].transcript).trim(); else interim += r[0].transcript; } write(interim); };
+    rec.onerror = e => { if (e && e.error === "not-allowed") stop("Mic permission is off. You can type instead, or allow the mic and tap again."); };
+    rec.onend = () => { if (rec) stop("Got it! Tap the mic to keep talking."); };
+    try { rec.start(); } catch (e) { rec = null; onUnsupported && onUnsupported(); return; }
+    endAt = Date.now() + SECS() * 1000; setUI(true, fmt(SECS()));
+    timer = setInterval(() => { const left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000)); if (left <= 0) stop("Got it! Tap the mic to keep talking."); else setUI(true, fmt(left)); }, 250);
+  }
+  return { html, start, stop, active: () => !!rec, NOTE };
+})();
+</script>
+<script>// ===== Prompt 3: Codes that change per person =====
+// Deterministic: every Code comes from a specific placement (sign + house) the person has, ranked by the placements they
+// picked, their keywords, "What you do" and (if they choose) their own story. Nothing here invents a life event:
+// chart-only "Why it fits" points to the chart, and story Codes quote only what the person wrote.
+const FYFCODES = (() => {
+  // [id, statement, what it challenges, another wording, "Name a Pattern" hook]
+  const SIGN = {
+    Aries: [["ar1", "Start before you feel ready.", "You need a perfect plan before you begin.", "Ready comes after you start.", "If you've been \"almost ready\" for a year, this one's for you."],
+      ["ar2", "Say the bold thing first.", "Soft, careful wording keeps clients comfortable.", "Lead with the bold part.", "If you keep editing the honest part out of your posts, notice that."],
+      ["ar3", "Momentum beats motivation.", "You have to feel motivated before you act.", "Move first. The feeling follows.", "If you're waiting to feel like it, you'll wait a long time."]],
+    Taurus: [["ta1", "Slow and steady is a strategy, not a weakness.", "Faster growth is always better growth.", "Steady wins more than it loses.", "If you feel behind because you're building slowly, look again."],
+      ["ta2", "Your body knows before your brain does.", "Good decisions come only from logic.", "Trust the gut feeling first.", "If your shoulders tense every time you say yes, that's an answer."],
+      ["ta3", "Charge what it's worth, then stop apologizing.", "Low prices are the kind thing to do.", "Fair pricing is generous pricing.", "If you flinch every time you say your price, this is for you."]],
+    Gemini: [["ge1", "Curiosity is a business plan.", "You have to pick one thing forever.", "Follow the question.", "If you've been told you're \"all over the place,\" hear this."],
+      ["ge2", "The right words change what people do.", "Words are just packaging.", "Say it right and people move.", "If people nod but don't act, the words might be the gap."],
+      ["ge3", "Think out loud. That's where the good stuff is.", "You should have it all worked out before you share.", "Share it before it's finished.", "If you only post finished thoughts, you're hiding the good part."]],
+    Cancer: [["cn1", "People need to feel safe before they can change.", "Pushing harder gets faster results.", "Safety first, then change.", "If your clients keep stalling, maybe they don't feel safe yet."],
+      ["cn2", "Caring this much is a skill, not a flaw.", "Being sensitive makes you less professional.", "Your sensitivity is a strength.", "If you've been told you take things too personally, this one's for you."],
+      ["cn3", "The real work starts at home.", "Change happens out there, not at home.", "Start at home.", "If everything looks fine at work but home feels off, start there."]],
+    Leo: [["le1", "Being seen is part of the work.", "Good work speaks for itself.", "Show your face.", "If you hide behind your logo, people can't find you."],
+      ["le2", "Joy is a serious business tool.", "Serious work has to feel serious.", "Bring the fun on purpose.", "If your work feels heavy all the time, joy might be missing."],
+      ["le3", "Generosity builds a bigger brand than gatekeeping.", "Giving away your best ideas loses you clients.", "Give the good stuff away.", "If you're holding back your best tips, try sharing one."]],
+    Virgo: [["vi1", "Small fixes beat big overhauls.", "Real change needs a total makeover.", "Fix one small thing.", "If you're planning a total life overhaul, start with one habit instead."],
+      ["vi2", "Done well beats done big.", "Bigger is always more impressive.", "Do it well before you do it big.", "If you're scaling something that isn't working yet, pause."],
+      ["vi3", "Helping is a craft you get better at.", "Anyone can help if they mean well.", "Good help is practiced.", "If good intentions aren't getting results, look at the method."]],
+    Libra: [["li1", "Beauty isn't extra. It's how people feel cared for.", "Looks don't matter if the content is good.", "How it feels matters.", "If your space or your posts feel rushed, people feel that too."],
+      ["li2", "Fair is better than nice.", "Being nice keeps everyone happy.", "Choose fair over nice.", "If you keep saying yes to keep the peace, this one's for you."],
+      ["li3", "The right partnership beats going it alone.", "You have to do it all yourself to do it right.", "Better together.", "If you're doing everything alone and calling it independence, look again."]],
+    Scorpio: [["sc1", "Real change starts with the conversation nobody wants to have.", "Keep it light and people will stay.", "Say the hard thing.", "If everyone around you avoids the topic, that's where the work is."],
+      ["sc2", "Depth beats reach.", "More followers means more impact.", "Go deep, not wide.", "If you're chasing followers but not connection, notice that."],
+      ["sc3", "Letting go is a skill.", "Holding on shows loyalty and strength.", "Let it end.", "If you're carrying something that's already over, this one's for you."]],
+    Sagittarius: [["sg1", "Your big idea is worth sharing before it's polished.", "Only experts get to have big ideas.", "Share the big idea now.", "If you've got a theory you're scared to say out loud, say it."],
+      ["sg2", "Freedom is the point, not the reward.", "Freedom comes after you've earned it.", "Build in the freedom now.", "If you're saving freedom for \"someday,\" this one's for you."],
+      ["sg3", "Honesty is the kindest thing you can offer.", "Being kind means softening the truth.", "Kind means honest.", "If you keep sugarcoating, people can't hear you."]],
+    Capricorn: [["cp1", "Discipline is a form of self-respect.", "Discipline means being hard on yourself.", "Structure is self-care.", "If \"discipline\" sounds like punishment to you, look again."],
+      ["cp2", "Build it to last, not to trend.", "You have to chase every trend to stay relevant.", "Skip the trend.", "If you're exhausted from chasing what's popular, this one's for you."],
+      ["cp3", "Boundaries are a business skill.", "Being available all the time shows you care.", "Office hours are kind.", "If you answer emails at ten at night, this one's for you."]],
+    Aquarius: [["aq1", "The usual way isn't the only way.", "There's one right way to do this, and everyone follows it.", "Break the template.", "If the standard advice never fit you, maybe it wasn't meant to."],
+      ["aq2", "Community does what willpower can't.", "Change is a solo, willpower thing.", "Nobody changes alone.", "If you keep trying to change on your own, try a group."],
+      ["aq3", "Being different is your marketing.", "To be trusted, you need to look like everyone else.", "Different works.", "If you keep toning yourself down to fit in, stop."]],
+    Pisces: [["pi1", "Intuition is information.", "Only data counts as evidence.", "Your gut is data.", "If you ignore a feeling until it's proven, you lose time."],
+      ["pi2", "The ideas show up when you stop pushing.", "Ideas come from pushing harder.", "Rest is where ideas come from.", "If your best ideas come in the shower, there's a reason."],
+      ["pi3", "Softness isn't weakness.", "You have to be tough to be taken seriously.", "Soft can be strong.", "If you've been told to toughen up, this one's for you."]]
+  };
+  const HOUSE = {
+    1: [["h1a", "Your face is part of the message.", "A good logo is enough.", "Show up as you.", "If nobody's seen your face in months, they're waiting."],
+      ["h1b", "How you show up is the first thing you teach.", "First impressions don't matter if the work is good.", "Your presence teaches first.", "If you rush the first five minutes, people notice."]],
+    2: [["h2a", "Your price tells people what to expect.", "A low price attracts more of the right people.", "Price sets the tone.", "If you're competing on price, you're competing on the wrong thing."],
+      ["h2b", "Knowing your values makes decisions easy.", "Every decision needs a long pro-and-con list.", "Values first, decisions second.", "If you agonize over every yes, check your values."]],
+    3: [["h3a", "Teaching is the best marketing.", "Marketing means selling.", "Teach, don't pitch.", "If your posts sound like ads, try teaching instead."],
+      ["h3b", "Local and specific beats global and vague.", "You need a global audience to matter.", "Start with your own street.", "If you're trying to reach everyone, start closer to home."]],
+    4: [["h4a", "A safe space is built, not declared.", "Saying \"this is a safe space\" makes it one.", "Build the safety.", "If people stay quiet in your space, look at how it's built."],
+      ["h4b", "Your roots are part of your brand.", "Keep your personal life out of your brand.", "Where you came from matters.", "If you hide where you came from, people miss half the story."]],
+    5: [["h5a", "Play is productive.", "Fun is what you do after the work.", "Play is part of the work.", "If you haven't played in months, your work feels it."],
+      ["h5b", "Creating is how you heal, not just how you earn.", "Creativity is a hobby, not a career.", "Make things to feel better.", "If you only create when it pays, you're missing the point."]],
+    6: [["h6a", "Rituals beat resolutions.", "Big goals change your life.", "Small rituals win.", "If your resolutions fade by February, try a ritual."],
+      ["h6b", "How you work every day is your brand.", "Branding is your logo and colors.", "Your routine is your brand.", "If your days are chaos, your clients feel it."]],
+    7: [["h7a", "One-on-one is where the real shift happens.", "Group programs are always better value.", "Full attention changes people.", "If you've never had someone's full attention, you know what's missing."],
+      ["h7b", "The right clients choose you because you're clear.", "You should work with anyone who'll pay.", "Clear attracts the right people.", "If you keep getting the wrong clients, get clearer."]],
+    8: [["h8a", "Money talk is part of the work.", "Deep work shouldn't talk about money.", "Talk about money.", "If money makes you squirm, that's worth looking at."],
+      ["h8b", "Real transformation is uncomfortable, and that's how you know it's working.", "Real growth feels good the whole time.", "Uncomfortable means it's working.", "If it feels uncomfortable, you might be right where you need to be."]],
+    9: [["h9a", "What you believe is what sets you apart.", "Your methods matter more than your beliefs.", "Lead with what you believe.", "If you can't say what you believe, people can't choose you."],
+      ["h9b", "Still learning doesn't make you less of an expert.", "Experts already know everything.", "Learning keeps you an expert.", "If you feel like a fraud for still learning, this one's for you."]],
+    10: [["h10a", "Your reputation is built in small moments.", "Reputation comes from big wins.", "Small moments build a name.", "If you're waiting for your big break, look at your small ones."],
+      ["h10b", "Be known for one thing first.", "Doing everything shows you're versatile.", "One thing first.", "If people can't say what you do in a sentence, narrow it."]],
+    11: [["h11a", "Your audience is a community, not a number.", "Follower count is the measure of success.", "People, not numbers.", "If you check your follower count every day, this one's for you."],
+      ["h11b", "The future belongs to people who build it together.", "You have to compete to get ahead.", "Collaborate, don't compete.", "If competition is wearing you out, try collaboration."]],
+    12: [["h12a", "The quiet work is the real work.", "If nobody sees it, it doesn't count.", "Quiet counts.", "If your best work happens alone, it still counts."],
+      ["h12b", "Solitude is a resource, not a retreat.", "Time alone means you're avoiding people.", "Alone time is fuel.", "If you need a day alone after a busy week, that's not a flaw."]]
+  };
+  // fallbacks per placement (so a chart with many placements in one sign still gets 10 different Codes)
+  const PLC = {
+    sun: [["su1", "Build around what comes easily.", "If it's easy, it can't be valuable.", "Easy is your advantage.", "If you discount the things that come naturally, look again."]],
+    moon: [["mo1", "What you need is a clue to what you offer.", "Your needs don't belong in your business.", "Your needs are data.", "If you keep ignoring what you need, your work feels it."]],
+    rising: [["ri1", "People buy the feeling before the offer.", "People buy on features and price.", "The feeling sells first.", "If your offer is great but nobody bites, check the feeling."]],
+    mercury: [["me1", "Say it plainly.", "Jargon makes you sound credible.", "Plain words win.", "If you need a glossary to read your bio, rewrite it."]],
+    venus: [["ve1", "Attraction beats persuasion.", "You have to convince people to buy.", "Draw people in, don't push.", "If selling feels like convincing, try attracting instead."]],
+    mars: [["ma1", "Action creates clarity.", "You need clarity before you act.", "Act your way into clarity.", "If you're stuck thinking, try doing one small thing."]],
+    descendant: [["de1", "Your people are drawn to what you have that they're missing.", "Your ideal client is just like you.", "You attract what they're missing.", "If your clients are nothing like you, that might be the point."]],
+    midheaven: [["mh1", "Your legacy starts with what you do this week.", "Legacy is something to think about later.", "Legacy is this week's work.", "If legacy feels far away, look at this week."]],
+    north_node: [["nn1", "Growth means doing the thing that feels new.", "Stick with what you already know.", "New is where you grow.", "If it all feels too familiar, it might be time to stretch."]]
+  };
+  const WHY = { Aries: "moves first and figures it out on the way", Taurus: "trusts what's steady and real", Gemini: "connects ideas quickly", Cancer: "protects and nurtures", Leo: "leads with warmth and visibility",
+    Virgo: "notices the details others miss", Libra: "looks for balance and fairness", Scorpio: "goes deep where others won't", Sagittarius: "chases the bigger meaning", Capricorn: "builds for the long haul",
+    Aquarius: "questions the usual way", Pisces: "feels what isn't said" };
+  const STOP = new Set("about after again also always because been before being but can could does doing don't even every from have having here into it's just like make more most much need never only other over really same should some still such than that that's their them then there these they thing things this those through time very want what when where which while with without work would your you're yours".split(" "));
+  const cw = t => new Set((String(t).toLowerCase().match(/[a-z']{5,}/g) || []).filter(w => !STOP.has(w)).map(w => w.replace(/(ing|ed|es|s)$/, "")));
+  const lc = t => t.charAt(0).toLowerCase() + t.slice(1);
+  const noDot = t => t.replace(/[.!?]+$/, "");
+  function hooks(s, c, p, hp) {
+    return [["Challenge an Assumption", `“${noDot(c)}.” I hear that a lot, and I don't buy it.`], ["Name a Pattern", p], ["Make the Point", hp ? `${s} It's how I show up in ${hp}.` : s]];
+  }
+  const sentenceWith = (text, word) => { const ss = String(text).split(/(?<=[.!?])\s+|\n+/); const x = ss.find(z => z.toLowerCase().includes(word)); if (!x) return ""; const w = x.trim().split(/\s+/); return w.length > 14 ? w.slice(0, 14).join(" ") + "…" : x.trim(); };
+  // ---- story Codes: only the person's own lessons, tidied (never invented)
+  function lessons(story) {
+    const src = [story.after || "", story.all || ""].join("\n"); const out = [];
+    String(src).split(/(?<=[.!?])\s+|\n+/).forEach(x => {
+      let t = x.trim(); if (!t) return;
+      const m = t.match(/(?:what i(?:'ve)? learned(?: is)?|i(?:'ve)? learned|now i know|i know now|i realized|i realize now|the truth is|turns out)[:,]?\s*(?:that\s+)?(.+)/i);
+      if (m) t = m[1]; else if (!/\b(isn't|aren't|is not|are not|don't need|doesn't have to|you don't have to)\b/i.test(t)) return;
+      t = FYFSTORY.tidy(t); if (t.split(/\s+/).length > 18 || t.split(/\s+/).length < 3) return;
+      if (!out.some(o => o.toLowerCase() === t.toLowerCase())) out.push(t); });
+    return out.slice(0, 3);
+  }
+  function challengeOf(s) {
+    let m;
+    if ((m = s.match(/^(.+?) (is|are) not (.+?)[.,;]/i))) return `${m[1]} ${m[2]} ${m[3]}.`;
+    if ((m = s.match(/^(.+?) (isn't|aren't) (.+?)(?:[,;] (?:it's|they're|it is|they are) .+)?[.]$/i))) return `${m[1]} ${m[2] === "isn't" ? "is" : "are"} ${m[3]}.`;
+    if ((m = s.match(/^you don't (need|have) to (.+?)[.]$/i))) return `You ${m[1]} to ${m[2]}.`;
+    return "Most people act as if the opposite were true.";
+  }
+  function generate(ch, o) {
+    o = o || {}; const picks = o.picks || [], useStory = !!o.story, avoid = o.avoid || [];
+    const order = FYFCHART.ordered(ch, picks), pk = picks.filter(k => order.includes(k));
+    const ctxText = [o.what || "", useStory ? Object.values(o.story).join(" ") : ""].join(" "), ctxW = cw(ctxText);
+    const kwSign = k => (o.keywords || []).some(w => FYFCHART.signBy(ch.P[k].sign).vibe_words.includes(w));
+    const H = FYFCHART.HOUSE_PH, out = [], usedPt = new Set(avoid.map(a => a.id)), usedW = avoid.map(a => cw(a.s));
+    const clash = s => { const w = cw(s); return usedW.some(u => [...w].filter(x => u.has(x)).length >= 2); };
+    // 1) story Codes (the person's own words), when they chose chart + story
+    if (useStory) lessons(o.story).forEach(s => {
+      if (out.length >= 3 || clash(s)) return; const id = "st-" + s.toLowerCase().replace(/[^a-z]+/g, "-").slice(0, 40); if (usedPt.has(id)) return;
+      const proofSrc = [o.story.after, o.story.helped].join(" "), proof = String(proofSrc).split(/(?<=[.!?])\s+/).find(x => FYFSTORY.concrete(x) && !x.includes(s.slice(0, 20)));
+      const sw = cw(s); const fitK = pk.find(k => FYFCHART.signBy(ch.P[k].sign).vibe_words.slice(0, -1).some(v => sw.has(v.replace(/(ing|ed|es|s)$/, ""))));
+      const c = challengeOf(s);
+      out.push({ id, src: "story", s, c, f: "You said this yourself, in your own story.", proof: proof ? `In your story: “${FYFSTORY.tidy(proof)}”` : "Your story is the proof. Add one detail people could picture.",
+        alts: [], hooks: [["Challenge an Assumption", c.startsWith("Most people") ? `Most people act like the opposite is true. I don't.` : `“${noDot(c)}.” I used to believe that. I don't anymore.`], ["Name a Pattern", `If you've been living like ${lc(noDot(c))}, this one's for you.`], ["Make the Point", `${s} That's what my story taught me.`]],
+        pl: fitK || null });
+      usedPt.add(id); usedW.push(cw(s)); });
+    // 2) chart Codes: candidates from each placement (sign beliefs, house beliefs, placement fallbacks)
+    const cands = [];
+    order.forEach((k, rank) => { const p = ch.P[k], lib = FYFCHART.PL(k), hn = p.house, hp = hn ? H[hn][0] : null, inH = hn ? ` in the ${FYFCHART.ord(hn)} house` : "";
+      const base = (pk.includes(k) ? 100 : 0) + (kwSign(k) ? 6 : 0) - rank * 2;
+      const add = (row, kind, bonus) => { const [id, s, c, alt, pat] = row; let f;
+        if (kind === "sign") f = `Your ${lib.name} in ${p.sign}${inH} (${lib.brand_label.toLowerCase()}) ${WHY[p.sign]}${hp ? `, and it speaks to ${hp}` : ""}.`;
+        else if (kind === "house") f = `Your ${lib.name} in ${p.sign} sits in the ${FYFCHART.ord(hn)} house, which in your business is ${FYFCHART.VC.houses.find(x => x.number === hn).in_business}.`;
+        else f = `Your ${lib.name} in ${p.sign}${inH} is ${lib.brand_label.toLowerCase()}, and ${p.sign} ${WHY[p.sign]}.`;
+        const ov = [...cw(s + " " + c)].filter(w => ctxW.has(w)); const why = ov.length && useStory ? sentenceWith(ctxText, ov[0]) : "";
+        cands.push({ id, src: "chart", s, c, f: f + (why ? ` It lines up with what you shared: “${why}”` : ""), proof: `Your proof to find: a time this showed up in ${hp || lib.brand_label.toLowerCase()}.`,
+          alts: [alt], hooks: hooks(s, c, pat, hp), pl: k, score: base + bonus + ov.length * 3, k }); };
+      (SIGN[p.sign] || []).forEach((r, i) => add(r, "sign", 3 - i * 0.5));
+      if (hn) HOUSE[hn].forEach((r, i) => add(r, "house", 2 - i * 0.5));
+      (PLC[k] || []).forEach(r => add(r, "pl", -4)); });
+    // round-robin by placement so each one leads at most one Code per pass; never the same point twice
+    const byK = {}; cands.sort((a, b) => b.score - a.score).forEach(c => (byK[c.k] = byK[c.k] || []).push(c));
+    for (let pass = 0; out.length < 10 && pass < 8; pass++)
+      for (const k of order) { if (out.length >= 10) break; const c = (byK[k] || []).find(x => !usedPt.has(x.id) && !out.some(y => y.s === x.s) && !clash(x.s)); if (c) { usedPt.add(c.id); usedW.push(cw(c.s)); out.push(c); } }
+    return out.slice(0, 10).map(({ score, k, ...c }) => c);
+  }
+  // sample Codes: only show "In your chart" when a placement genuinely fits (sign or house), naming placement + house
+  const SAMPLE_FIT = [
+    [["venus", "moon", "midheaven"], ["Taurus", "Cancer", "Virgo", "Pisces"], [6, 12]],
+    [["mercury"], ["Pisces", "Cancer", "Virgo", "Gemini"], [3]],
+    [["descendant", "moon", "north_node"], ["Cancer", "Scorpio", "Aquarius", "Virgo"], [4, 7, 11]],
+    [["moon"], ["Cancer", "Pisces", "Scorpio", "Virgo", "Taurus"], [6, 12]],
+    [["mars", "sun"], ["Capricorn", "Aquarius", "Scorpio", "Virgo"], []],
+    [["mercury", "rising", "venus"], ["Pisces", "Cancer", "Aquarius", "Libra"], [12]],
+    [["venus", "moon"], ["Taurus", "Pisces", "Cancer", "Libra"], [12]],
+    [["mars", "north_node"], ["Aries", "Capricorn", "Virgo"], [6]],
+    [["sun", "north_node", "mercury"], ["Aries", "Sagittarius", "Leo", "Aquarius"], [3, 9]],
+    [["north_node", "sun", "moon"], ["Aries", "Capricorn", "Virgo"], []]];
+  function sampleFit(ch, i) {
+    const [keys, signs, houses] = SAMPLE_FIT[i] || [[], [], []];
+    const k = keys.find(k => { const p = ch.P[k]; return p && !p.locked && (signs.includes(p.sign) || houses.includes(p.house)); });
+    return k ? FYFCHART.plLabel(ch, k) : "";
+  }
+  return { generate, lessons, challengeOf, sampleFit, SIGN, HOUSE, PLC };
+})();
 </script>
 <script>(function(){
 const SCREENS=[
- {id:"s1-start",stage:1,label:"Your details"},{id:"s1-chart",stage:1,label:"Confirm your chart"},
+ {id:"s1-start",stage:1,label:"Your details"},{id:"s1-chart",stage:1,label:"Confirm your chart"},{id:"s1-picks",stage:1,label:"Placements most like you"},
  {id:"s1-blueprint",stage:1,label:"Your Brand Blueprint"},{id:"s1-powers",stage:1,label:"Superpowers + keywords"},
  {id:"s1-deep",stage:1,label:"Your 9-Area Frequency Chart"},
- {id:"s2-begin",stage:2,label:"Where it began"},{id:"s2-timeline",stage:2,label:"Your story timeline"},
+ {id:"s2-begin",stage:2,label:"Where it began"},{id:"s2-mode",stage:2,label:"How to tell it"},{id:"s2-timeline",stage:2,label:"Your story timeline"},
  {id:"s2-private",stage:2,label:"What stays private"},{id:"s2-story",stage:2,label:"Signature Brand Story"},
  {id:"s3-pick",stage:3,label:"Choose your Codes"},{id:"s3-reveal",stage:3,label:"Your Brand Codes"},
  {id:"s4-quick",stage:4,label:"Two quick questions"},{id:"s4-hub",stage:4,label:"Build your Bundle"},
@@ -1470,18 +1860,19 @@ const STAGES=[null,{n:"Your Frequency",sub:"Creating Your Brand Blueprint",tag:"
  {n:"Your Codes",sub:"Writing Your Chorus",tag:"Your chorus"},{n:"Broadcast",sub:"Building Your Brand Broadcast Bundle",tag:"Your song on the radio"},{n:"Your Bundle",sub:"All five pieces together",tag:"Download"}];
 const KEY="fyf-proto-v2";
 const CHAT_URL=(window.FYF_CHAT_URL||"https://fyf-proto-chat.themetamusician.workers.dev");
-const fresh=()=>({i:0,reached:0,stageOpen:[0,1,0,0,0,0],name:"",biz:"",what:"",bdate:"",btime:"",bunk:false,bplace:"",place:null,kwFor:null,chartOk:false,chartFix:false,react:{},keywords:BLUEPRINT.keywordsEcho.slice(),deepOpen:{},origin:null,
- st:{},stIdx:0,priv:["The school's name"],storyOk:false,codes:{},alt:{},openAlt:null,flipped:{},qi:0,offer:null,cta:null,openD:null,d:{},usedSample:{},chat:[]});
+const fresh=()=>({i:0,reached:0,stageOpen:[0,1,0,0,0,0],name:"",biz:"",what:"",bdate:"",btime:"",bunk:false,bplace:"",place:null,kwFor:null,chartOk:false,chartFix:false,react:{},keywords:BLUEPRINT.keywordsEcho.slice(),deepOpen:{},origin:null,picks:[],bpPicks:null,cpPicks:null,
+ st:{},stIdx:0,storyMode:null,allText:"",allSorted:false,priv:["The school's name"],storyOk:false,codeSrc:null,codeList:null,codeChart:null,codes:{},alt:{},openAlt:null,flipped:{},qi:0,offer:null,offerName:"",offerOther:"",cta:null,openD:null,d:{},usedSample:{},chat:[]});
 let S; try{S=Object.assign(fresh(),JSON.parse(sessionStorage.getItem(KEY)||"{}"))}catch(e){S=fresh()}
 const save=()=>{try{sessionStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const $=s=>document.querySelector(s), app=$("#app");
 const h=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const nm=()=>h(S.name||"friend");
 const WAVE='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 12h1M7 8v8M11 5v14M15 8v8M19 10v4M21 12h0"/></svg>';
-function echo(lines,cls){return `<div class="echo ${cls||""}"><div class="av" aria-hidden="true">${WAVE}</div><div class="bub"><b class="nm">Echo</b>${[].concat(lines).map(l=>`<p>${l}</p>`).join("")}</div></div>`}
+function echo(lines,cls){return `<div class="echo ${cls||""}"><div class="av" aria-hidden="true">${WAVE}</div><div class="bub"><b class="nm">Echo</b>${[].concat(lines).map(l=>/^<(ol|ul|div)/.test(l)?l:`<p>${l}</p>`).join("")}</div></div>`}
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)}
 const cur=()=>SCREENS[S.i];
-const keptCodes=()=>CODES.map((c,i)=>({...c,i,s:S.alt[i]!=null?c.alts[S.alt[i]]:c.s})).filter(c=>S.codes[c.i]==="keep");
+const codesList=()=>S.codeList||[];
+const keptCodes=()=>codesList().map((c,i)=>({...c,i,s:S.alt[i]!=null?c.alts[S.alt[i]]:c.s})).filter(c=>S.codes[c.i]==="keep");
 const nApproved=()=>DELIV.filter(d=>S.d[d.id]&&S.d[d.id].ok).length;
 const bioLen=x=>[...x].length;
 const CH=()=>FYFCHART.compute(S);
@@ -1495,19 +1886,20 @@ function why(){const id=cur().id;
  if(id==="s1-chart") return S.chartOk?"":"Confirm your chart looks right";
  if(id==="s1-powers") return S.keywords.length===5?"":`Pick exactly 5 keywords (${S.keywords.length} picked)`;
  if(id==="s2-begin") return S.origin!=null?"":"Pick where your work began";
- if(id==="s2-timeline"){const n=STATIONS.filter(s=>S.st[s.id]&&S.st[s.id].done).length;return n===4?"":`Organize all 4 parts (${n} of 4 done)`;}
+ if(id==="s2-mode") return S.storyMode?"":"Pick how you want to tell it";
+ if(id==="s2-timeline"){if(S.storyMode==="all")return S.allSorted?"":"Tell me your story, then tap “Sort my story”";const n=STATIONS.filter(s=>S.st[s.id]&&S.st[s.id].done).length;return n===4?"":`Organize all 4 parts (${n} of 4 done)`;}
  if(id==="s2-story") return S.storyOk?"":"Approve your story to continue";
- if(id==="s3-pick"){const k=keptCodes().length;return k>=1?"":"Keep at least one Code";}
- if(id==="s4-quick") return (S.offer!=null&&S.cta!=null)?"":"Answer both questions";
+ if(id==="s3-pick"){if(!S.codeSrc)return"Choose where your Codes come from";const k=keptCodes().length;return k>=1?"":"Keep at least one Code";}
+ if(id==="s4-quick"){if(S.offer==null)return"Pick where you want to send people";if(S.offer===3&&!S.offerOther.trim())return"Tell Echo what it is in a few words";if(S.qi===1&&S.cta==null)return"Pick what they should do next";return"";}
  if(id==="s4-hub") return nApproved()>=1?"":"Approve at least one piece";
  return "";}
-const NEXT_LABEL={"s1-start":"Calculate my chart","s1-chart":"Show my Brand Blueprint","s1-blueprint":"Next: superpowers","s1-powers":"Next: my 9 areas","s1-deep":"On to Your Story →",
- "s2-begin":"Next","s2-timeline":"Next: privacy check","s2-private":"Write my story","s2-story":"On to Your Codes →","s3-pick":"Reveal my Codes","s3-reveal":"On to Broadcast →","s4-quick":"Next","s4-hub":"Assemble my Bundle","s5-bundle":""};
+const NEXT_LABEL={"s1-start":"Calculate my chart","s1-chart":"Next: pick your placements","s1-picks":"Show my Brand Blueprint","s1-blueprint":"Next: superpowers","s1-powers":"Next: my 9 areas","s1-deep":"On to Your Story →",
+ "s2-begin":"Next","s2-mode":"Next","s2-timeline":"Next: privacy check","s2-private":"Write my story","s2-story":"On to Your Codes →","s3-pick":"Reveal my Codes","s3-reveal":"On to Broadcast →","s4-quick":"Next","s4-hub":"Assemble my Bundle","s5-bundle":""};
 
 // ---- navigation (history-backed so browser Back works too)
-function go(i,push=true){S.i=Math.max(0,Math.min(SCREENS.length-1,i));S.reached=Math.max(S.reached,S.i);save();if(push)history.pushState({i:S.i},"","#"+cur().id);render();window.scrollTo({top:0,behavior:"instant"})}
+function go(i,push=true){FYFDICT.stop("");S.i=Math.max(0,Math.min(SCREENS.length-1,i));S.reached=Math.max(S.reached,S.i);save();if(push)history.pushState({i:S.i},"","#"+cur().id);render();window.scrollTo({top:0,behavior:"instant"})}
 function next(){if(why()){toast(why());return}
- if(cur().id==="s4-quick"&&S.qi===0){S.qi=1;save();render();return}
+ if(cur().id==="s4-quick"&&S.qi===0){if(S.offer===4){S.cta=2;save();go(S.i+1);return}S.qi=1;save();render();return}
  if(cur().id==="s3-pick"&&keptCodes().length<3||cur().id==="s3-pick"&&keptCodes().length>5){
    return dialog(keptCodes().length<3?`You kept ${keptCodes().length}. Most people carry 3 to 5 Codes.`:`You kept ${keptCodes().length}. More than 5 can feel scattered.`,
      "That's your call. Fewer Codes are easier to repeat; more give you range. Want to keep going with what you picked?","Keep choosing","Continue anyway",()=>go(S.i+1));}
@@ -1525,21 +1917,24 @@ function stepbar(){const st=cur().stage;const maxSt=SCREENS[S.reached].stage;
 function jumpStage(n){const first=SCREENS.findIndex(s=>s.stage===n);const maxSt=SCREENS[S.reached].stage;
  if(n===cur().stage)return;
  if(n<=maxSt){go(n===maxSt?S.reached:first);return}
- dialog(`Jump ahead to ${STAGES[n].n}?`,`The stages work best in order, but you never have to finish one before starting another. If you jump ahead, Echo will ask only for the minimum it needs. <em>(In this prototype, the earlier stages fill in with sample answers.)</em>`,"Stay here","Jump ahead",()=>{fillThrough(first-1);S.usedSample[n]=true;go(first)})}
+ dialog(`Jump ahead to ${STAGES[n].n}?`,`The stages work best in order, but you never have to finish one before starting another. If you jump ahead, Echo will ask only for the minimum it needs. <em>(In this prototype, the earlier stages fill in with sample answers${S.name&&!isSample()?", except Your Story: if you skip it, your Codes come from your chart":""}.)</em>`,"Stay here","Jump ahead",()=>{fillThrough(first-1,{noStory:!!S.name&&!isSample()});S.usedSample[n]=true;go(first)})}
 
 // ---- sample filler (also used by ?at= for screenshots)
-function fillThrough(idx){
+const AT=id=>SCREENS.findIndex(s=>s.id===id);
+function fillThrough(idx,opt){const ns=opt&&opt.noStory;
  if(idx>=0){if(!S.place||!S.bdate){const r=FYFCHART.CITY.find(...SAMPLE.city);Object.assign(S,{bdate:SAMPLE.bdate,btime:SAMPLE.btime,bunk:false,place:{label:FYFCHART.CITY.label(r),lat:r.lat,lon:r.lon,tz:r.tz},bplace:FYFCHART.CITY.label(r)})}
   Object.assign(S,{name:S.name||SAMPLE.name,biz:S.biz||SAMPLE.biz,what:S.what||SAMPLE.what})}
- if(idx>=1)S.chartOk=true;
- if(idx>=2){S.react={m0:"yes",m1:"yes",r0:"yes"}}
- if(idx>=5)S.origin=S.origin==null?1:S.origin;
- if(idx>=6){STATIONS.forEach(s=>{S.st[s.id]={text:s.ramble,done:true}});S.stIdx=4}
- if(idx>=8)S.storyOk=true;
- if(idx>=9){if(!keptCodes().length){S.codes={0:"keep",1:"keep",2:"keep",5:"keep",4:"skip",8:"skip"};S.alt={5:0}}}
- if(idx>=10)S.flipped={};
- if(idx>=11){S.offer=S.offer==null?0:S.offer;S.cta=S.cta==null?0:S.cta;S.qi=1}
- if(idx>=12){S.d={bio:{pick:0,ok:true},one:{pick:0,ok:true},about:{ok:true},hooks:{stars:["0-0","1-1","2-2"],ok:true},pth:{ok:true}}}
+ if(idx>=AT("s1-chart"))S.chartOk=true;
+ if(idx>=AT("s1-picks")&&!S.picks.length&&isSample())S.picks=SAMPLE.picks.slice();
+ if(idx>=AT("s1-blueprint")){S.react={m0:"yes",m1:"yes",r0:"yes"}}
+ if(idx>=AT("s2-begin")&&!ns)S.origin=S.origin==null?1:S.origin;
+ if(idx>=AT("s2-mode")&&!ns)S.storyMode=S.storyMode||"walk";
+ if(idx>=AT("s2-timeline")&&!ns){STATIONS.forEach(s=>{S.st[s.id]={text:s.ramble,done:true}});S.stIdx=4}
+ if(idx>=AT("s2-story")&&!ns)S.storyOk=true;
+ if(idx>=AT("s3-pick")){S.codeSrc=S.codeSrc||(S.storyOk?"both":"chart");if(!S.codeList)buildCodes([]);if(!keptCodes().length){S.codes={0:"keep",1:"keep",2:"keep",5:"keep",4:"skip",8:"skip"};S.alt={5:0}}}
+ if(idx>=AT("s3-reveal"))S.flipped={};
+ if(idx>=AT("s4-quick")){if(S.offer==null){S.offer=1;S.offerName=isSample()?"next circle":""}S.cta=S.cta==null?0:S.cta;S.qi=1}
+ if(idx>=AT("s4-hub")){S.d={bio:{pick:0,ok:true},one:{pick:0,ok:true},about:{ok:true},hooks:{stars:["0-0","1-1","2-2"],ok:true},pth:{ok:true}}}
  S.reached=Math.max(S.reached,idx+1);save()}
 
 // ================= SCREENS =================
@@ -1571,25 +1966,43 @@ R["s1-chart"]=()=>{const ch=CH();if(!ch)return `<p>Add your birth details first.
   <div class="btnrow"><button class="btn ${S.chartOk?"dark":""}" type="button" id="chartYes">${S.chartOk?"✓ Looks right":"Yes, looks right"}</button><button class="btn ghost" type="button" id="chartFix">Something's off</button></div>
   ${S.chartFix?`<div class="echo reflect" style="margin-bottom:0"><div class="av">${WAVE}</div><div class="bub"><b class="nm">Echo</b><p>No problem. Most of the time it's the birth time or the city. Double-check them and I'll recalculate.</p><p><button type="button" class="btn small" data-editbirth="1">Edit my birth details</button></p></div></div>`:""}
  </div>`};
+// ---- Prompt 1: which placements feel most like you (YVV-style cards, multi-select, change anytime)
+const samePicks=(a,b)=>JSON.stringify((a||[]).slice().sort())===JSON.stringify((b||[]).slice().sort());
+const livePicks=()=>{const ch=CH();return ch?S.picks.filter(k=>!ch.P[k].locked):[]};
+function bpPicks(){if(S.bpPicks==null){S.bpPicks=livePicks();save()}return S.bpPicks}
+function refreshBar(kind){const snap=kind==="codes"?S.cpPicks:S.bpPicks;if(kind==="codes"&&!S.codeList)return"";const chartMoved=kind==="codes"&&S.codeChart&&CH()&&S.codeChart!==CH().key;if(snap==null||(samePicks(snap,livePicks())&&!chartMoved))return"";
+ return `<div class="refreshbar" role="status"><span>You changed which placements feel most like you. ${kind==="codes"?"Your Codes still use your earlier picks, and nothing changes until you say so. Codes you kept stay put.":"Your Blueprint still uses your earlier picks, and nothing changes until you say so."}</span><button type="button" class="btn small" data-refresh="${kind}">${kind==="codes"?"Refresh my Codes":"Refresh with my new picks"}</button></div>`}
+R["s1-picks"]=()=>{const ch=CH();if(!ch)return `<p>Add your birth details first.</p>`;const pk=livePicks();return `
+ <div class="eyebrow">Stage 1 · Your Frequency</div><h2>Which placements feel most like you?</h2>
+ ${echo(["Tap the placements that feel most like you. There are no wrong answers, and you can change these anytime."])}
+ <div class="pcards">${FYFCHART.ORDER.map(o=>{const p=ch.P[o.key],lib=FYFCHART.PL(o.key),on=pk.includes(o.key),sg=p.locked?null:FYFCHART.signBy(p.sign),hs=p.house?FYFCHART.VC.houses.find(x=>x.number===p.house):null;
+  return `<div class="pcard ${on?"on":""} ${p.locked?"na":""}" role="checkbox" tabindex="${p.locked?-1:0}" aria-checked="${on}" aria-disabled="${p.locked}" data-pk="${o.key}">
+   <div class="pc-top"><span class="pc-glyph">${p.ic}</span><span class="pc-check" aria-hidden="true">✓</span></div>
+   <div class="pc-name">${p.locked?`${h(p.name)}`:`${h(p.name)} in ${h(p.sign)}${p.house?`, ${FYFCHART.ord(p.house)} house`:""}`}</div>
+   <div class="pc-role">${h(lib.brand_label)}</div>
+   ${p.locked?`<div class="pc-int">🔒 Needs your birth time, so it's left out rather than guessed.</div>`:`<div class="pc-words">${sg.vibe_words.slice(0,3).map(w=>`<span>${h(w)}</span>`).join("")}</div>
+   ${hs?`<div class="pc-int">Shows up in ${h(hs.in_business)}.</div>`:""}`}</div>`}).join("")}</div>
+ <p class="muted pcount" style="font-size:14px;margin-top:12px"><b>${pk.length}</b> picked${pk.length?"":" · pick as many as you like, or none"}. These lead your Brand Essence, superpowers, keywords and Codes.</p>`};
 R["s1-blueprint"]=()=>`
  <div class="eyebrow">Stage 1 · Your Brand Blueprint</div>
- <div class="hero reveal-in"><div class="eyebrow">Part 1 · Your Brand Archetype</div><h1>${h(BLUEPRINT.archetype)}</h1><p class="iam">“${h(BLUEPRINT.iam)}”</p>
+ <div class="hero reveal-in"><div class="eyebrow">Part 1 · Your Brand Persona</div><h1>${h(BLUEPRINT.persona)}</h1><p class="iam">“${h(BLUEPRINT.iam)}”</p>
   <svg class="wave" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"><path d="M3 12h1M7 8v8M11 5v14M15 8v8M19 10v4"/></svg></div>
- ${sampleNote("Your archetype, Magnetize and Repel are still sample copy in this prototype. Your Brand Essence below comes from your real chart.")}<div class="card" style="margin-top:14px"><div class="eyebrow">Part 2 · Brand Essence · from your chart</div><p style="margin:0">${h(FYFCHART.essence(CH()))}</p></div>
+ ${refreshBar("bp")}${sampleNote("Your Brand Persona, Magnetize and Repel are still sample copy in this prototype. Your Brand Essence below comes from your real chart.")}<div class="card" style="margin-top:14px"><div class="eyebrow">Part 2 · Brand Essence · from your chart</div><p style="margin:0" id="essence">${h(FYFCHART.essence(CH(),bpPicks()))}</p></div>
  ${echo(["Tap how each one lands. It's optional, and if something feels off, I'll take that into the next parts."])}
  <div class="grid g2">
   <div class="card mag"><div class="eyebrow">Part 3 · You Magnetize</div>${BLUEPRINT.magnetize.map((m,i)=>card("m"+i,m)).join("")}</div>
   <div class="card rep"><div class="eyebrow">Part 4 · You Repel</div>${BLUEPRINT.repel.map((m,i)=>card("r"+i,m)).join("")}</div></div>`;
 function card(id,m){const v=S.react[id];return `<div style="padding:10px 0;border-bottom:1px solid var(--cream)"><h3>${h(m.t)}</h3><div class="muted" style="font-size:14.5px">${h(m.d)}</div>
  <div class="react"><button type="button" class="yes ${v==="yes"?"on":""}" data-react="${id}" data-v="yes">✓ Feels true</button><button type="button" class="no ${v==="no"?"on":""}" data-react="${id}" data-v="no">Not quite</button></div></div>`}
-R["s1-powers"]=()=>{const ch=CH(),kw=FYFCHART.keywords(ch);if(S.kwFor!==ch.key){S.keywords=kw.pick.slice();S.kwFor=ch.key;save()}return `
- <div class="eyebrow">Stage 1 · Your Brand Blueprint</div><h2>Your magnetic superpowers</h2>
- <div class="grid g3">${BLUEPRINT.powers.map((p,i)=>`<div class="card reveal-in" style="animation-delay:${i*.08}s;padding:16px"><div class="tag coral">Superpower ${i+1}</div><h3 style="margin-top:8px">${h(p.t)}</h3><div class="muted" style="font-size:14.5px">${h(p.d)}</div></div>`).join("")}</div>
+const powersFor=()=>isSample()?BLUEPRINT.powers:FYFCHART.powers(CH(),bpPicks());
+R["s1-powers"]=()=>{const ch=CH(),bp=bpPicks(),kw=FYFCHART.keywords(ch,bp),kf=ch.key+"|"+bp.join(",");if(S.kwFor!==kf){S.keywords=kw.pick.slice();S.kwFor=kf;save()}return `
+ <div class="eyebrow">Stage 1 · Your Brand Blueprint</div>${refreshBar("bp")}<h2>Your magnetic superpowers</h2>
+ <div class="grid g3" id="powers">${powersFor().map((p,i)=>`<div class="card reveal-in" style="animation-delay:${i*.08}s;padding:16px"><div class="tag coral">Superpower ${i+1}</div><h3 style="margin-top:8px">${h(p.t)}</h3><div class="muted" style="font-size:14.5px">${h(p.d)}</div></div>`).join("")}</div>
  <h2 style="margin-top:26px">Your five Brand Energy Keywords</h2>
- ${echo([`I picked five from your chart, one from each of your strongest placements. Swap any of them by tapping. You need exactly five.`])}
+ ${echo([`I picked five from your chart, starting with the placements you said feel most like you. Swap any of them by tapping. You need exactly five.`])}
  <div class="panel"><div class="chips" id="kw">${kw.pool.map(k=>`<button type="button" class="chip ${S.keywords.includes(k)?"on":""}" data-kw="${h(k)}">${h(k)} <small>${h(kw.from[k].name)}</small></button>`).join("")}</div>
  <p class="muted" style="margin:10px 0 0;font-size:14px"><b>${S.keywords.length} of 5</b> picked${S.keywords.length>5?" · tap one to drop it":""}</p></div>
- <div class="card" style="margin-top:14px"><div class="eyebrow">Part 7 · Your Mini Brand Blueprint</div><p style="margin:0 0 8px;font-size:17px">“${h(BLUEPRINT.mini)}”</p><p class="muted" style="margin:0;font-size:14.5px">${h(BLUEPRINT.insight)}</p>${sampleNote("Superpowers and the Mini Blueprint are sample copy for now. In the full version Echo writes them from your chart and what you do.")}</div>`};
+ <div class="card" style="margin-top:14px"><div class="eyebrow">Part 7 · Your Mini Brand Blueprint</div><p style="margin:0 0 8px;font-size:17px">“${h(BLUEPRINT.mini)}”</p><p class="muted" style="margin:0;font-size:14.5px">${h(BLUEPRINT.insight)}</p>${sampleNote("Your superpowers come from your chart. The Mini Blueprint is still sample copy for now.")}</div>`};
 const DEEP_GROUPS=[["Deep Dive 1 · Your Foundation",["sun","rising","moon"]],["Deep Dive 2 · Your Expression",["mercury","venus","mars"]],["Deep Dive 3 · Your Direction",["descendant","midheaven","north_node"]]];
 R["s1-deep"]=()=>{const ch=CH();return `
  <div class="eyebrow">Stage 1 · Your 9-Area Frequency Chart</div><h2>Go deeper, one area at a time</h2>
@@ -1598,7 +2011,7 @@ R["s1-deep"]=()=>{const ch=CH();return `
   if(r.locked)return `<div class="acc locked" data-deep="${k}"><div class="lk"><span>🔒 ${h(r.title)}</span><button type="button" class="btn small ghost" data-editbirth="1">Add birth time</button></div><p>${h(r.meaning)}</p></div>`;
   return `<details class="acc" ${S.deepOpen[k]?"open":""} data-deep="${k}"><summary><span><span class="gl">${p.ic}</span> ${h(r.short)} <span class="muted" style="font-weight:500">· ${h(p.label)}</span></span></summary>
    <div class="rd"><p class="sent">${h(r.sentence)}</p><div class="chips">${r.words.map(w=>`<span class="chip static">${h(w)}</span>`).join("")}</div>
-   <p><b>What your ${h(r.short.split(" in ")[0])} means:</b> ${h(r.meaning)}</p>${r.signVibe?`<p><b>The vibe of ${h(p.sign)}:</b> ${h(r.signVibe)}</p>`:""}${r.houseVibe?`<p><b>The ${h(FYFCHART.ord(p.house))} house:</b> ${h(r.houseVibe)}</p>`:""}
+   <p><b>What your ${h(r.short.split(" in ")[0])} means:</b> ${h(r.meaning)}</p>${r.signVibe?`<p><b>The vibe of ${h(p.sign)}:</b> ${h(r.signVibe)}</p>`:""}${r.houseVibe?`<p><b>The ${h(FYFCHART.ord(p.house))} house:</b> ${h(r.houseVibe)}</p>`:""}${(()=>{const sp=FYFCHART.specific(p);return sp?`<p class="specific"><b>What this means for you, specifically:</b> ${h(sp)}</p>`:""})()}
    ${p.notes.length?`<p class="flag">⚑ ${h(p.notes.join(" "))}</p>`:""}
    <button type="button" class="btn small ghost" data-ask="${h(`Tell me more about my ${r.short} and what it means for my brand.`)}">Ask Echo about this</button></div></details>`}).join("")}`).join("")}
  ${ch.timeKnown?"":unlockNote()}
@@ -1610,22 +2023,47 @@ R["s2-begin"]=()=>`
  <div class="quiz-q">Where did your work begin?</div>
  <div class="quiz-opts">${ORIGINS.map((o,i)=>`<button type="button" class="pick ${S.origin===i?"on":""}" data-origin="${i}"><b>${h(o.t)}</b><span>${h(o.d)}</span></button>`).join("")}</div>
  <p class="muted" style="font-size:13.5px;max-width:720px">Picking one moves you on automatically. Echo adapts its questions, so a story doesn't have to be about healing.</p>`;
-R["s2-timeline"]=()=>{const ai=Math.min(S.stIdx,3);return `
- <div class="eyebrow">Stage 2 · Your Story</div><h2>Your story, one verse at a time</h2>
+// a part's verse: Echo's polished sample verse for the sample ramble, otherwise the person's own words, tidied
+const verseOf=(s,d)=>d&&d.text&&d.text.trim()!==s.ramble?FYFSTORY.tidy(d.text):s.verse;
+const evidenceOf=(s,d)=>d&&d.text&&d.text.trim()!==s.ramble?FYFSTORY.evidence(d.text):s.evidence;
+const movieOf=(s,d)=>d&&d.text&&d.text.trim()!==s.ramble?(FYFSTORY.concrete(d.text)?"I can picture that. It passes the Movie Test. 🎬":"I can't quite picture this yet. Add one thing we could see or count, so it passes the Movie Test."):s.reflect;
+const sampleStory=()=>STATIONS.every(s=>S.st[s.id]&&S.st[s.id].text===s.ramble);
+const modeSwitch=()=>`<div class="modeswitch"><span class="muted">${S.storyMode==="all"?"Telling it all at once.":"Walking through it one part at a time."}</span> <button type="button" class="skiplink" data-mode="${S.storyMode==="all"?"walk":"all"}">${S.storyMode==="all"?"Switch to: Walk me through it":"Switch to: Tell it all at once"}</button> <span class="muted" style="font-size:12.5px">Nothing you've written is lost.</span></div>`;
+R["s2-mode"]=()=>`
+ <div class="eyebrow">Stage 2 · Your Story</div><h2>Two ways to tell it</h2>
+ ${echo(["How do you want to do this? Some people like to tell it all in one go, others like a little structure. Both work."])}
+ <div class="quiz-opts">${[["all","Tell it all at once","I'll ramble about the whole thing and Echo sorts it out."],["walk","Walk me through it","One part at a time."]].map(([k,t,d])=>`<button type="button" class="pick ${S.storyMode===k?"on":""}" data-pickmode="${k}"><b>${t}</b><span>${d}</span></button>`).join("")}</div>
+ <p class="muted" style="font-size:13.5px">You can switch anytime without losing what you've written.</p>`;
+function allPartsHTML(){const fu=FYFSTORY.followUp(Object.fromEntries(STATIONS.map(s=>[s.id,(S.st[s.id]||{}).text||""])));
+ return `<div class="sorted">${STATIONS.map(s=>{const d=S.st[s.id]||{},txt=d.text||"",ev=txt?evidenceOf(s,d):[];return `<div class="card part" data-partcard="${s.id}"><h3>${h(s.title)} ${txt.trim()?'<span class="tag ok">Sorted</span>':'<span class="tag">Missing</span>'}</h3>
+  <label class="muted" for="part-${s.id}" style="font-size:13px">Edit anything. It's still your words.</label><textarea id="part-${s.id}" data-part="${s.id}" rows="4" placeholder="Nothing for this part yet.">${h(txt)}</textarea>
+  ${txt.trim()?`<div class="evidence"><span class="muted">Visible + measurable details Echo found:</span><div class="chips" style="margin-top:6px">${ev.length?ev.map(e=>`<span class="chip static">${h(e)}</span>`).join(""):`<span class="muted" style="font-size:13.5px">None yet.</span>`}</div></div><p class="movie">${h(movieOf(s,d))}</p>`:""}</div>`}).join("")}</div>
+ ${fu?echo([`Just ${fu.questions.length===1?"one question":fu.questions.length+" quick questions"} so I can picture the rest:`,`<ol class="fuq">${fu.questions.map(q=>`<li>${h(q)}</li>`).join("")}</ol>`,`Answer in the matching box above, or add to your big ramble and sort again. Or keep going if you'd rather leave it.`],"reflect followup"):echo(["Everything's here, and I can picture it. On to the privacy check whenever you're ready."],"reflect")}`}
+R["s2-all"]=()=>`
+ <div class="eyebrow">Stage 2 · Your Story</div><h2>Tell it all at once</h2>${modeSwitch()}
+ ${echo(["Tell me your story, messy is perfect. Where were you before, what made you change, what helped, and what's different now? Ramble as much as you want."])}
+ <div class="panel"><label for="allText" class="muted" style="font-size:13px">Your whole story (messy is perfect)</label>
+  <textarea id="allText" rows="9" placeholder="Just start talking…">${h(S.allText)}</textarea>
+  ${FYFDICT.html("allText")}
+  <div class="ramble-tools"><button type="button" class="btn small ghost" id="useSampleAll">Use sample ramble</button><button type="button" class="btn small dark" id="sortAll">${S.allSorted?"Sort it again ✨":"Sort my story ✨"}</button></div></div>
+ ${S.allSorted?`<h3 style="margin-top:20px">Echo sorted it into your 4 parts</h3>${allPartsHTML()}`:""}`;
+R["s2-timeline"]=()=>{if(S.storyMode==="all")return R["s2-all"]();const ai=Math.min(S.stIdx,3);return `
+ <div class="eyebrow">Stage 2 · Your Story</div><h2>Your story, one verse at a time</h2>${modeSwitch()}
  <p class="muted" style="margin-top:-4px">Ramble below. Echo shapes each part into a short verse and pins it to your timeline.</p>
  <div class="timeline">${STATIONS.map((s,i)=>{const d=S.st[s.id]||{};const state=d.done?"done":(i===S.stIdx?"active":(i<S.stIdx?"done":"locked"));
   return `<div class="station ${state}"><div class="dot">${d.done?"✓":i+1}</div><div class="card"><h3>${h(s.title)} ${d.done?'<span class="tag ok">Verse ready</span>':state==="locked"?'<span class="tag">Up next</span>':""} ${d.done?`<button type="button" class="skiplink" data-redo="${i}">Edit</button>`:""}</h3>
   ${state==="active"?`${echo(s.q)}
    <label for="ramble" class="muted" style="font-size:13px">Your words (messy is perfect)</label>
    <textarea id="ramble" placeholder="Just start talking…">${h(d.text||"")}</textarea>
-   <div class="ramble-tools"><button type="button" class="btn small mic" id="mic">🎙 Talk instead</button><button type="button" class="btn small ghost" id="useSample">Use sample ramble</button><button type="button" class="btn small dark" id="organize">Organize it ✨</button>${i<3?`<button type="button" class="skiplink" id="skipSt">Skip this part</button>`:""}</div>`:""}
-  ${d.done&&!d.skipped?`<div class="verse">${h(s.verse)}</div>
-   <div class="evidence"><span class="muted">Visible + measurable details Echo found:</span><div class="chips" style="margin-top:6px">${s.evidence.map(e=>`<span class="chip static">${h(e)}</span>`).join("")}</div></div>
-   ${i===S.stIdx-1?echo(s.reflect,"reflect"):""}
-   ${s.lessons?`<div style="margin-top:12px"><div class="eyebrow">What you learned · carries into Your Codes</div><div class="chips">${s.lessons.map(l=>`<span class="chip static">“${h(l)}”</span>`).join("")}</div><p class="muted" style="font-size:13px;margin:6px 0 0">These are early beliefs, not final Codes yet.</p></div>`:""}`:""}
+   ${FYFDICT.html("ramble")}<div class="ramble-tools"><button type="button" class="btn small ghost" id="useSample">Use sample ramble</button><button type="button" class="btn small dark" id="organize">Organize it ✨</button>${i<3?`<button type="button" class="skiplink" id="skipSt">Skip this part</button>`:""}</div>`:""}
+  ${d.done&&!d.skipped?`<div class="verse">${h(verseOf(s,d))}</div>
+   <div class="evidence"><span class="muted">Visible + measurable details Echo found:</span><div class="chips" style="margin-top:6px">${evidenceOf(s,d).map(e=>`<span class="chip static">${h(e)}</span>`).join("")||`<span class="muted" style="font-size:13.5px">None yet.</span>`}</div></div>
+   ${i===S.stIdx-1?echo(h(movieOf(s,d)),"reflect"):""}
+   ${s.lessons&&d.text===s.ramble?`<div style="margin-top:12px"><div class="eyebrow">What you learned · carries into Your Codes</div><div class="chips">${s.lessons.map(l=>`<span class="chip static">“${h(l)}”</span>`).join("")}</div><p class="muted" style="font-size:13px;margin:6px 0 0">These are early beliefs, not final Codes yet.</p></div>`:""}`:""}
   ${d.skipped?`<p class="muted" style="margin:4px 0 0">Skipped for now. Echo will ask only if it's needed later.</p>`:""}
   </div></div>`}).join("")}</div>
- ${S.st.before&&S.st.before.done&&S.st.after&&S.st.after.done?`<div class="fullcircle"><span style="font-size:22px">🔁</span><div><b>Full circle ✓</b> Your Before (Sunday nights grading, silence in the car) and After (tea + piano, singing again) are about the same parts of your life.</div></div>`:""}`};
+ ${S.st.before&&S.st.before.done&&!S.st.before.skipped&&S.st.after&&S.st.after.done&&!S.st.after.skipped?`<div class="fullcircle"><span style="font-size:22px">🔁</span><div><b>Full circle ✓</b> ${sampleStory()?"Your Before (Sunday nights grading, silence in the car) and After (tea + piano, singing again) are about the same parts of your life.":"Your Before and your After are both here, so your story can come full circle."}</div></div>`:""}
+ ${S.allText.trim()?`<p class="muted" style="font-size:13px">Your all-at-once ramble is saved too. Switch back anytime.</p>`:""}`};
 R["s2-private"]=()=>`
  <div class="eyebrow">Stage 2 · Share from the scar, not the open wound</div><h2>What should stay private?</h2>
  ${echo([`Before I write anything public, tell me what to leave out. You always control what becomes public.`,`Tap anything you'd rather keep private. You can still keep the lesson without the details.`])}
@@ -1633,33 +2071,70 @@ R["s2-private"]=()=>`
  <p class="muted" style="margin:12px 0 0;font-size:14px">${S.priv.length?`Keeping private: <b>${S.priv.map(h).join(", ")}</b>`:"Nothing marked private. Everything you shared can be used."}</p></div>`;
 R["s2-story"]=()=>{const parts=STATIONS.filter(s=>S.st[s.id]&&S.st[s.id].done&&!S.st[s.id].skipped);return `
  <div class="eyebrow">Stage 2 · Your Story</div><h2>Your Signature Brand Story</h2>
- <div class="card">${parts.map(s=>`<div style="margin-bottom:12px"><div class="tag">${h(s.title)}</div><p style="margin:6px 0 0;font-size:16.5px">${h(s.verse)}</p></div>`).join("")}
-  <div><div class="tag coral">What I Learned</div><p style="margin:6px 0 0;font-size:16.5px">Here's what I know now: rest is a skill, not a reward. Your voice isn't broken, it's tired. And small rooms change more people than big stages.</p></div>
-  ${S.priv.includes("The school's name")?`<p class="muted" style="font-size:13px;margin:12px 0 0">✓ No school name appears anywhere in your story.</p>`:""}</div>
+ <div class="card">${parts.map(s=>`<div style="margin-bottom:12px"><div class="tag">${h(s.title)}</div><p style="margin:6px 0 0;font-size:16.5px">${h(verseOf(s,S.st[s.id]))}</p></div>`).join("")}
+  ${sampleStory()?`<div><div class="tag coral">What I Learned</div><p style="margin:6px 0 0;font-size:16.5px">Here's what I know now: rest is a skill, not a reward. Your voice isn't broken, it's tired. And small rooms change more people than big stages.</p></div>`:""}
+  ${sampleStory()&&S.priv.includes("The school's name")?`<p class="muted" style="font-size:13px;margin:12px 0 0">✓ No school name appears anywhere in your story.</p>`:""}</div>
  <div class="btnrow" style="margin-top:14px"><button class="btn ${S.storyOk?"dark":""}" type="button" id="approveStory">${S.storyOk?"✓ Approved":"Approve my story"}</button><button class="btn ghost" type="button" id="sharpen">Sharpen something</button></div>
  ${S.storyOk?`<div class="closing"><b>🎶 Your Signature Brand Story is ready!</b><br>Next is Your Codes, where we'll find the beliefs your story is already pointing to.</div>`:""}`};
-R["s3-pick"]=()=>{const k=keptCodes().length;return `
- <div class="eyebrow">Stage 3 · Your Codes · Writing Your Chorus</div><h2>10 possible Codes. Keep the ones you'd stand behind.</h2>
- ${echo([`A Brand Code is a bold belief someone could argue with. These come from your story and Blueprint.`,`Choose the 3 to 5 that feel most true. Love the idea but not the wording? Tap “Reword”.`])}
+// ---- Prompt 3: where the Codes come from + per-person Codes (the hand-written 10 are only for sample Rae)
+const chartLineFor=c=>{const ch=CH();if(!ch)return"";return c.si!=null?FYFCODES.sampleFit(ch,c.si):(c.pl?FYFCHART.plLabel(ch,c.pl):"")};
+function storyParts(){const o={};STATIONS.forEach(s=>{const d=S.st[s.id];o[s.id]=d&&d.done&&!d.skipped?(d.text||""):""});o.all=S.storyMode==="all"?S.allText:"";return o}
+function buildCodes(keepIdx){const ch=CH();if(!ch)return;const old=codesList(),kept=keepIdx.map(i=>({o:old[i],a:S.alt[i]})).filter(x=>x.o);
+ let fresh;
+ if(S.codeSrc==="both"&&isSample()&&sampleStory())fresh=CODES.map((c,i)=>({...c,si:i}));
+ else fresh=FYFCODES.generate(ch,{picks:livePicks(),keywords:S.keywords,what:S.what,story:S.codeSrc==="both"?storyParts():null,avoid:kept.map(x=>x.o)});
+ fresh=fresh.filter(c=>!kept.some(x=>x.o.s===c.s||(x.o.id&&x.o.id===c.id)));
+ S.codeList=kept.map(x=>x.o).concat(fresh).slice(0,Math.max(10,kept.length));S.codes={};S.alt={};kept.forEach((x,j)=>{S.codes[j]="keep";if(x.a!=null)S.alt[j]=x.a});
+ S.flipped={};S.openAlt=null;S.cpPicks=livePicks();S.codeChart=ch.key;save()}
+function refreshCodes(){const keep=codesList().map((c,i)=>i).filter(i=>S.codes[i]==="keep");buildCodes(keep);render();toast(keep.length?`Refreshed ✓ Your ${keep.length} kept Code${keep.length>1?"s":""} stayed put.`:"Refreshed ✓")}
+R["s3-pick"]=()=>{
+ if(!S.storyOk&&!S.codeSrc){S.codeSrc="chart";save()}
+ if(S.codeSrc&&!S.codeList)buildCodes([]);
+ if(!S.codeSrc)return `
+ <div class="eyebrow">Stage 3 · Your Codes · Writing Your Chorus</div><h2>Where should your Codes come from?</h2>
+ ${echo([`A Brand Code is a bold belief someone could argue with. I'll write 10 for you to choose from.`,`Where should they come from?`])}
+ <div class="quiz-opts">${[["both","From my chart and my story","Your placements plus what you told me in Your Story."],["chart","Just from my chart","Starting points from the placements you picked."]].map(([k,t,d])=>`<button type="button" class="pick ${S.codeSrcPrev===k?"on":""}" data-codesrc="${k}"><b>${t}</b><span>${d}</span></button>`).join("")}</div>
+ ${S.codeList?`<p class="muted" style="font-size:13.5px">Any Codes you already kept will stay.</p>`:""}`;
+ const k=keptCodes().length,list=codesList(),src=S.codeSrc,smp=list.some(c=>c.si!=null);return `
+ <div class="eyebrow">Stage 3 · Your Codes · Writing Your Chorus</div>${refreshBar("codes")}<h2>10 possible Codes. Keep the ones you'd stand behind.</h2>
+ ${!S.storyOk?echo([`No story? No problem. These Codes come from your chart.`,`A Brand Code is a bold belief someone could argue with. Choose the 3 to 5 that feel most true. Love the idea but not the wording? Tap “Reword”.`])
+  :echo([`A Brand Code is a bold belief someone could argue with. ${smp?"These come from your story and Blueprint.":src==="both"?"These come from your chart, your story and what you do, starting with the placements you picked.":"These come from the placements you picked, then the rest of your chart."}`,`Choose the 3 to 5 that feel most true. Love the idea but not the wording? Tap “Reword”.`])}
+ ${src==="chart"?`<p class="startnote">These come from your chart, so treat them as starting points. Keep the ones that feel true for you.</p>`:""}
+ ${S.storyOk?`<p class="muted" style="font-size:13.5px;margin:-4px 0 10px">${src==="both"?"From your chart and your story.":"Just from your chart."} <button type="button" class="skiplink" data-codesrc-change="1">Change where my Codes come from</button></p>`:""}
  <div class="counter"><span class="pips">${[0,1,2,3,4].map(i=>`<i class="${i<k?"f":""}"></i>`).join("")}</span><span>${k} kept</span><span class="muted" style="font-weight:400">· aim for 3 to 5</span></div>
- <div class="codes">${CODES.map((c,i)=>{const v=S.codes[i];const s=S.alt[i]!=null?c.alts[S.alt[i]]:c.s;return `<div class="code ${v||""}"><div class="n">CODE ${i+1}</div><div class="stmt">${h(s)}</div>
-  <div class="ln"><b>What it challenges:</b> ${h(c.c)}</div><div class="ln"><b>Why it fits:</b> ${h(c.f)}</div>${(()=>{const l=FYFCHART.line(CH(),c.pl,c.pl2);return l?`<div class="ln chartln"><b>In your chart:</b> ${h(l)}</div>`:""})()}
-  ${S.openAlt===i?`<div class="alts"><span class="muted" style="font-size:12.5px">Echo's other wordings:</span>${[c.s].concat(c.alts).map((a,ai)=>`<button type="button" class="${(ai===0&&S.alt[i]==null)||S.alt[i]===ai-1?"on":""}" data-alt="${i}" data-ai="${ai-1}">${h(a)}</button>`).join("")}</div>`:""}
+ <div class="codes">${list.map((c,i)=>{const v=S.codes[i];const s=S.alt[i]!=null?c.alts[S.alt[i]]:c.s;const l=chartLineFor(c);return `<div class="code ${v||""}" data-codeid="${h(c.id||("r"+c.si))}"><div class="n">CODE ${i+1}</div><div class="stmt">${h(s)}</div>
+  <div class="ln"><b>What it challenges:</b> ${h(c.c)}</div><div class="ln"><b>Why it fits:</b> ${h(c.f)}</div>${l?`<div class="ln chartln"><b>In your chart:</b> ${h(l)}</div>`:""}
+  ${S.openAlt===i?`<div class="alts"><span class="muted" style="font-size:12.5px">Echo's other wordings:</span>${[c.s].concat(c.alts).map((a,ai)=>`<button type="button" class="${(ai===0&&S.alt[i]==null)||S.alt[i]===ai-1?"on":""}" data-alt="${i}" data-ai="${ai-1}">${h(a)}</button>`).join("")}${c.alts.length?"":`<button type="button" data-ask="${h(`Can you reword this Code a few ways? “${c.s}”`)}">Ask Echo for other wordings</button>`}</div>`:""}
   <div class="acts"><button type="button" class="k ${v==="keep"?"on":""}" data-code="${i}" data-v="keep">♥ Keep</button><button type="button" class="s ${v==="skip"?"on":""}" data-code="${i}" data-v="skip">✕ Not me</button><button type="button" data-reword="${i}">✎ Reword</button></div></div>`}).join("")}</div>`};
 R["s3-reveal"]=()=>{const ks=keptCodes();const all=ks.every(c=>S.flipped[c.i]);return `
  <div class="eyebrow">Stage 3 · Your Brand Codes</div><h2>Your chorus</h2>
- ${echo([`Tap each card to reveal it. On the back: what it argues against, and the proof from your own story.`])}
+ ${echo([`Tap each card to reveal it. On the back: what it argues against, and ${S.codeSrc==="both"?"the proof from your own story":"where to look for your proof"}.`])}
  <div class="deck">${ks.map((c,n)=>`<button type="button" class="cc ${S.flipped[c.i]?"flip":""}" data-flip="${c.i}" aria-label="Code ${n+1}: ${h(c.s)}. Tap to flip.">
   <div class="face front"><div class="no">CODE ${n+1} OF ${ks.length}</div><div class="seal">♪</div><div class="stmt">${h(c.s)}</div><div class="hint">Tap to flip ↻</div></div>
-  <div class="face back"><b>The Code</b><div style="font-family:var(--head);font-weight:800;color:var(--espresso);font-size:15px">${h(c.s)}</div><b>What it argues against</b><div>${h(c.c)}</div><b>The proof</b><div>${h(c.proof)}</div>${(()=>{const l=FYFCHART.line(CH(),c.pl,c.pl2);return l?`<b>In your chart</b><div>${h(l)}</div>`:""})()}</div></button>`).join("")}</div>
+  <div class="face back"><b>The Code</b><div style="font-family:var(--head);font-weight:800;color:var(--espresso);font-size:15px">${h(c.s)}</div><b>What it argues against</b><div>${h(c.c)}</div><b>The proof</b><div>${h(c.proof)}</div>${(()=>{const l=chartLineFor(c);return l?`<b>In your chart</b><div>${h(l)}</div>`:""})()}</div></button>`).join("")}</div>
  ${all?`<div class="closing reveal-in"><b>🎶 Your Brand Codes are ready!</b><br>These are the ideas you'll return to again and again. Next is Broadcast Your Frequency, where they become marketing you can actually use.</div>`:`<p class="muted" style="font-size:14px">${ks.filter(c=>S.flipped[c.i]).length} of ${ks.length} revealed</p>`}`};
-R["s4-quick"]=()=>{const q=QUICK[S.qi];const val=S.qi===0?S.offer:S.cta;return `
+R["s4-quick"]=()=>{const q=QUICK[S.qi];const val=S.qi===0?S.offer:S.cta;const nQ=S.offer===4?1:2;return `
  <div class="eyebrow">Stage 4 · Broadcast Your Frequency</div>
- ${S.qi===0?echo([`Welcome to Broadcast Your Frequency! 🎶 Now we turn everything into marketing you can actually USE.`,`Before I write, two quick things.`]):""}
- <div class="substeps">Question ${S.qi+1} of 2</div><div class="qbar"><i style="width:${(S.qi+(val!=null?1:0))*50}%"></i></div>
+ ${S.qi===0?echo([`Welcome to Broadcast Your Frequency! 🎶 Now we turn everything into marketing you can actually USE.`,`Before I write, ${nQ===1?"one quick thing":"two quick things"}.`]):""}
+ <div class="substeps">Question ${S.qi+1} of ${nQ}</div><div class="qbar"><i style="width:${(S.qi+(val!=null?1:0))*(100/nQ)}%"></i></div>
  <div class="quiz-q">${h(q.q)}</div>
- <div class="quiz-opts">${q.opts.map((o,i)=>`<button type="button" class="pick ${val===i?"on":""}" data-quick="${i}"><b>${h(o.t)}</b><span>${h(o.d)}</span></button>`).join("")}</div>
- <p class="muted" style="font-size:13.5px">${h(q.why)} Picking one moves on by itself, and Back still works.</p>`};
+ <div class="quiz-opts">${q.opts.map((o,i)=>`<button type="button" class="pick ${val===i?"on":""}" data-quick="${i}"><b>${h(o.t)}</b><span>${h(o.d)}</span></button>
+  ${S.qi===0&&val===i&&i<3?`<div class="field offername"><label for="offerName">What's it called? <span class="muted">(optional)</span></label><input type="text" id="offerName" maxlength="48" value="${h(S.offerName)}" placeholder="e.g. &quot;Reset Session&quot; or &quot;Full Moon Sound Bath&quot;"></div>`:""}
+  ${S.qi===0&&val===i&&i===3?`<div class="field offername"><label for="offerOther">Where do you want to send people?</label><input type="text" id="offerOther" maxlength="60" value="${h(S.offerOther)}" placeholder="e.g. Shop my prints"></div>`:""}`).join("")}</div>
+ <p class="muted" style="font-size:13.5px">${h(q.why)} ${S.qi===0?(val!=null&&val<4?"Tap Next when you're ready, and Back still works.":"Picking “Nothing yet” moves on by itself."):"Picking one moves on by itself, and Back still works."}</p>`};
+// ---- the call to action at the end of the bio and one-liner comes from the Stage 4 answer (name used if given)
+const nmOffer=()=>S.offerName.trim().replace(/[.!?\s]+$/,"");
+const the=n=>/^(the|my|a|an|our|your)\s/i.test(n)?n:"the "+n;
+function ctaWhat(){const n=nmOffer();switch(S.offer){
+ case 0:return n?["Book your "+n,"you can book a "+n.replace(/^(the|my|a|an|your)\s/i,"")+" with me anytime"]:["Book a 1:1 session","you can book a 1:1 session with me anytime"];
+ case 1:return n?["Join "+the(n),"come to "+the(n)]:["Join my next workshop","come to my next workshop"];
+ case 2:return n?["Grab "+the(n),"start with "+the(n)]:["Join my email list","join my email list to start"];
+ case 3:{const o=S.offerOther.trim().replace(/[.!?\s]+$/,"");return [o.charAt(0).toUpperCase()+o.slice(1),o.charAt(0).toLowerCase()+o.slice(1)]}
+ default:return null}}
+function ctaLine(i){const w=ctaWhat();if(!w||S.cta===2)return i===1?"DM me \"hello\" 👋":"Follow along for more ✨";return S.cta===1?`${w[0]}: DM me 💬`:`${w[0]} ↓`}
+function bios(){return BIOS.map((b,i)=>{let x=b.x+"\n"+ctaLine(i);if([...x].length>150&&S.offerName){const keep=S.offerName;S.offerName="";x=b.x+"\n"+ctaLine(i);S.offerName=keep}return {t:b.t,x}})}
+function ones(){const w=ctaWhat();const tail=!w||S.cta===2?" Follow along for more.":` ${w[1].charAt(0).toUpperCase()+w[1].slice(1)}.`;return ONES.map(x=>x+tail)}
+window.FYF_bios=bios;window.FYF_ones=ones;
 R["s4-hub"]=()=>{const o=S.openD;return `
  <div class="eyebrow">Stage 4 · Your Brand Broadcast Bundle</div><h2>Five pieces. Any order.</h2>
  ${echo([`We'll create these one at a time, and you can refine each until it feels like you. Start wherever you like, or skip any you don't need.`])}
@@ -1668,9 +2143,9 @@ R["s4-hub"]=()=>{const o=S.openD;return `
 const DP={};
 const approveBtn=(id,dis)=>`<div class="btnrow" style="margin-top:14px"><button class="btn ${S.d[id]&&S.d[id].ok?"dark":""}" type="button" data-approve="${id}" ${dis?'aria-disabled="true"':""}>${S.d[id]&&S.d[id].ok?"✓ Approved":"Approve this piece"}</button><button class="btn ghost small" type="button" data-sharpen="1">Ask Echo to refine</button></div>`;
 DP.bio=()=>{const p=(S.d.bio||{}).pick;return `<div class="panel"><h3>📱 Instagram Bio</h3>${echo("Three directions. Counts include line breaks, because Instagram counts them too.")}
- <div class="grid g3">${BIOS.map((b,i)=>{const n=bioLen(b.x);return `<button type="button" class="opt ${p===i?"on":""}" data-pick="bio" data-i="${i}"><span class="tag">${h(b.t)}</span><pre>${h(b.x)}</pre><span class="count ${n<=150?"okc":"bad"}">${n} / 150 characters</span></button>`}).join("")}</div>${approveBtn("bio",p==null)}</div>`};
+ <div class="grid g3">${bios().map((b,i)=>{const n=bioLen(b.x);return `<button type="button" class="opt ${p===i?"on":""}" data-pick="bio" data-i="${i}"><span class="tag">${h(b.t)}</span><pre>${h(b.x)}</pre><span class="count ${n<=150?"okc":"bad"}">${n} / 150 characters</span></button>`}).join("")}</div>${approveBtn("bio",p==null)}</div>`};
 DP.one=()=>{const p=(S.d.one||{}).pick;return `<div class="panel"><h3>💬 Signature One-Liner</h3>${echo("For when someone asks “so what do you do?” Say them out loud and see which one sounds like you.")}
- <div class="grid g2">${ONES.map((x,i)=>`<button type="button" class="opt ${p===i?"on":""}" data-pick="one" data-i="${i}"><pre>“${h(x)}”</pre><span class="count okc">${x.split(/\s+/).length} words</span></button>`).join("")}</div>${approveBtn("one",p==null)}</div>`};
+ <div class="grid g2">${ones().map((x,i)=>`<button type="button" class="opt ${p===i?"on":""}" data-pick="one" data-i="${i}"><pre>“${h(x)}”</pre><span class="count okc">${x.split(/\s+/).length} words</span></button>`).join("")}</div>${approveBtn("one",p==null)}</div>`};
 DP.about=()=>`<div class="panel"><h3>🏡 Website About Page</h3>${echo("Built in eight parts. Open any part to read it. This isn't just a longer version of your story; it ends with how you help.")}
  ${ABOUT.map((a,i)=>`<details class="acc" ${i<2?"open":""}><summary><span>${h(a[0])}</span></summary><p>${h(a[1])}</p></details>`).join("")}${approveBtn("about")}</div>`;
 DP.hooks=()=>{const stars=(S.d.hooks||{}).stars||[];const ks=keptCodes();return `<div class="panel"><h3>🎵 Brand Code Hook Bank</h3>${echo(`${ks.length*3} hooks, three for each of your ${ks.length} Codes. Star your favorites to use first.`)}
@@ -1680,21 +2155,34 @@ DP.pth=()=>`<div class="panel"><h3>🔁 Personal Transformation Hook Bank</h3>${
 R["s5-bundle"]=()=>{const ks=keptCodes();const d=S.d;return `
  <div class="btnrow noprint" style="justify-content:flex-end;margin-bottom:12px"><button class="btn ghost small" type="button" id="toHub">← Edit pieces</button>
   <div class="export"><button class="btn dark small" type="button" id="exp">Download ▾</button><div class="menu" id="expMenu" hidden>
-   <button type="button" id="dlHtml">⬇ Download Bundle (HTML file)</button><button type="button" id="dlPrint">🖨 Print / Save as PDF</button><button type="button" id="dlCopy">📋 Copy all text</button></div></div></div>
+   <button type="button" id="dlHtml">⬇ Download Bundle (HTML file)</button><button type="button" id="dlPrint">🖨 Print / Save as PDF</button><button type="button" id="dlTxt">📝 Download as text (.txt)</button><button type="button" id="dlCopy">📋 Copy all text</button></div></div></div>
  <div class="bundle-hero"><div class="eyebrow">Find Your Frequency · ${h(S.biz||"")}</div><h1>${nm()}'s Brand Broadcast Bundle</h1>
-  <p style="font-size:18px;margin:0 0 10px;color:#f7ece0"><b>${h(BLUEPRINT.archetype)}</b> · “${h(BLUEPRINT.iam)}”</p>${(()=>{const ch=CH();if(!ch)return"";const P=ch.P;return `<p class="big3">☉︎ ${h(P.sun.sign)} Sun · ☽︎ ${h(P.moon.sign)} Moon${P.rising.locked?"":` · ${h(P.rising.sign)} Rising`} · ☊︎ North Node in ${h(P.north_node.sign)}</p>`})()}
+  <p style="font-size:18px;margin:0 0 10px;color:#f7ece0"><span class="bp-lbl">Your Brand Persona</span><br><b>${h(BLUEPRINT.persona)}</b> · “${h(BLUEPRINT.iam)}”</p>${(()=>{const ch=CH();if(!ch)return"";const P=ch.P;return `<p class="big3">☉︎ ${h(P.sun.sign)} Sun · ☽︎ ${h(P.moon.sign)} Moon${P.rising.locked?"":` · ${h(P.rising.sign)} Rising`} · ☊︎ North Node in ${h(P.north_node.sign)}</p>`})()}
   <div class="chips">${S.keywords.map(k=>`<span class="chip static">${h(k)}</span>`).join("")}</div>
   <div class="mini-codes">${ks.map(c=>`<span>${h(c.s)}</span>`).join("")}</div></div>
- ${piece(1,"Instagram Bio",d.bio&&d.bio.ok?`<pre>${h(BIOS[d.bio.pick].x)}</pre><span class="count okc">${bioLen(BIOS[d.bio.pick].x)} / 150 characters, line breaks included</span>`:null)}
- ${piece(2,"Signature One-Liner",d.one&&d.one.ok?`<p style="font-size:18px;margin:6px 0">“${h(ONES[d.one.pick])}”</p>`:null)}
+ ${piece(1,"Instagram Bio",d.bio&&d.bio.ok?`<pre>${h(bios()[d.bio.pick].x)}</pre><span class="count okc">${bioLen(bios()[d.bio.pick].x)} / 150 characters, line breaks included</span>`:null)}
+ ${piece(2,"Signature One-Liner",d.one&&d.one.ok?`<p style="font-size:18px;margin:6px 0">“${h(ones()[d.one.pick])}”</p>`:null)}
  ${piece(3,"Website About Page",d.about&&d.about.ok?ABOUT.map(a=>`<p style="margin:6px 0">${h(a[1])}</p>`).join(""):null)}
  ${piece(4,"Brand Code Hook Bank",d.hooks&&d.hooks.ok?ks.map((c,ci)=>`<div style="margin-top:10px"><b>${h(c.s)}</b><ul style="margin:4px 0">${c.hooks.map((x,hi)=>`<li>${(d.hooks.stars||[]).includes(ci+"-"+hi)?"★ ":""}${h(x[1])}</li>`).join("")}</ul></div>`).join(""):null)}
  ${piece(5,"Personal Transformation Hook Bank",d.pth&&d.pth.ok?`<ol style="margin:6px 0">${PTH.map(x=>`<li><b>${h(x[0])}:</b> ${h(x[1])}</li>`).join("")}</ol>`:null)}
  <div class="closing"><p style="margin:0 0 8px"><b>🎶 Congratulations, ${nm()}!</b> Your Brand Broadcast Bundle is your starting point, not something you need to keep rewriting every time you post.</p>
  <p style="margin:0">The goal was to become so unmistakably YOU that the right people understand exactly why they want to work with you. <b>Now go broadcast your frequency. 🎶</b></p></div>
+ ${whatsNext()}
  <p class="foot">Prototype · sample data · nothing is saved to a server</p>`};
+function whatsNext(){const cards=[{id:"yvv",t:"Give your visual brand an upgrade with Your Visual Vibe",x:"Your colors, fonts, photo style and brand voice, built from your chart and your brand archetypes. A full branding hub for how your brand looks.",small:"Already grabbed it at checkout? It's waiting for you.",b:"Open Your Visual Vibe",u:YVV_URL},
+  {id:"mmm",t:"Want to learn how to turn this into your weekly content?",x:"The Magnetic Marketing Method is the place for you.",b:"Learn more",u:MMM_URL}].filter(c=>/^https:\/\//.test(c.u||""));
+ return `<section class="whatsnext" aria-labelledby="wnH"><h2 id="wnH">What's next</h2><div class="wn-grid">${cards.map(c=>`<div class="wn-card" data-wn="${c.id}"><h3>${h(c.t)}</h3><p>${h(c.x)}</p>${c.small?`<p class="wn-small">${h(c.small)}</p>`:""}<a class="btn wn-btn" href="${h(c.u)}" target="_blank" rel="noopener">${h(c.b)}</a><span class="wn-url">${h(c.u.replace(/^https:\/\//,""))}</span></div>`).join("")}</div></section>`}
+// plain-text Bundle (Copy all text + .txt download): the page minus buttons, with each link written out
+function bundleText(){const cl=$("#app").cloneNode(true);cl.querySelectorAll(".noprint,.foot").forEach(e=>e.remove());cl.querySelectorAll(".wn-url").forEach(e=>e.remove());
+ cl.querySelectorAll("a.wn-btn").forEach(a=>{a.textContent=`${a.textContent}: ${a.getAttribute("href")}`});
+ const box=document.createElement("div");box.style.cssText="position:fixed;left:-9999px;top:0;width:800px";box.appendChild(cl);document.body.appendChild(box);const t=cl.innerText.replace(/\n{3,}/g,"\n\n").trim();box.remove();return t+"\n"}
 function piece(n,t,body){return `<div class="piece ${body?"":"skipped"}"><div class="pn">PIECE ${n} OF 5</div><h3>${h(t)}</h3>${body||`<p class="muted" style="margin:0">Skipped for now. <button type="button" class="skiplink noprint" data-goto-deliv="${["bio","one","about","hooks","pth"][n-1]}">Add it anytime →</button></p>`}</div>`}
 
+// switching modes never deletes anything: the big ramble and the 4 parts are stored separately
+function setMode(m){FYFDICT.stop("");if(m==="all"){const parts=STATIONS.map(s=>(S.st[s.id]||{}).text||"").filter(x=>x.trim());
+  if(!S.allText.trim()&&parts.length)S.allText=parts.join("\n\n");if(STATIONS.some(s=>S.st[s.id]&&S.st[s.id].done&&!S.st[s.id].skipped))S.allSorted=true}
+ else{S.stIdx=STATIONS.findIndex(s=>!(S.st[s.id]&&S.st[s.id].done));if(S.stIdx<0)S.stIdx=4}
+ S.storyMode=m;save()}
 // ================= RENDER + EVENTS =================
 function render(){const sc=cur();const stage=sc.stage;const inStage=SCREENS.filter(s=>s.stage===stage);const pos=inStage.indexOf(sc);
  $("#steps").innerHTML=stepbar();
@@ -1708,7 +2196,12 @@ function render(){const sc=cur();const stage=sc.stage;const inStage=SCREENS.filt
 function refreshNav(){const w=why();const n=$("#nextBtn");if(n){w?n.setAttribute("aria-disabled","true"):n.removeAttribute("aria-disabled")}$(".navbar .why").textContent=w}
 document.addEventListener("input",e=>{const k=e.target.dataset&&e.target.dataset.k;if(k){S[k]=e.target.value;if(k==="bdate"||k==="btime"){S.chartOk=false}save();refreshNav()}
  if(e.target.id==="iPlace"){S.bplace=e.target.value;S.place=null;S.chartOk=false;save();$("#cityPicked").textContent="";cityResults=FYFCHART.CITY.search(e.target.value);cityHi=cityResults.length?0:-1;drawCities();refreshNav()}
- if(e.target.id==="ramble"){const s=STATIONS[S.stIdx];S.st[s.id]=Object.assign(S.st[s.id]||{},{text:e.target.value});save()}});
+ if(e.target.id==="ramble"){const s=STATIONS[S.stIdx];S.st[s.id]=Object.assign(S.st[s.id]||{},{text:e.target.value});save()}
+ if(e.target.id==="allText"){S.allText=e.target.value;save()}
+ if(e.target.id==="offerName"||e.target.id==="offerOther"){S[e.target.id]=e.target.value;save();refreshNav()}
+ if(e.target.dataset&&e.target.dataset.part){const id=e.target.dataset.part,v=e.target.value;S.st[id]=Object.assign(S.st[id]||{},{text:v,done:!!v.trim(),skipped:!v.trim(),edited:true});save()}});
+// re-render a sorted part after editing (so its details + Movie Test note update) without stealing focus mid-typing
+document.addEventListener("focusout",e=>{if(e.target.dataset&&e.target.dataset.part&&!FYFDICT.active()){const y=window.scrollY;setTimeout(()=>{if(!document.activeElement||!document.activeElement.dataset||!document.activeElement.dataset.part){render();window.scrollTo(0,y)}},0)}});
 document.addEventListener("change",e=>{if(e.target.id==="iUnk"){S.bunk=e.target.checked;if(S.bunk)S.btime="";S.chartOk=false;save();render()}});
 let cityResults=[],cityHi=-1;
 function drawCities(){const l=$("#cityList"),q=$("#iPlace");if(!l)return;l.innerHTML=cityResults.map((r,i)=>`<li role="option" data-ci="${i}" class="${i===cityHi?"hi":""}" aria-selected="${i===cityHi}"><b>${h(r.name)}</b> <span>${h([r.admin,r.country].filter(Boolean).join(", "))}</span></li>`).join("")+(q.value.trim().length>=2&&!cityResults.length&&!S.place?`<li class="none">No match. Try the nearest bigger town.</li>`:"");q.setAttribute("aria-expanded",cityResults.length?"true":"false")}
@@ -1717,6 +2210,9 @@ document.addEventListener("keydown",e=>{if(e.target.id!=="iPlace")return;if((e.k
 document.addEventListener("mousedown",e=>{if(e.target.closest&&e.target.closest("li[data-ci]"))e.preventDefault()});
 document.addEventListener("click",e=>{const li=e.target.closest&&e.target.closest("li[data-ci]");if(li)pickCity(cityResults[+li.dataset.ci])});
 document.addEventListener("toggle",e=>{if(e.target.dataset&&e.target.dataset.deep){S.deepOpen[e.target.dataset.deep]=e.target.open;save()}},true);
+function togglePick(el){if(el.getAttribute("aria-disabled")==="true")return;const k=el.dataset.pk,i=S.picks.indexOf(k);i>=0?S.picks.splice(i,1):S.picks.push(k);save();const y=window.scrollY;render();window.scrollTo(0,y)}
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest("[data-pk]");if(c)togglePick(c)});
+document.addEventListener("keydown",e=>{const c=e.target.closest&&e.target.closest("[data-pk]");if(c&&(e.key===" "||e.key==="Enter")){e.preventDefault();togglePick(c);const n=document.querySelector(`[data-pk="${c.dataset.pk}"]`);if(n)n.focus()}});
 document.addEventListener("click",e=>{const t=e.target.closest("button,[data-stage]");if(!t)return;const ds=t.dataset;
  if(t.id==="nextBtn")return next(); if(t.id==="backBtn")return back();
  if(t.id==="restart")return dialog("Start over?","This clears the sample answers in this tab.","Keep my Bundle","Start over",()=>{S=fresh();save();go(0)});
@@ -1724,16 +2220,26 @@ document.addEventListener("click",e=>{const t=e.target.closest("button,[data-sta
  if(t.id==="fillSample"){Object.assign(S,{name:"",biz:"",what:"",bdate:"",place:null,chartOk:false});fillThrough(0);S.reached=Math.max(S.reached,0);save();render();return}
  if(ds.editbirth){go(0);setTimeout(()=>{const el=$(S.bunk?"#iUnk":"#iTime");if(el)el.focus()},60);return}
  if(ds.ask){openDrawer(true);$("#chatIn").value=ds.ask;$("#chatIn").focus();return}
+ if(ds.codesrc){const prev=S.codeList;S.codeSrc=ds.codesrc;S.codeSrcPrev=null;if(prev){buildCodes(prev.map((c,i)=>i).filter(i=>S.codes[i]==="keep"))}else buildCodes([]);save();render();return}
+ if(ds.codesrcChange){S.codeSrcPrev=S.codeSrc;S.codeSrc=null;save();render();return}
+ if(ds.refresh){if(ds.refresh==="codes"){refreshCodes();return}S.bpPicks=livePicks();S.kwFor=null;save();render();toast("Refreshed with your new picks ✓");return}
  if(t.id==="chartYes"){S.chartOk=true;S.chartFix=false;save();render();return}
  if(t.id==="chartFix"){S.chartFix=true;S.chartOk=false;save();render();return}
  if(ds.react){S.react[ds.react]=S.react[ds.react]===ds.v?null:ds.v;save();render();return}
  if(ds.kw){const k=ds.kw,i=S.keywords.indexOf(k);if(i>=0)S.keywords.splice(i,1);else{if(S.keywords.length>=5){toast("You have 5. Tap one to drop it first.");return}S.keywords.push(k)}save();render();return}
  if(ds.origin!=null){S.origin=+ds.origin;save();render();setTimeout(()=>{if(cur().id==="s2-begin")go(S.i+1)},450);return}
  if(t.id==="useSample"){const s=STATIONS[S.stIdx];S.st[s.id]=Object.assign(S.st[s.id]||{},{text:s.ramble});save();render();return}
- if(t.id==="mic"){t.classList.add("rec");t.textContent="● Listening… (mock)";setTimeout(()=>{const s=STATIONS[S.stIdx];S.st[s.id]=Object.assign(S.st[s.id]||{},{text:s.ramble});save();render()},1200);return}
+ if(ds.mic){FYFDICT.start(ds.mic,()=>toast("Voice typing isn't available in this browser. The mic on your phone's keyboard works too."));return}
+ if(ds.pickmode){setMode(ds.pickmode);render();setTimeout(()=>{if(cur().id==="s2-mode")go(S.i+1)},450);return}
+ if(ds.mode){setMode(ds.mode);const y=window.scrollY;render();window.scrollTo(0,y);toast(ds.mode==="all"?"Switched to: Tell it all at once":"Switched to: Walk me through it");return}
+ if(t.id==="useSampleAll"){S.allText=(S.allText.trim()?S.allText.trim()+"\n\n":"")+STATIONS.map(s=>s.ramble).join("\n\n");save();render();return}
+ if(t.id==="sortAll"){if(!S.allText.trim()){toast("Ramble a little first, or use the sample.");return}
+   const doSort=()=>{const r=FYFSTORY.sort(S.allText);STATIONS.forEach(s=>{const v=r[s.id]||"";S.st[s.id]={text:v,done:!!v.trim(),skipped:!v.trim()}});S.allSorted=true;S.stIdx=4;save();render();setTimeout(()=>{const x=$(".sorted");if(x)x.scrollIntoView({behavior:"smooth",block:"start"})},50)};
+   if(S.allSorted&&STATIONS.some(s=>S.st[s.id]&&S.st[s.id].edited))return dialog("Sort it again?","This re-sorts your big ramble into the 4 parts and replaces the edits you made in those boxes. Your big ramble stays exactly as it is.","Keep my edits","Sort again",doSort);
+   t.textContent="Echo is sorting…";t.setAttribute("aria-disabled","true");setTimeout(doSort,600);return}
  if(t.id==="organize"){const s=STATIONS[S.stIdx];const d=S.st[s.id]||{};if(!(d.text||"").trim()){toast("Ramble a little first, or use the sample.");return}
    t.textContent="Echo is organizing…";t.setAttribute("aria-disabled","true");setTimeout(()=>{S.st[s.id]=Object.assign(d,{done:true,skipped:false});S.stIdx=Math.min(4,S.stIdx+1);while(S.stIdx<4&&S.st[STATIONS[S.stIdx].id]&&S.st[STATIONS[S.stIdx].id].done)S.stIdx++;save();render()},700);return}
- if(t.id==="skipSt"){const s=STATIONS[S.stIdx];S.st[s.id]={done:true,skipped:true};S.stIdx++;save();render();return}
+ if(t.id==="skipSt"){const s=STATIONS[S.stIdx];S.st[s.id]=Object.assign(S.st[s.id]||{},{done:true,skipped:true});S.stIdx++;save();render();return}
  if(ds.redo!=null){const i=+ds.redo;S.st[STATIONS[i].id].done=false;S.stIdx=i;save();render();return}
  if(ds.priv){const i=S.priv.indexOf(ds.priv);i>=0?S.priv.splice(i,1):S.priv.push(ds.priv);save();render();return}
  if(t.id==="approveStory"){S.storyOk=true;save();render();return}
@@ -1742,7 +2248,8 @@ document.addEventListener("click",e=>{const t=e.target.closest("button,[data-sta
  if(ds.reword!=null){S.openAlt=S.openAlt===+ds.reword?null:+ds.reword;save();render();return}
  if(ds.alt!=null){const i=+ds.alt,ai=+ds.ai;S.alt[i]=ai<0?null:ai;save();render();return}
  if(ds.flip!=null){S.flipped[ds.flip]=!S.flipped[ds.flip];save();render();return}
- if(ds.quick!=null){const v=+ds.quick;if(S.qi===0)S.offer=v;else S.cta=v;save();render();setTimeout(()=>{if(cur().id!=="s4-quick")return;if(S.qi===0){S.qi=1;save();render()}else go(S.i+1)},450);return}
+ if(ds.quick!=null){const v=+ds.quick;if(S.qi===0){S.offer=v;save();render();if(v===4){S.cta=2;save();setTimeout(()=>{if(cur().id==="s4-quick"&&S.qi===0&&S.offer===4)go(S.i+1)},450)}else setTimeout(()=>{const f=$(v===3?"#offerOther":"#offerName");if(f)f.focus({preventScroll:true})},30);return}
+   S.cta=v;save();render();setTimeout(()=>{if(cur().id==="s4-quick"&&S.qi===1)go(S.i+1)},450);return}
  if(ds.deliv){S.openD=S.openD===ds.deliv?null:ds.deliv;window._scrollPanel=true;save();render();return}
  if(ds.pick){S.d[ds.pick]=Object.assign(S.d[ds.pick]||{},{pick:+ds.i});save();render();return}
  if(ds.star){const o=S.d.hooks=S.d.hooks||{};o.stars=o.stars||[];const i=o.stars.indexOf(ds.star);i>=0?o.stars.splice(i,1):o.stars.push(ds.star);save();render();return}
@@ -1753,7 +2260,8 @@ document.addEventListener("click",e=>{const t=e.target.closest("button,[data-sta
  if(t.id==="exp"){const m=$("#expMenu");m.hidden=!m.hidden;return}
  if(t.id==="dlHtml"){downloadHtml();$("#expMenu").hidden=true;return}
  if(t.id==="dlPrint"){$("#expMenu").hidden=true;window.print();return}
- if(t.id==="dlCopy"){const txt=$("#app").innerText;(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast("Copied ✓"),()=>toast("Copy not available here"));$("#expMenu").hidden=true;return}
+ if(t.id==="dlTxt"){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([bundleText()],{type:"text/plain"}));a.download=(S.name||"My")+"-Brand-Broadcast-Bundle.txt";document.body.appendChild(a);a.click();a.remove();$("#expMenu").hidden=true;toast("Text version downloaded");return}
+ if(t.id==="dlCopy"){const txt=bundleText();(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast("Copied ✓"),()=>toast("Copy not available here"));$("#expMenu").hidden=true;return}
  if(t.id==="echoFab"){openDrawer(true);return} if(t.id==="drawerClose"){openDrawer(false);return}
 });
 function downloadHtml(){const css=document.querySelector("style#fyfcss").textContent.replace(/@font-face\{[^}]*\}/g,"");
